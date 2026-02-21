@@ -20,26 +20,23 @@ const Home = () => {
 			</Head>
 			<Stack id="pc-wrap">
 				<Top />
-				<Stack className="hero-section" sx={{
-					minHeight: '100vh',
-					background: 'linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%)',
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					textAlign: 'center',
-					position: 'relative',
-					overflow: 'hidden',
-				}}>
-					<Box sx={{
-						position: 'absolute',
-						width: '600px',
-						height: '600px',
-						borderRadius: '50%',
-						border: '1px solid rgba(201, 169, 110, 0.1)',
-						top: '50%',
-						left: '50%',
-						transform: 'translate(-50%, -50%)',
-					}} />
+			<Stack className="hero-section" sx={{
+				minHeight: '100vh',
+				backgroundImage: 'url(https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=1920&q=80)',
+				backgroundSize: 'cover',
+				backgroundPosition: 'center',
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center',
+				textAlign: 'center',
+				position: 'relative',
+				overflow: 'hidden',
+			}}>
+				<Box sx={{
+					position: 'absolute',
+					inset: 0,
+					background: 'rgba(10, 10, 20, 0.75)',
+				}} />
 					<Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
 						<WatchIcon sx={{ fontSize: 80, color: '#c9a96e', mb: 3 }} />
 						<Typography variant="h1" sx={{
