@@ -19,53 +19,53 @@ const ContactPage = () => {
 	return (
 		<>
 			<Head><title>Contact Us - Watches</title></Head>
-			<Stack sx={{ background: '#0f0f1a', minHeight: '100vh' }}>
+			<Stack sx={{ background: '#E4E4DE', minHeight: '100vh' }}>
 				<Top />
-				<Stack sx={{ pt: 15, pb: 4, background: 'linear-gradient(135deg, #1a1a2e, #16213e)', textAlign: 'center' }}>
-					<Typography variant="h3" sx={{ color: '#fff', fontWeight: 700, letterSpacing: '2px' }}>CONTACT US</Typography>
-					<Typography sx={{ color: '#c9a96e', mt: 1, letterSpacing: '3px' }}>Get in Touch</Typography>
+				<Stack sx={{ pt: 14, pb: 4, textAlign: 'center', background: 'rgba(196,197,186,0.3)' }}>
+					<Typography variant="h3" sx={{ color: '#1B1B1B', fontWeight: 700, letterSpacing: '2px' }}>CONTACT US</Typography>
+					<Typography sx={{ color: '#888', mt: 1 }}>Get in Touch</Typography>
 				</Stack>
 
-				<Container maxWidth="lg" sx={{ py: 6 }}>
+				<Container maxWidth="lg" sx={{ py: 4 }}>
 					<Grid container spacing={4}>
 						<Grid item xs={12} md={6}>
-							<Box sx={{ background: '#1a1a2e', borderRadius: '16px', border: '1px solid rgba(201,169,110,0.2)', p: 4, height: '100%' }}>
-								<Typography variant="h5" sx={{ color: '#fff', mb: 3, fontWeight: 600 }}>Reach Out To Us</Typography>
+							<Box sx={{ background: 'rgba(255,255,255,0.7)', borderRadius: '16px', border: '1px solid #C4C5BA', p: 4, height: '100%' }}>
+								<Typography variant="h5" sx={{ color: '#1B1B1B', mb: 3, fontWeight: 600 }}>Reach Out To Us</Typography>
 
 								<Stack spacing={3}>
 									<Stack direction="row" alignItems="center" spacing={2}>
-										<IconButton sx={{ background: 'rgba(201,169,110,0.1)', color: '#c9a96e' }}><PhoneIcon /></IconButton>
+										<IconButton sx={{ background: 'rgba(89,95,57,0.1)', color: '#595f39' }}><PhoneIcon /></IconButton>
 										<Box>
 											<Typography sx={{ color: '#888', fontSize: '0.85rem' }}>Phone</Typography>
-											<Typography sx={{ color: '#fff', fontWeight: 500 }}>+82 10 1234 5678</Typography>
+											<Typography sx={{ color: '#1B1B1B', fontWeight: 500 }}>+82 10 1234 5678</Typography>
 										</Box>
 									</Stack>
 
 									<Stack direction="row" alignItems="center" spacing={2}>
-										<IconButton sx={{ background: 'rgba(201,169,110,0.1)', color: '#c9a96e' }}><EmailIcon /></IconButton>
+										<IconButton sx={{ background: 'rgba(89,95,57,0.1)', color: '#595f39' }}><EmailIcon /></IconButton>
 										<Box>
 											<Typography sx={{ color: '#888', fontSize: '0.85rem' }}>Email</Typography>
-											<Typography sx={{ color: '#fff', fontWeight: 500 }}>info@watches-store.com</Typography>
+											<Typography sx={{ color: '#1B1B1B', fontWeight: 500 }}>info@watches-store.com</Typography>
 										</Box>
 									</Stack>
 
 									<Stack direction="row" alignItems="center" spacing={2}>
-										<IconButton sx={{ background: 'rgba(201,169,110,0.1)', color: '#c9a96e' }}><LocationOnIcon /></IconButton>
+										<IconButton sx={{ background: 'rgba(89,95,57,0.1)', color: '#595f39' }}><LocationOnIcon /></IconButton>
 										<Box>
 											<Typography sx={{ color: '#888', fontSize: '0.85rem' }}>Address</Typography>
-											<Typography sx={{ color: '#fff', fontWeight: 500 }}>Gangnam-gu, Seoul, South Korea</Typography>
+											<Typography sx={{ color: '#1B1B1B', fontWeight: 500 }}>Gangnam-gu, Seoul, South Korea</Typography>
 										</Box>
 									</Stack>
 								</Stack>
 
-								<Typography sx={{ color: '#c9a96e', fontWeight: 600, mt: 4, mb: 2 }}>Follow Us</Typography>
+								<Typography sx={{ color: '#1B1B1B', fontWeight: 600, mt: 4, mb: 2 }}>Follow Us</Typography>
 								<Stack direction="row" spacing={2}>
 									<IconButton component="a" href="https://facebook.com" target="_blank"
-										sx={{ background: 'rgba(201,169,110,0.1)', color: '#c9a96e', '&:hover': { background: 'rgba(201,169,110,0.2)' } }}>
+										sx={{ background: 'rgba(89,95,57,0.1)', color: '#595f39', '&:hover': { background: 'rgba(89,95,57,0.2)', color: '#484d2e' } }}>
 										<FacebookIcon />
 									</IconButton>
 									<IconButton component="a" href="https://instagram.com" target="_blank"
-										sx={{ background: 'rgba(201,169,110,0.1)', color: '#c9a96e', '&:hover': { background: 'rgba(201,169,110,0.2)' } }}>
+										sx={{ background: 'rgba(89,95,57,0.1)', color: '#595f39', '&:hover': { background: 'rgba(89,95,57,0.2)', color: '#484d2e' } }}>
 										<InstagramIcon />
 									</IconButton>
 								</Stack>
@@ -74,9 +74,9 @@ const ContactPage = () => {
 
 						<Grid item xs={12} md={6}>
 							<Box sx={{
-								background: '#1a1a2e',
+								background: 'rgba(255,255,255,0.7)',
 								borderRadius: '16px',
-								border: '1px solid rgba(201,169,110,0.2)',
+								border: '1px solid #C4C5BA',
 								overflow: 'hidden',
 								height: '100%',
 								minHeight: 400,

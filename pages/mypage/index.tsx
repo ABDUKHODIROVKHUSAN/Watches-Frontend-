@@ -28,22 +28,22 @@ const MyPage = () => {
 	return (
 		<>
 			<Head><title>My Page - Watches</title></Head>
-			<Stack sx={{ background: '#0f0f1a', minHeight: '100vh' }}>
+			<Stack sx={{ background: '#E4E4DE', minHeight: '100vh' }}>
 				<Top />
 				<Container maxWidth="md" sx={{ pt: 15, pb: 6 }}>
 					<Stack alignItems="center" sx={{ mb: 4 }}>
 						<Avatar
 							src={user.memberImage?.startsWith('/') ? user.memberImage : `${REACT_APP_API_URL}/${user.memberImage}`}
-							sx={{ width: 120, height: 120, mb: 2, border: '3px solid #c9a96e' }}
+							sx={{ width: 120, height: 120, mb: 2, border: '3px solid #595f39' }}
 						/>
-						<Typography variant="h4" sx={{ color: '#fff', fontWeight: 700 }}>
+						<Typography variant="h4" sx={{ color: '#1B1B1B', fontWeight: 700 }}>
 							{user.memberNick}
 						</Typography>
-						<Typography sx={{ color: '#c9a96e', textTransform: 'uppercase', letterSpacing: 2 }}>
+						<Typography sx={{ color: '#595f39', textTransform: 'uppercase', letterSpacing: 2, fontSize: '0.85rem', fontWeight: 600 }}>
 							{user.memberType}
 						</Typography>
 						{user.memberFullName && (
-							<Typography sx={{ color: '#b0b0b0', mt: 1 }}>{user.memberFullName}</Typography>
+							<Typography sx={{ color: '#666', mt: 1 }}>{user.memberFullName}</Typography>
 						)}
 					</Stack>
 
@@ -56,22 +56,24 @@ const MyPage = () => {
 							<Box key={stat.label} sx={{
 								textAlign: 'center',
 								p: 3,
-								background: '#1a1a2e',
+								background: 'rgba(255,255,255,0.7)',
 								borderRadius: '12px',
-								border: '1px solid rgba(201,169,110,0.1)',
+								border: '1px solid #C4C5BA',
 								minWidth: 120,
+								transition: 'all 0.3s',
+								'&:hover': { borderColor: '#595f39', boxShadow: '0 4px 16px rgba(89,95,57,0.1)' },
 							}}>
-								<Box sx={{ color: '#c9a96e', mb: 1 }}>{stat.icon}</Box>
-								<Typography variant="h5" sx={{ color: '#fff', fontWeight: 700 }}>{stat.value}</Typography>
+								<Box sx={{ color: '#595f39', mb: 1 }}>{stat.icon}</Box>
+								<Typography variant="h5" sx={{ color: '#1B1B1B', fontWeight: 700 }}>{stat.value}</Typography>
 								<Typography sx={{ color: '#888', fontSize: '0.85rem' }}>{stat.label}</Typography>
 							</Box>
 						))}
 					</Stack>
 
 					{user.memberDesc && (
-						<Box sx={{ background: '#1a1a2e', borderRadius: '12px', p: 3, mb: 4, border: '1px solid rgba(201,169,110,0.1)' }}>
-							<Typography sx={{ color: '#c9a96e', fontWeight: 600, mb: 1 }}>About</Typography>
-							<Typography sx={{ color: '#b0b0b0' }}>{user.memberDesc}</Typography>
+						<Box sx={{ background: 'rgba(255,255,255,0.7)', borderRadius: '12px', p: 3, mb: 4, border: '1px solid #C4C5BA' }}>
+							<Typography sx={{ color: '#595f39', fontWeight: 600, mb: 1 }}>About</Typography>
+							<Typography sx={{ color: '#666' }}>{user.memberDesc}</Typography>
 						</Box>
 					)}
 
@@ -80,7 +82,7 @@ const MyPage = () => {
 							variant="outlined"
 							startIcon={<LogoutIcon />}
 							onClick={() => logOut()}
-							sx={{ color: '#ff6b6b', borderColor: '#ff6b6b', '&:hover': { borderColor: '#ff5252', background: 'rgba(255,107,107,0.1)' } }}
+							sx={{ color: '#e53935', borderColor: '#e53935', '&:hover': { borderColor: '#c62828', background: 'rgba(229,57,53,0.05)' } }}
 						>
 							Logout
 						</Button>

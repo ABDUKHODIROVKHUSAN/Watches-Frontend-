@@ -5,8 +5,8 @@
 }
 
 html, body {
-  background: #0f0f1a;
-  color: #ffffff;
+  background: #E4E4DE;
+  color: #1B1B1B;
   font-family: 'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -23,10 +23,14 @@ a {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0f0f1a;
+  background: #E4E4DE;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c9a96e;
+  background: #C4C5BA;
   border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #595f39;
 }

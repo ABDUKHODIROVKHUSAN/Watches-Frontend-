@@ -1,17 +1,17 @@
 import type { AppProps } from 'next/app';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
-import React, { useState } from 'react';
+import React from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../apollo/client';
 import '../scss/app.scss';
 
 const theme = createTheme({
 	palette: {
-		primary: { main: '#1a1a2e' },
-		secondary: { main: '#c9a96e' },
-		background: { default: '#0f0f1a', paper: '#1a1a2e' },
-		text: { primary: '#ffffff', secondary: '#b0b0b0' },
+		primary: { main: '#1B1B1B' },
+		secondary: { main: '#595f39' },
+		background: { default: '#E4E4DE', paper: '#FFFFFF' },
+		text: { primary: '#1B1B1B', secondary: '#6b6b6b' },
 	},
 	typography: {
 		fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
