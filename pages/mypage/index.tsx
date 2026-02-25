@@ -28,18 +28,18 @@ const MyPage = () => {
 	return (
 		<>
 			<Head><title>My Page - Watches</title></Head>
-			<Stack sx={{ background: '#E4E4DE', minHeight: '100vh' }}>
+			<Stack sx={{ background: '#FAFAFA', minHeight: '100vh' }}>
 				<Top />
 				<Container maxWidth="md" sx={{ pt: 15, pb: 6 }}>
 					<Stack alignItems="center" sx={{ mb: 4 }}>
 						<Avatar
 							src={user.memberImage?.startsWith('/') ? user.memberImage : `${REACT_APP_API_URL}/${user.memberImage}`}
-							sx={{ width: 120, height: 120, mb: 2, border: '3px solid #595f39' }}
+							sx={{ width: 120, height: 120, mb: 2, border: '3px solid #111111' }}
 						/>
-						<Typography variant="h4" sx={{ color: '#1B1B1B', fontWeight: 700 }}>
+						<Typography variant="h4" sx={{ color: '#111111', fontWeight: 700 }}>
 							{user.memberNick}
 						</Typography>
-						<Typography sx={{ color: '#595f39', textTransform: 'uppercase', letterSpacing: 2, fontSize: '0.85rem', fontWeight: 600 }}>
+						<Typography sx={{ color: '#111111', textTransform: 'uppercase', letterSpacing: 2, fontSize: '0.85rem', fontWeight: 600 }}>
 							{user.memberType}
 						</Typography>
 						{user.memberFullName && (
@@ -58,21 +58,21 @@ const MyPage = () => {
 								p: 3,
 								background: 'rgba(255,255,255,0.7)',
 								borderRadius: '12px',
-								border: '1px solid #C4C5BA',
+								border: '1px solid #D4AF37',
 								minWidth: 120,
 								transition: 'all 0.3s',
-								'&:hover': { borderColor: '#595f39', boxShadow: '0 4px 16px rgba(89,95,57,0.1)' },
+								'&:hover': { borderColor: '#111111', boxShadow: '0 4px 16px rgba(17,17,17,0.16)' },
 							}}>
-								<Box sx={{ color: '#595f39', mb: 1 }}>{stat.icon}</Box>
-								<Typography variant="h5" sx={{ color: '#1B1B1B', fontWeight: 700 }}>{stat.value}</Typography>
+								<Box sx={{ color: '#111111', mb: 1 }}>{stat.icon}</Box>
+								<Typography variant="h5" sx={{ color: '#111111', fontWeight: 700 }}>{stat.value}</Typography>
 								<Typography sx={{ color: '#888', fontSize: '0.85rem' }}>{stat.label}</Typography>
 							</Box>
 						))}
 					</Stack>
 
 					{user.memberDesc && (
-						<Box sx={{ background: 'rgba(255,255,255,0.7)', borderRadius: '12px', p: 3, mb: 4, border: '1px solid #C4C5BA' }}>
-							<Typography sx={{ color: '#595f39', fontWeight: 600, mb: 1 }}>About</Typography>
+						<Box sx={{ background: 'rgba(255,255,255,0.7)', borderRadius: '12px', p: 3, mb: 4, border: '1px solid #D4AF37' }}>
+							<Typography sx={{ color: '#111111', fontWeight: 600, mb: 1 }}>About</Typography>
 							<Typography sx={{ color: '#666' }}>{user.memberDesc}</Typography>
 						</Box>
 					)}

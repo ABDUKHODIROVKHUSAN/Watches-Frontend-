@@ -8,7 +8,7 @@ import { getJwtToken, logOut, updateUserInfo } from '../auth';
 import { REACT_APP_API_URL } from '../config';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-const LuxuryWatchIcon = ({ size = 24, color = '#595f39' }: { size?: number; color?: string }) => (
+const LuxuryWatchIcon = ({ size = 24, color = '#111111' }: { size?: number; color?: string }) => (
 	<svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 		<rect x="9" y="1" width="6" height="3" rx="0.8" fill={color} opacity="0.5" />
 		<rect x="9" y="20" width="6" height="3" rx="0.8" fill={color} opacity="0.5" />
@@ -64,15 +64,15 @@ const Top = () => {
 			left: 0,
 			right: 0,
 			zIndex: 1000,
-			background: scrolled ? 'rgba(228, 228, 222, 0.97)' : '#E4E4DE',
+			background: scrolled ? 'rgba(255, 255, 255, 0.97)' : '#FAFAFA',
 			backdropFilter: scrolled ? 'blur(10px)' : 'none',
-			borderBottom: '1px solid #C4C5BA',
+			borderBottom: '1px solid #D4AF37',
 			transition: 'all 0.3s',
 		}}>
 			<Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ maxWidth: 1200, mx: 'auto', width: '100%', px: 3, py: 1.5 }}>
 				<Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
-					<LuxuryWatchIcon size={26} color="#595f39" />
-					<Box component="span" sx={{ color: '#1B1B1B', fontWeight: 700, fontSize: '1.1rem', letterSpacing: 3 }}>
+					<LuxuryWatchIcon size={26} color="#111111" />
+					<Box component="span" sx={{ color: '#111111', fontWeight: 700, fontSize: '1.1rem', letterSpacing: 3 }}>
 						TIMELESS
 					</Box>
 					<Box component="span" sx={{ color: '#999', fontWeight: 300, fontSize: '0.95rem', ml: -0.5, letterSpacing: 1 }}>
@@ -84,11 +84,11 @@ const Top = () => {
 					{navLinks.map((link) => (
 						<Link key={link.href} href={link.href} style={{ textDecoration: 'none' }}>
 							<Button sx={{
-								color: router.pathname === link.href ? '#595f39' : '#777',
+								color: router.pathname === link.href ? '#111111' : '#777',
 								fontWeight: router.pathname === link.href ? 600 : 400,
 								fontSize: '0.8rem',
 								letterSpacing: '0.5px',
-								'&:hover': { color: '#595f39', background: 'rgba(89,95,57,0.06)' },
+								'&:hover': { color: '#111111', background: 'rgba(17,17,17,0.08)' },
 							}}>
 								{link.label}
 							</Button>
@@ -99,7 +99,7 @@ const Top = () => {
 						<>
 							<Box onClick={(e: any) => setLogoutAnchor(e.currentTarget)} sx={{
 								width: 34, height: 34, borderRadius: '50%', overflow: 'hidden',
-								border: '2px solid #595f39', cursor: 'pointer', ml: 1,
+								border: '2px solid #111111', cursor: 'pointer', ml: 1,
 							}}>
 								<img
 									src={user.memberImage?.startsWith('/') ? user.memberImage : `${REACT_APP_API_URL}/${user.memberImage}`}
@@ -115,19 +115,19 @@ const Top = () => {
 					) : (
 						<Stack direction="row" spacing={1} sx={{ ml: 1 }}>
 							<Link href="/account/join" style={{ textDecoration: 'none' }}>
-								<Button sx={{ color: '#1B1B1B', fontWeight: 600, fontSize: '0.8rem', '&:hover': { color: '#595f39' } }}>
+								<Button sx={{ color: '#111111', fontWeight: 600, fontSize: '0.8rem', '&:hover': { color: '#111111' } }}>
 									LOGIN
 								</Button>
 							</Link>
 							<Link href="/account/join" style={{ textDecoration: 'none' }}>
 								<Button sx={{
-									background: '#1B1B1B',
-									color: '#E4E4DE',
+									background: '#111111',
+									color: '#FAFAFA',
 									fontWeight: 600,
 									fontSize: '0.8rem',
 									borderRadius: '6px',
 									px: 2,
-									'&:hover': { background: '#595f39' },
+									'&:hover': { background: '#2B2B2B' },
 								}}>
 									SIGN UP
 								</Button>

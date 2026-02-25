@@ -43,25 +43,35 @@ const WatchesPage = () => {
 
 	const types = [
 		{ label: 'All Watches', value: '' },
-		{ label: 'Chronograph', value: 'LUXURY' },
+		{ label: 'Luxury', value: 'LUXURY' },
 		{ label: 'Dress', value: 'DRESS' },
 		{ label: 'Sport', value: 'SPORT' },
-		{ label: 'Automatic', value: 'CLASSIC' },
-		{ label: 'Skeleton', value: 'DIVING' },
+		{ label: 'Classic', value: 'CLASSIC' },
+		{ label: 'Smart', value: 'SMART' },
 	];
 
 	return (
 		<>
 			<Head><title>Timepiece Collection</title></Head>
-			<Stack sx={{ background: '#E4E4DE', minHeight: '100vh' }}>
+			<Stack sx={{ background: '#FAFAFA', minHeight: '100vh' }}>
 				<Top />
 
-				<Stack sx={{ pt: 14, pb: 4, textAlign: 'center', background: 'rgba(196,197,186,0.3)' }}>
-					<WatchIcon sx={{ fontSize: 40, color: '#595f39', mx: 'auto', mb: 1 }} />
-					<Typography variant="h3" sx={{ color: '#1B1B1B', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2.5rem' } }}>
+				<Stack sx={{
+					pt: 14,
+					pb: 4,
+					textAlign: 'center',
+					position: 'relative',
+					overflow: 'hidden',
+					backgroundImage:
+						'linear-gradient(rgba(250,250,250,0.84), rgba(250,250,250,0.84)), url(https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=1920&q=80)',
+					backgroundSize: 'cover',
+					backgroundPosition: 'center',
+				}}>
+					<WatchIcon sx={{ fontSize: 40, color: '#111111', mx: 'auto', mb: 1, position: 'relative', zIndex: 1 }} />
+					<Typography variant="h3" sx={{ color: '#111111', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2.5rem' }, position: 'relative', zIndex: 1 }}>
 						Timepiece Collection
 					</Typography>
-					<Typography sx={{ color: '#777', mt: 1, fontSize: '0.95rem' }}>
+					<Typography sx={{ color: '#777', mt: 1, fontSize: '0.95rem', position: 'relative', zIndex: 1 }}>
 						Discover exquisite timepieces crafted with precision and elegance
 					</Typography>
 				</Stack>
@@ -90,9 +100,9 @@ const WatchesPage = () => {
 								'& .MuiOutlinedInput-root': {
 									borderRadius: '8px',
 									background: 'rgba(255,255,255,0.7)',
-									'& fieldset': { borderColor: '#C4C5BA' },
-									'&:hover fieldset': { borderColor: '#595f39' },
-									'&.Mui-focused fieldset': { borderColor: '#595f39' },
+									'& fieldset': { borderColor: '#D4AF37' },
+									'&:hover fieldset': { borderColor: '#111111' },
+									'&.Mui-focused fieldset': { borderColor: '#111111' },
 								},
 							}}
 						/>
@@ -111,12 +121,12 @@ const WatchesPage = () => {
 										cursor: 'pointer',
 										transition: 'all 0.2s',
 										border: '1.5px solid',
-										borderColor: activeType === t.value ? '#1B1B1B' : '#C4C5BA',
-										background: activeType === t.value ? '#1B1B1B' : 'rgba(255,255,255,0.6)',
-										color: activeType === t.value ? '#E4E4DE' : '#555',
+										borderColor: activeType === t.value ? '#111111' : '#D4AF37',
+										background: activeType === t.value ? '#111111' : 'rgba(255,255,255,0.6)',
+										color: activeType === t.value ? '#FAFAFA' : '#555',
 										'&:hover': {
-											borderColor: activeType === t.value ? '#1B1B1B' : '#595f39',
-											color: activeType === t.value ? '#E4E4DE' : '#595f39',
+											borderColor: activeType === t.value ? '#111111' : '#111111',
+											color: activeType === t.value ? '#FAFAFA' : '#111111',
 										},
 									}}
 								>
@@ -138,13 +148,13 @@ const WatchesPage = () => {
 										borderRadius: '16px',
 										overflow: 'hidden',
 										boxShadow: '0 2px 12px rgba(27,27,27,0.06)',
-										border: '1px solid #C4C5BA',
+										border: '1px solid #D4AF37',
 										transition: 'all 0.3s',
 										background: 'rgba(255,255,255,0.8)',
 										'&:hover': {
 											transform: 'translateY(-4px)',
-											boxShadow: '0 8px 30px rgba(89,95,57,0.12)',
-											borderColor: '#595f39',
+											boxShadow: '0 8px 30px rgba(17,17,17,0.22)',
+											borderColor: '#111111',
 										},
 									}}>
 										<Link href={`/watches/detail?id=${watch._id}`} style={{ textDecoration: 'none' }}>
@@ -164,7 +174,27 @@ const WatchesPage = () => {
 														style={{ width: '100%', height: '100%', objectFit: 'cover' }}
 													/>
 												) : (
-													<WatchIcon sx={{ fontSize: 80, color: '#C4C5BA' }} />
+													<WatchIcon sx={{ fontSize: 80, color: '#D4AF37' }} />
+												)}
+
+												{watch.watchBestSeller && (
+													<Box sx={{
+														position: 'absolute',
+														top: 12,
+														left: 12,
+														background: 'rgba(212,175,55,0.92)',
+														color: '#111111',
+														px: 1.1,
+														py: 0.35,
+														borderRadius: '999px',
+														fontSize: '0.66rem',
+														fontWeight: 700,
+														letterSpacing: '0.8px',
+														textTransform: 'uppercase',
+														zIndex: 2,
+													}}>
+														Best Seller
+													</Box>
 												)}
 
 												<IconButton
@@ -176,12 +206,12 @@ const WatchesPage = () => {
 														backdropFilter: 'blur(4px)',
 														width: 36,
 														height: 36,
-														'&:hover': { background: '#fff', color: '#595f39' },
+														'&:hover': { background: '#fff', color: '#111111' },
 													}}
 													onClick={(e) => e.preventDefault()}
 												>
 													{watch.meLiked?.[0]?.myFavorite ? (
-														<FavoriteIcon sx={{ fontSize: 18, color: '#595f39' }} />
+														<FavoriteIcon sx={{ fontSize: 18, color: '#111111' }} />
 													) : (
 														<FavoriteBorderIcon sx={{ fontSize: 18, color: '#888' }} />
 													)}
@@ -192,8 +222,8 @@ const WatchesPage = () => {
 														position: 'absolute',
 														bottom: 12,
 														left: 12,
-														background: 'rgba(27,27,27,0.75)',
-														color: '#E4E4DE',
+														background: 'rgba(17,17,17,0.78)',
+														color: '#FAFAFA',
 														px: 1.5,
 														py: 0.4,
 														borderRadius: '6px',
@@ -208,7 +238,7 @@ const WatchesPage = () => {
 
 										<Box sx={{ p: 2.5 }}>
 											<Typography sx={{
-												color: '#595f39',
+												color: '#555555',
 												fontSize: '0.7rem',
 												fontWeight: 600,
 												letterSpacing: '1.5px',
@@ -220,7 +250,7 @@ const WatchesPage = () => {
 
 											<Link href={`/watches/detail?id=${watch._id}`} style={{ textDecoration: 'none' }}>
 												<Typography sx={{
-													color: '#1B1B1B',
+													color: '#111111',
 													fontWeight: 600,
 													fontSize: '1.05rem',
 													mb: 1.5,
@@ -228,27 +258,27 @@ const WatchesPage = () => {
 													textOverflow: 'ellipsis',
 													whiteSpace: 'nowrap',
 													cursor: 'pointer',
-													'&:hover': { color: '#595f39' },
+													'&:hover': { color: '#111111' },
 												}}>
 													{watch.watchTitle}
 												</Typography>
 											</Link>
 
 											<Stack direction="row" alignItems="center" justifyContent="space-between">
-												<Typography sx={{ color: '#1B1B1B', fontWeight: 700, fontSize: '1.1rem' }}>
+												<Typography sx={{ color: '#111111', fontWeight: 700, fontSize: '1.1rem' }}>
 													${watch.watchPrice?.toLocaleString()}
 												</Typography>
 
 												<IconButton
 													size="small"
 													sx={{
-														background: '#1B1B1B',
-														color: '#E4E4DE',
+														background: '#111111',
+														color: '#FAFAFA',
 														borderRadius: '8px',
 														px: 1.5,
 														py: 0.5,
 														fontSize: '0.8rem',
-														'&:hover': { background: '#595f39' },
+														'&:hover': { background: '#2B2B2B' },
 													}}
 												>
 													<AddShoppingCartIcon sx={{ fontSize: 16, mr: 0.5 }} />
@@ -269,8 +299,8 @@ const WatchesPage = () => {
 								page={page}
 								onChange={(_, v) => setPage(v)}
 								sx={{
-									'& .MuiPaginationItem-root': { color: '#1B1B1B' },
-									'& .Mui-selected': { background: '#1B1B1B !important', color: '#E4E4DE' },
+									'& .MuiPaginationItem-root': { color: '#111111' },
+									'& .Mui-selected': { background: '#111111 !important', color: '#FAFAFA' },
 								}}
 							/>
 						</Stack>

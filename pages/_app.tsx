@@ -8,10 +8,10 @@ import '../scss/app.scss';
 
 const theme = createTheme({
 	palette: {
-		primary: { main: '#1B1B1B' },
-		secondary: { main: '#595f39' },
-		background: { default: '#E4E4DE', paper: '#FFFFFF' },
-		text: { primary: '#1B1B1B', secondary: '#6b6b6b' },
+		primary: { main: '#111111' },
+		secondary: { main: '#D4AF37' },
+		background: { default: '#FAFAFA', paper: '#FFFFFF' },
+		text: { primary: '#111111', secondary: '#555555' },
 	},
 	typography: {
 		fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',

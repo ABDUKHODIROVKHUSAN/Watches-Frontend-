@@ -44,32 +44,32 @@ const JoinPage = () => {
 
 	const inputSx = {
 		'& .MuiOutlinedInput-root': {
-			'& fieldset': { borderColor: '#C4C5BA' },
-			'&:hover fieldset': { borderColor: '#595f39' },
-			'&.Mui-focused fieldset': { borderColor: '#595f39' },
+			'& fieldset': { borderColor: '#D4AF37' },
+			'&:hover fieldset': { borderColor: '#111111' },
+			'&.Mui-focused fieldset': { borderColor: '#111111' },
 		},
 		'& .MuiInputLabel-root': { color: '#888' },
-		'& .MuiInputLabel-root.Mui-focused': { color: '#595f39' },
+		'& .MuiInputLabel-root.Mui-focused': { color: '#111111' },
 	};
 
 	return (
 		<>
 			<Head><title>Join - Watches</title></Head>
-			<Stack sx={{ background: '#E4E4DE', minHeight: '100vh' }}>
+			<Stack sx={{ background: '#FAFAFA', minHeight: '100vh' }}>
 				<Top />
 				<Container maxWidth="sm" sx={{ pt: 18, pb: 6 }}>
 					<Box sx={{
 						background: 'rgba(255,255,255,0.7)',
 						borderRadius: '16px',
-						border: '1px solid #C4C5BA',
+						border: '1px solid #D4AF37',
 						p: 4,
 						boxShadow: '0 4px 20px rgba(27,27,27,0.04)',
 					}}>
-						<Typography variant="h4" sx={{ color: '#1B1B1B', textAlign: 'center', mb: 3, fontWeight: 700 }}>
+						<Typography variant="h4" sx={{ color: '#111111', textAlign: 'center', mb: 3, fontWeight: 700 }}>
 							Welcome
 						</Typography>
 						<Tabs value={tab} onChange={(_, v) => setTab(v)} centered
-							sx={{ mb: 3, '& .MuiTab-root': { color: '#888' }, '& .Mui-selected': { color: '#595f39' }, '& .MuiTabs-indicator': { backgroundColor: '#595f39' } }}>
+							sx={{ mb: 3, '& .MuiTab-root': { color: '#888' }, '& .Mui-selected': { color: '#111111' }, '& .MuiTabs-indicator': { backgroundColor: '#D4AF37' } }}>
 							<Tab label="Login" />
 							<Tab label="Sign Up" />
 						</Tabs>
@@ -79,7 +79,7 @@ const JoinPage = () => {
 								<TextField label="Nickname" value={loginNick} onChange={(e) => setLoginNick(e.target.value)} fullWidth sx={inputSx} />
 								<TextField label="Password" type="password" value={loginPass} onChange={(e) => setLoginPass(e.target.value)} fullWidth sx={inputSx} />
 								<Button variant="contained" onClick={handleLogin} fullWidth
-									sx={{ background: '#1B1B1B', color: '#E4E4DE', fontWeight: 700, py: 1.5, borderRadius: '8px', '&:hover': { background: '#595f39' } }}>
+									sx={{ background: '#111111', color: '#FAFAFA', fontWeight: 700, py: 1.5, borderRadius: '8px', '&:hover': { background: '#2B2B2B' } }}>
 									Login
 								</Button>
 							</Stack>
@@ -89,7 +89,7 @@ const JoinPage = () => {
 								<TextField label="Password" type="password" value={signPass} onChange={(e) => setSignPass(e.target.value)} fullWidth sx={inputSx} />
 								<TextField label="Phone" value={signPhone} onChange={(e) => setSignPhone(e.target.value)} fullWidth sx={inputSx} />
 								<Button variant="contained" onClick={handleSignup} fullWidth
-									sx={{ background: '#1B1B1B', color: '#E4E4DE', fontWeight: 700, py: 1.5, borderRadius: '8px', '&:hover': { background: '#595f39' } }}>
+									sx={{ background: '#111111', color: '#FAFAFA', fontWeight: 700, py: 1.5, borderRadius: '8px', '&:hover': { background: '#2B2B2B' } }}>
 									Sign Up
 								</Button>
 							</Stack>

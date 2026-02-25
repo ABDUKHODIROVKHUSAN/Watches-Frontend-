@@ -14,6 +14,7 @@ export const GET_WATCHES = gql`
 				watchDesc
 				watchBarter
 				watchRent
+				watchBestSeller
 				watchViews
 				watchLikes
 				watchComments
