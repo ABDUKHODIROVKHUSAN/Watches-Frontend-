@@ -63,6 +63,12 @@ export const UPDATE_MEMBER = gql`
 	}
 `;
 
+export const IMAGE_UPLOADER = gql`
+	mutation ImageUploader($file: Upload!, $target: String!) {
+		imageUploader(file: $file, target: $target)
+	}
+`;
+
 export const LIKE_TARGET_WATCH = gql`
 	mutation LikeTargetWatch($input: String!) {
 		likeTargetWatch(watchId: $input) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Stack, Box, Typography, Button, Container, Grid } from '@mui/material';
+import { Stack, Box, Typography, Button, Container, Grid, IconButton } from '@mui/material';
 import Head from 'next/head';
 import Top from '../libs/components/Top';
 import Footer from '../libs/components/Footer';
@@ -10,9 +10,66 @@ import { GET_WATCHES } from '../apollo/user/query';
 import { REACT_APP_API_URL } from '../libs/config';
 import WatchIcon from '@mui/icons-material/Watch';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
+import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
 
 const Home = () => {
 	const [hoveredBestSellerId, setHoveredBestSellerId] = useState<string | null>(null);
+	const [celebrityStartIndex, setCelebrityStartIndex] = useState(0);
+	const [showLeftCelebrityArrow, setShowLeftCelebrityArrow] = useState(false);
+
+	const celebrityWearers = [
+		{
+			name: 'Ryan Gosling',
+			brand: 'TAG HEUER',
+			image: '/img/celebrities/ryan-gosling-tag-heuer.png',
+			position: 'center center',
+		},
+		{
+			name: 'Jung Kook',
+			brand: 'HUBLOT',
+			image: '/img/celebrities/jungkook-rolex.png',
+			position: 'center center',
+		},
+		{
+			name: 'Carlos Alcaraz',
+			brand: 'ROLEX',
+			image: '/img/celebrities/carlos-alcaraz-rolex.png',
+			position: 'center center',
+		},
+		{
+			name: 'Erling Haaland',
+			brand: 'BREITLING',
+			image: '/img/celebrities/erling-haaland-breitling.png',
+			position: 'center center',
+		},
+		{
+			name: 'Eileen Gu',
+			brand: 'IWC',
+			image: '/img/celebrities/eileen-gu-iwc.png',
+			position: 'center center',
+		},
+		{
+			name: 'Jacob Elordi',
+			brand: 'CARTIER',
+			image: '/img/celebrities/jacob-elordi-cartier-v2.png',
+			position: 'center center',
+		},
+	];
+
+	const visibleCelebrityWearers = [
+		celebrityWearers[celebrityStartIndex % celebrityWearers.length],
+		celebrityWearers[(celebrityStartIndex + 1) % celebrityWearers.length],
+	];
+
+	const showNextCelebrity = () => {
+		setShowLeftCelebrityArrow(true);
+		setCelebrityStartIndex((prev) => (prev + 1) % celebrityWearers.length);
+	};
+
+	const showPreviousCelebrity = () => {
+		setCelebrityStartIndex((prev) => (prev - 1 + celebrityWearers.length) % celebrityWearers.length);
+	};
 
 	useEffect(() => {
 		const jwt = getJwtToken();
@@ -68,13 +125,13 @@ const Home = () => {
 					position: 'relative',
 					overflow: 'hidden',
 				}}>
-					<Box sx={{ position: 'absolute', inset: 0, background: 'rgba(17, 17, 17, 0.55)' }} />
+					<Box sx={{ position: 'absolute', inset: 0, background: 'rgba(17, 17, 17, 0.5)' }} />
 					<Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
 						<WatchIcon sx={{ fontSize: 70, color: '#D4AF37', mb: 3 }} />
 						<Typography variant="h1" sx={{
 							fontSize: { xs: '2.5rem', md: '4.5rem' },
 							fontWeight: 700,
-							color: '#FAFAFA',
+							color: 'rgba(250,250,250,0.62)',
 							mb: 2,
 							letterSpacing: '2px',
 						}}>
@@ -108,12 +165,12 @@ const Home = () => {
 					</Container>
 				</Stack>
 
-					<Stack sx={{ background: '#FAFAFA', py: 10 }}>
+					<Stack sx={{ background: '#FAFAFA', py: { xs: 8, md: 10 } }}>
 					<Container maxWidth="lg">
 						<Typography variant="h4" sx={{ color: '#111111', textAlign: 'center', mb: 1, fontWeight: 600 }}>
 							Featured Brands
 						</Typography>
-						<Typography sx={{ color: '#777', textAlign: 'center', mb: 6 }}>
+						<Typography sx={{ color: '#777', textAlign: 'center', mb: 5 }}>
 							Authorized dealer of world-renowned watchmakers
 						</Typography>
 						<Stack direction="row" justifyContent="center" flexWrap="wrap" gap={3}>
@@ -266,7 +323,7 @@ const Home = () => {
 				</Stack>
 
 				{/* BEST SELLERS */}
-				<Stack sx={{ background: '#0A0D12', minHeight: '100vh', py: { xs: 8, md: 12 } }}>
+				<Stack sx={{ background: '#0A0D12', py: { xs: 8, md: 11 } }}>
 					<Container maxWidth="xl">
 						<Stack sx={{ mb: { xs: 6, md: 8 }, pl: { md: 2 } }}>
 							<Typography sx={{ color: '#FAFAFA', fontSize: { xs: '1.8rem', md: '2.2rem' }, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
@@ -335,7 +392,140 @@ const Home = () => {
 					</Container>
 				</Stack>
 
-				<Stack sx={{ background: 'rgba(17,17,17,0.06)', py: 10 }}>
+				{/* CELEBRITY WEARERS */}
+				<Stack
+					sx={{
+						background: '#111111',
+						py: 0,
+						minHeight: { xs: 'auto', md: 'calc(100vh - 64px)' },
+						position: 'relative',
+						overflow: 'hidden',
+					}}
+				>
+					<Stack
+						key={celebrityStartIndex}
+						direction={{ xs: 'column', md: 'row' }}
+						sx={{
+							minHeight: { xs: 'auto', md: 'calc(100vh - 64px)' },
+							height: { xs: 'auto', md: 'calc(100vh - 64px)' },
+							animation: 'celebritySlide 0.55s ease',
+							'@keyframes celebritySlide': {
+								'0%': { transform: 'translateX(24px)', opacity: 0.65 },
+								'100%': { transform: 'translateX(0)', opacity: 1 },
+							},
+						}}
+					>
+						{visibleCelebrityWearers.map((celebrity) => (
+							<Box
+								key={`${celebrity.name}-${celebrity.brand}`}
+								sx={{
+									position: 'relative',
+									flex: 1,
+									minHeight: { xs: 320, md: 'calc(100vh - 64px)' },
+									height: { xs: 320, md: 'calc(100vh - 64px)' },
+									overflow: 'hidden',
+									background: '#7b7d80',
+									borderRight: { xs: 'none', md: '2px solid rgba(220,220,220,0.35)' },
+								}}
+							>
+								<Box
+									component="img"
+									src={celebrity.image}
+									alt={`${celebrity.name} wearing ${celebrity.brand}`}
+									sx={{
+										width: '100%',
+										height: '100%',
+										objectFit: 'cover',
+										objectPosition: celebrity.position,
+										filter: 'grayscale(100%) contrast(1.06) brightness(0.98)',
+										transform: 'scale(1)',
+										transformOrigin: 'center center',
+									}}
+								/>
+								<Box
+									sx={{
+										position: 'absolute',
+										inset: 0,
+										background:
+											'linear-gradient(to top, rgba(8,8,8,0.45) 0%, rgba(8,8,8,0.1) 38%, rgba(8,8,8,0.2) 100%)',
+									}}
+								/>
+
+								<Box sx={{ position: 'absolute', left: 22, bottom: 18, zIndex: 2 }}>
+									<Typography sx={{ color: '#FAFAFA', fontSize: { xs: '1.1rem', md: '1.5rem' }, fontWeight: 600, letterSpacing: '0.5px' }}>
+										{celebrity.name}
+									</Typography>
+								</Box>
+
+								<Box sx={{ position: 'absolute', right: 22, bottom: 16, zIndex: 2 }}>
+									<Typography
+										sx={{
+											color: '#D4AF37',
+											fontSize: { xs: '0.8rem', md: '0.95rem' },
+											fontWeight: 700,
+											letterSpacing: '2px',
+											textTransform: 'uppercase',
+										}}
+									>
+										{celebrity.brand}
+									</Typography>
+								</Box>
+							</Box>
+						))}
+					</Stack>
+
+					{showLeftCelebrityArrow && (
+						<IconButton
+							disableRipple
+							onClick={showPreviousCelebrity}
+							sx={{
+								position: 'absolute',
+								left: { xs: 10, md: 18 },
+								top: '50%',
+								transform: 'translateY(-50%)',
+								color: 'rgba(250,250,250,0.6)',
+								background: 'transparent',
+								p: 0.25,
+								zIndex: 3,
+								'&:hover': {
+									color: '#FAFAFA',
+									background: 'transparent',
+								},
+							}}
+						>
+							<ChevronLeftRoundedIcon sx={{ fontSize: { xs: 24, md: 30 } }} />
+						</IconButton>
+					)}
+
+					<IconButton
+						disableRipple
+						onClick={showNextCelebrity}
+						sx={{
+							position: 'absolute',
+							right: { xs: 10, md: 18 },
+							top: '50%',
+							transform: 'translateY(-50%)',
+							color: 'rgba(250,250,250,0.6)',
+							background: 'transparent',
+							p: 0.25,
+							zIndex: 3,
+							animation: 'arrowPulse 1.9s ease-in-out infinite',
+							'@keyframes arrowPulse': {
+								'0%': { transform: 'translateY(-50%) scale(1)', opacity: 0.72 },
+								'50%': { transform: 'translateY(-50%) scale(1.06)', opacity: 1 },
+								'100%': { transform: 'translateY(-50%) scale(1)', opacity: 0.72 },
+							},
+							'&:hover': {
+								color: '#FAFAFA',
+								background: 'transparent',
+							},
+						}}
+					>
+						<ChevronRightRoundedIcon sx={{ fontSize: { xs: 24, md: 30 } }} />
+					</IconButton>
+				</Stack>
+
+				<Stack sx={{ background: 'rgba(17,17,17,0.06)', py: { xs: 8, md: 10 } }}>
 					<Container maxWidth="lg">
 						<Stack direction={{ xs: 'column', md: 'row' }} spacing={6} alignItems="center">
 							<Box flex={1}>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Stack, Container, Typography, Grid, Card, Box, TextField, Pagination, IconButton, InputAdornment } from '@mui/material';
+import { Stack, Container, Typography, Grid, Card, Box, TextField, Pagination, IconButton, InputAdornment, Button } from '@mui/material';
 import Head from 'next/head';
 import Top from '../../libs/components/Top';
 import Footer from '../../libs/components/Footer';
@@ -50,10 +50,16 @@ const WatchesPage = () => {
 		{ label: 'Smart', value: 'SMART' },
 	];
 
+	const resetToAllWatches = () => {
+		setSearchText('');
+		setActiveType('');
+		setPage(1);
+	};
+
 	return (
 		<>
 			<Head><title>Timepiece Collection</title></Head>
-			<Stack sx={{ background: '#FAFAFA', minHeight: '100vh' }}>
+			<Stack sx={{ background: '#FAFAFA', minHeight: '100vh', display: 'flex' }}>
 				<Top />
 
 				<Stack sx={{
@@ -139,7 +145,54 @@ const WatchesPage = () => {
 					{loading ? (
 						<Typography sx={{ color: '#999', textAlign: 'center', py: 10 }}>Loading watches...</Typography>
 					) : watches.length === 0 ? (
-						<Typography sx={{ color: '#999', textAlign: 'center', py: 10 }}>No watches found</Typography>
+						<Box
+							sx={{
+								border: '1px dashed rgba(212,175,55,0.58)',
+								borderRadius: '16px',
+								background: 'linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(248,248,248,0.92) 100%)',
+								px: { xs: 2.5, md: 4 },
+								py: { xs: 5, md: 6 },
+								textAlign: 'center',
+							}}
+						>
+							<WatchIcon sx={{ fontSize: 42, color: '#D4AF37', mb: 1.2 }} />
+							<Typography sx={{ color: '#111111', fontWeight: 600, fontSize: '1.08rem', mb: 0.7 }}>
+								No watches found
+							</Typography>
+							<Typography sx={{ color: '#666666', fontSize: '0.9rem', mb: 2.2 }}>
+								Try a different keyword or clear filters to discover more timepieces.
+							</Typography>
+							<Stack direction="row" justifyContent="center" spacing={1.2} flexWrap="wrap" useFlexGap>
+								<Button
+									variant="outlined"
+									onClick={resetToAllWatches}
+									sx={{
+										color: '#111111',
+										borderColor: 'rgba(0,0,0,0.24)',
+										fontSize: '0.78rem',
+										letterSpacing: '1.1px',
+										px: 2.6,
+										'&:hover': { borderColor: '#D4AF37', color: '#D4AF37' },
+									}}
+								>
+									Clear Filters
+								</Button>
+								<Button
+									variant="contained"
+									onClick={resetToAllWatches}
+									sx={{
+										background: '#111111',
+										color: '#FAFAFA',
+										fontSize: '0.78rem',
+										letterSpacing: '1.1px',
+										px: 2.6,
+										'&:hover': { background: '#2B2B2B' },
+									}}
+								>
+									Browse All
+								</Button>
+							</Stack>
+						</Box>
 					) : (
 						<Grid container spacing={3}>
 							{watches.map((watch: any) => (
@@ -306,7 +359,9 @@ const WatchesPage = () => {
 						</Stack>
 					)}
 				</Container>
-				<Footer />
+				<Box sx={{ mt: 'auto' }}>
+					<Footer />
+				</Box>
 			</Stack>
 		</>
 	);

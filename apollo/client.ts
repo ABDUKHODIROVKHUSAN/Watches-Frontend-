@@ -11,6 +11,9 @@ function getHeaders() {
 	const token = getJwtToken();
 	// @ts-ignore
 	if (token) headers['Authorization'] = `Bearer ${token}`;
+	// Required by backend CSRF protection for multipart uploads.
+	// @ts-ignore
+	headers['apollo-require-preflight'] = 'true';
 	return headers;
 }
 
