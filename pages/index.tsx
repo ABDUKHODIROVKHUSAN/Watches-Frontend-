@@ -17,6 +17,14 @@ const Home = () => {
 	const [hoveredBestSellerId, setHoveredBestSellerId] = useState<string | null>(null);
 	const [celebrityStartIndex, setCelebrityStartIndex] = useState(0);
 	const [showLeftCelebrityArrow, setShowLeftCelebrityArrow] = useState(false);
+	const [featuredGroupIndex, setFeaturedGroupIndex] = useState(0);
+	const [showFeaturedBrands, setShowFeaturedBrands] = useState(true);
+
+	const featuredBrandGroups = [
+		['ROLEX', 'OMEGA', 'CARTIER', 'TAG HEUER', 'PATEK PHILIPPE', 'BREITLING', 'HUBLOT', 'IWC', 'AUDEMARS PIGUET'],
+		['RICHARD MILLE', 'VACHERON CONSTANTIN', 'TUDOR', 'PANERAI', 'ZENITH', 'LONGINES', 'TISSOT', 'BULGARI', 'CHOPARD'],
+		['HERMES', 'CHANEL', 'GUCCI', 'LOUIS VUITTON', 'BAUME & MERCIER', 'JAEGER-LECOULTRE', 'MONTBLANC', 'BREGUET', 'HARRY WINSTON'],
+	];
 
 	const celebrityWearers = [
 		{
@@ -75,6 +83,18 @@ const Home = () => {
 		const jwt = getJwtToken();
 		if (jwt) updateUserInfo(jwt);
 	}, []);
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setShowFeaturedBrands(false);
+			setTimeout(() => {
+				setFeaturedGroupIndex((prev) => (prev + 1) % featuredBrandGroups.length);
+				setShowFeaturedBrands(true);
+			}, 380);
+		}, 3000);
+
+		return () => clearInterval(interval);
+	}, [featuredBrandGroups.length]);
 
 	const { data } = useQuery(GET_WATCHES, {
 		variables: {
@@ -173,8 +193,17 @@ const Home = () => {
 						<Typography sx={{ color: '#777', textAlign: 'center', mb: 5 }}>
 							Authorized dealer of world-renowned watchmakers
 						</Typography>
-						<Stack direction="row" justifyContent="center" flexWrap="wrap" gap={3}>
-							{['ROLEX', 'OMEGA', 'CARTIER', 'TAG HEUER', 'PATEK PHILIPPE', 'BREITLING', 'HUBLOT', 'IWC'].map((brand) => (
+						<Stack
+							direction="row"
+							justifyContent="center"
+							flexWrap="wrap"
+							gap={3}
+							sx={{
+								opacity: showFeaturedBrands ? 1 : 0,
+								transition: 'opacity 0.38s ease',
+							}}
+						>
+							{featuredBrandGroups[featuredGroupIndex].map((brand) => (
 								<Box key={brand} sx={{
 									px: 4, py: 2,
 									border: '1.5px solid #D4AF37',
@@ -195,7 +224,7 @@ const Home = () => {
 				</Stack>
 
 				{/* NEW ARRIVALS */}
-				<Stack sx={{ background: '#FFFFFF', py: { xs: 8, md: 12 } }}>
+				<Stack id="new-arrivals" sx={{ background: '#FFFFFF', py: { xs: 8, md: 12 } }}>
 					<Container maxWidth="lg">
 						<Stack alignItems="center" sx={{ mb: { xs: 5, md: 8 } }}>
 							<Typography sx={{
@@ -394,6 +423,7 @@ const Home = () => {
 
 				{/* CELEBRITY WEARERS */}
 				<Stack
+					id="celebrity-wearers"
 					sx={{
 						background: '#111111',
 						py: 0,
