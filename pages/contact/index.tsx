@@ -10,6 +10,7 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import SearchIcon from '@mui/icons-material/Search';
+import Link from 'next/link';
 
 const ContactPage = () => {
 	const [watchSearch, setWatchSearch] = useState('');
@@ -88,9 +89,21 @@ const ContactPage = () => {
 							We are here for you.
 						</Typography>
 						<Stack direction="row" justifyContent="center" spacing={3}>
-							<Typography sx={{ color: '#FAFAFA', fontSize: '0.72rem', fontWeight: 600, letterSpacing: '1.5px' }}>
-								› READ OUR FAQ
-							</Typography>
+							<Link href="/faq" style={{ textDecoration: 'none' }}>
+								<Typography
+									sx={{
+										color: '#FAFAFA',
+										fontSize: '0.72rem',
+										fontWeight: 600,
+										letterSpacing: '1.5px',
+										cursor: 'pointer',
+										transition: 'all 0.2s ease',
+										'&:hover': { color: '#D4AF37' },
+									}}
+								>
+									› READ OUR FAQ
+								</Typography>
+							</Link>
 							<Typography sx={{ color: '#FAFAFA', fontSize: '0.72rem', fontWeight: 600, letterSpacing: '1.5px' }}>
 								› SERVICE REQUEST
 							</Typography>

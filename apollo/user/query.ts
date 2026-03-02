@@ -194,6 +194,41 @@ export const GET_VISITED_WATCHES = gql`
 	}
 `;
 
+export const GET_SELLER_WATCHES = gql`
+	query GetSellerWatches($input: SellerWatchesInquiry!) {
+		getSellerWatches(input: $input) {
+			list {
+				_id
+				watchType
+				watchStatus
+				watchBrand
+				watchTitle
+				watchPrice
+				watchImages
+				watchDesc
+				watchBarter
+				watchRent
+				watchBestSeller
+				watchViews
+				watchLikes
+				memberId
+				soldAt
+				manufacturedAt
+				createdAt
+				updatedAt
+				memberData {
+					_id
+					memberNick
+					memberImage
+				}
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
 export const GET_WATCH_AI_INSIGHTS = gql`
 	query GetWatchAIInsights($watchId: String!) {
 		getWatchAIInsights(watchId: $watchId) {
@@ -211,6 +246,51 @@ export const GET_WATCH_AI_INSIGHTS = gql`
 			priceRange
 			funFacts
 			summary
+		}
+	}
+`;
+
+export const GET_WATCH_BRAND_AI_INSIGHTS = gql`
+	query GetWatchBrandAIInsights($brand: String!) {
+		getWatchBrandAIInsights(brand: $brand) {
+			watchTitle
+			watchBrand
+			salesInfo
+			celebrityWearers {
+				name
+				description
+			}
+			fashionTips {
+				outfit
+				occasion
+			}
+			priceRange
+			funFacts
+			summary
+		}
+	}
+`;
+
+export const GET_MY_ORDERS = gql`
+	query GetMyOrders($input: OrdersInquiry!) {
+		getMyOrders(input: $input) {
+			list {
+				_id
+				watchId
+				watchTitle
+				watchBrand
+				watchPrice
+				watchImage
+				orderTotal
+				orderStatus
+				paymentStatus
+				paymentMethod
+				shippingAddress
+				createdAt
+			}
+			metaCounter {
+				total
+			}
 		}
 	}
 `;

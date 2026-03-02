@@ -3,18 +3,25 @@ import { Stack, Container, Typography, Grid, Card, Box, TextField, Pagination, I
 import Head from 'next/head';
 import Top from '../../libs/components/Top';
 import Footer from '../../libs/components/Footer';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { GET_WATCHES } from '../../apollo/user/query';
 import { getJwtToken, updateUserInfo } from '../../libs/auth';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import SearchIcon from '@mui/icons-material/Search';
 import WatchIcon from '@mui/icons-material/Watch';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { REACT_APP_API_URL } from '../../libs/config';
+import { LIKE_TARGET_WATCH } from '../../apollo/user/mutation';
+import { addToCart } from '../../libs/cart';
+import { userVar } from '../../apollo/store';
+import { sweetInfoAlert } from '../../libs/sweetAlert';
 
 const WatchesPage = () => {
+	const router = useRouter();
+	const user = useReactiveVar(userVar);
 	const [searchText, setSearchText] = useState('');
 	const [activeType, setActiveType] = useState('');
 	const [page, setPage] = useState(1);
@@ -24,19 +31,32 @@ const WatchesPage = () => {
 		if (jwt) updateUserInfo(jwt);
 	}, []);
 
-	const { data, loading } = useQuery(GET_WATCHES, {
-		variables: {
-			input: {
-				page: page,
-				limit: 12,
-				search: {
-					...(activeType && { typeList: [activeType] }),
-					...(searchText && { text: searchText }),
-				},
+	useEffect(() => {
+		if (!router.isReady) return;
+		const querySearch = router.query.search;
+		const incoming = Array.isArray(querySearch) ? querySearch[0] : querySearch;
+		if (!incoming) return;
+		setSearchText(String(incoming).trim());
+		setPage(1);
+	}, [router.isReady, router.query.search]);
+
+	const queryVariables = {
+		input: {
+			page: page,
+			limit: 12,
+			search: {
+				...(activeType && { typeList: [activeType] }),
+				...(searchText && { text: searchText }),
 			},
 		},
+	};
+
+	const { data, loading } = useQuery(GET_WATCHES, {
+		variables: queryVariables,
 		fetchPolicy: 'network-only',
 	});
+
+	const [likeTargetWatch] = useMutation(LIKE_TARGET_WATCH);
 
 	const watches = data?.getWatches?.list || [];
 	const total = data?.getWatches?.metaCounter?.[0]?.total || 0;
@@ -54,6 +74,46 @@ const WatchesPage = () => {
 		setSearchText('');
 		setActiveType('');
 		setPage(1);
+	};
+
+	const handleToggleLike = async (e: React.MouseEvent, watchId: string) => {
+		e.preventDefault();
+		e.stopPropagation();
+
+		const jwt = getJwtToken();
+		if (!jwt) {
+			await sweetInfoAlert('Please login first to like watches.');
+			return;
+		}
+
+		try {
+			await likeTargetWatch({
+				variables: { input: watchId },
+				refetchQueries: [{ query: GET_WATCHES, variables: queryVariables }],
+				awaitRefetchQueries: true,
+			});
+		} catch (err) {
+			console.log('Like toggle failed:', err);
+		}
+	};
+
+	const handleAddToCart = (watch: any) => {
+		const jwt = getJwtToken();
+		if (!jwt) {
+			void sweetInfoAlert('Please login first to add watches to cart.');
+			return;
+		}
+
+		addToCart(
+			{
+				_id: watch._id,
+				watchTitle: watch.watchTitle,
+				watchBrand: watch.watchBrand,
+				watchPrice: Number(watch.watchPrice || 0),
+				watchImage: watch.watchImages?.[0] || '',
+			},
+			user?._id || 'member',
+		);
 	};
 
 	return (
@@ -261,10 +321,10 @@ const WatchesPage = () => {
 														height: 36,
 														'&:hover': { background: '#fff', color: '#111111' },
 													}}
-													onClick={(e) => e.preventDefault()}
+													onClick={(e) => handleToggleLike(e, watch._id)}
 												>
 													{watch.meLiked?.[0]?.myFavorite ? (
-														<FavoriteIcon sx={{ fontSize: 18, color: '#111111' }} />
+														<FavoriteIcon sx={{ fontSize: 18, color: '#E53935' }} />
 													) : (
 														<FavoriteBorderIcon sx={{ fontSize: 18, color: '#888' }} />
 													)}
@@ -324,6 +384,7 @@ const WatchesPage = () => {
 
 												<IconButton
 													size="small"
+													onClick={() => handleAddToCart(watch)}
 													sx={{
 														background: '#111111',
 														color: '#FAFAFA',

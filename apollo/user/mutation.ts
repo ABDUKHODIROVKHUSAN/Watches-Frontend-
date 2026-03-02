@@ -69,6 +69,12 @@ export const IMAGE_UPLOADER = gql`
 	}
 `;
 
+export const IMAGES_UPLOADER = gql`
+	mutation ImagesUploader($files: [Upload!]!, $target: String!) {
+		imagesUploader(files: $files, target: $target)
+	}
+`;
+
 export const LIKE_TARGET_WATCH = gql`
 	mutation LikeTargetWatch($input: String!) {
 		likeTargetWatch(watchId: $input) {
@@ -86,6 +92,53 @@ export const LIKE_TARGET_MEMBER = gql`
 			_id
 			memberNick
 			memberLikes
+		}
+	}
+`;
+
+export const CREATE_WATCH = gql`
+	mutation CreateWatch($input: WatchInput!) {
+		createWatch(input: $input) {
+			_id
+			watchType
+			watchStatus
+			watchBrand
+			watchTitle
+			watchPrice
+			watchImages
+			watchDesc
+			watchBarter
+			watchRent
+			watchBestSeller
+			manufacturedAt
+			createdAt
+		}
+	}
+`;
+
+export const UPDATE_WATCH = gql`
+	mutation UpdateWatch($input: WatchUpdate!) {
+		updateWatch(input: $input) {
+			_id
+			watchStatus
+			soldAt
+			updatedAt
+		}
+	}
+`;
+
+export const CREATE_ORDER = gql`
+	mutation CreateOrder($input: CreateOrderInput!) {
+		createOrder(input: $input) {
+			_id
+			watchId
+			watchTitle
+			watchBrand
+			watchPrice
+			orderTotal
+			orderStatus
+			paymentStatus
+			createdAt
 		}
 	}
 `;

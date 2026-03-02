@@ -1,0 +1,67 @@
+import { gql } from '@apollo/client';
+
+export const GET_ALL_MEMBERS_BY_ADMIN = gql`
+	query GetAllMembersByAdmin($input: MembersInquiry!) {
+		getAllMembersByAdmin(input: $input) {
+			list {
+				_id
+				memberType
+				memberStatus
+				memberAuthType
+				memberPhone
+				memberNick
+				memberFullName
+				memberImage
+				memberAddress
+				memberDesc
+				memberWarnings
+				memberBlocks
+				memberWatches
+				memberRank
+				memberArticles
+				memberPoints
+				memberLikes
+				memberViews
+				createdAt
+				updatedAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+export const GET_ALL_WATCHES_BY_ADMIN = gql`
+	query GetAllWatchesByAdmin($input: AllWatchesInquiry!) {
+		getAllWatchesByAdmin(input: $input) {
+			list {
+				_id
+				watchType
+				watchStatus
+				watchBrand
+				watchTitle
+				watchPrice
+				watchImages
+				watchViews
+				watchLikes
+				watchBestSeller
+				memberId
+				soldAt
+				deletedAt
+				createdAt
+				updatedAt
+				memberData {
+					_id
+					memberType
+					memberStatus
+					memberNick
+					memberImage
+				}
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;

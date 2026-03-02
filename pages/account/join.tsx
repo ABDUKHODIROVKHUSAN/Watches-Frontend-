@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Stack, Container, Typography, Box, TextField, Button, Tabs, Tab } from '@mui/material';
+import { Stack, Container, Typography, Box, TextField, Button, Tabs, Tab, MenuItem } from '@mui/material';
 import Head from 'next/head';
 import Top from '../../libs/components/Top';
 import Footer from '../../libs/components/Footer';
@@ -15,6 +15,7 @@ const JoinPage = () => {
 	const [signNick, setSignNick] = useState('');
 	const [signPass, setSignPass] = useState('');
 	const [signPhone, setSignPhone] = useState('');
+	const [signRole, setSignRole] = useState<'USER' | 'AGENT'>('USER');
 
 	useEffect(() => {
 		if (getJwtToken()) router.push('/mypage');
@@ -34,7 +35,7 @@ const JoinPage = () => {
 	const handleSignup = async () => {
 		try {
 			if (!signNick || !signPass || !signPhone) return sweetMixinErrorAlert('Please fill all fields');
-			await signUp(signNick, signPass, signPhone, 'USER');
+			await signUp(signNick, signPass, signPhone, signRole);
 			await sweetMixinSuccessAlert('Welcome!');
 			router.push('/');
 		} catch (err) {
@@ -85,6 +86,17 @@ const JoinPage = () => {
 							</Stack>
 						) : (
 							<Stack spacing={2}>
+								<TextField
+									label="Account Type"
+									select
+									value={signRole}
+									onChange={(e) => setSignRole(e.target.value as 'USER' | 'AGENT')}
+									fullWidth
+									sx={inputSx}
+								>
+									<MenuItem value="USER">User</MenuItem>
+									<MenuItem value="AGENT">Seller</MenuItem>
+								</TextField>
 								<TextField label="Nickname" value={signNick} onChange={(e) => setSignNick(e.target.value)} fullWidth sx={inputSx} />
 								<TextField label="Password" type="password" value={signPass} onChange={(e) => setSignPass(e.target.value)} fullWidth sx={inputSx} />
 								<TextField label="Phone" value={signPhone} onChange={(e) => setSignPhone(e.target.value)} fullWidth sx={inputSx} />

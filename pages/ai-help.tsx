@@ -1,10 +1,39 @@
 import React from 'react';
-import { Stack, Container, Typography, Box } from '@mui/material';
+import { useLazyQuery } from '@apollo/client';
+import { Box, CircularProgress, Container, Grid, Paper, Stack, Typography } from '@mui/material';
 import Head from 'next/head';
 import Top from '../libs/components/Top';
 import Footer from '../libs/components/Footer';
+import AiHero from '../components/ai/AiHero';
+import AiWatchFinder from '../components/ai/AiWatchFinder';
+import AiChatAssistant from '../components/ai/AiChatAssistant';
+import AiComparison from '../components/ai/AiComparison';
+import AiVisualSearch from '../components/ai/AiVisualSearch';
+import AiWristAdvisor from '../components/ai/AiWristAdvisor';
+import { GET_WATCH_BRAND_AI_INSIGHTS } from '../apollo/user/query';
 
 const AiHelpPage = () => {
+	const [latestBrand, setLatestBrand] = React.useState('');
+	const [brandSearchError, setBrandSearchError] = React.useState('');
+	const [getBrandInsights, { data, loading }] = useLazyQuery(GET_WATCH_BRAND_AI_INSIGHTS, {
+		fetchPolicy: 'network-only',
+	});
+
+	const handleQuickSearch = async (value: string): Promise<void> => {
+		const text = value.trim();
+		if (!text) return;
+		setBrandSearchError('');
+		setLatestBrand(text);
+		try {
+			await getBrandInsights({ variables: { brand: text } });
+		} catch (error) {
+			console.log('Brand AI search failed:', error);
+			setBrandSearchError('Could not fetch brand insights right now. Please try again.');
+		}
+	};
+
+	const brandInsights = data?.getWatchBrandAIInsights;
+
 	return (
 		<>
 			<Head>
@@ -12,24 +41,73 @@ const AiHelpPage = () => {
 			</Head>
 			<Stack sx={{ minHeight: '100vh', background: '#FAFAFA', display: 'flex' }}>
 				<Top />
-				<Container maxWidth="md" sx={{ pt: 16, pb: 10 }}>
-					<Box
-						sx={{
-							background: '#FFFFFF',
-							border: '1px solid rgba(17,17,17,0.12)',
-							borderRadius: '14px',
-							p: { xs: 3, md: 4 },
-							textAlign: 'center',
-						}}
-					>
-						<Typography sx={{ color: '#111111', fontWeight: 700, fontSize: { xs: '1.5rem', md: '2rem' }, mb: 1.5 }}>
-							AI Help
-						</Typography>
-						<Typography sx={{ color: '#666666', fontSize: '0.95rem' }}>
-							This page is ready. You can now ask me anytime to build the full AI Help experience and connect it to your watch details workflow.
-						</Typography>
-					</Box>
-				</Container>
+				<Box sx={{ pt: 0 }}>
+					<AiHero onQuickSearch={handleQuickSearch} />
+					{loading ? (
+						<Container maxWidth="lg" sx={{ py: 4 }}>
+							<Stack direction="row" spacing={1.2} alignItems="center">
+								<CircularProgress size={22} sx={{ color: '#111111' }} />
+								<Typography sx={{ color: '#444' }}>
+									Finding well-known details for <b>{latestBrand}</b>...
+								</Typography>
+							</Stack>
+						</Container>
+					) : null}
+					{brandSearchError ? (
+						<Container maxWidth="lg" sx={{ py: 3 }}>
+							<Typography sx={{ color: '#C62828' }}>{brandSearchError}</Typography>
+						</Container>
+					) : null}
+					{brandInsights ? (
+						<Container maxWidth="lg" sx={{ py: 4 }}>
+							<Paper sx={{ borderRadius: '16px', border: '1px solid #D4AF37', p: { xs: 2, md: 2.4 }, background: '#FFFFFF' }}>
+								<Typography sx={{ color: '#777', fontSize: '0.78rem', letterSpacing: '1.4px', textTransform: 'uppercase', mb: 0.6 }}>
+									Brand Insights
+								</Typography>
+								<Typography sx={{ color: '#111111', fontSize: { xs: '1.2rem', md: '1.45rem' }, fontWeight: 700 }}>
+									{brandInsights.watchBrand} - {brandInsights.watchTitle}
+								</Typography>
+								<Typography sx={{ color: '#555', mt: 1, lineHeight: 1.7 }}>
+									{brandInsights.summary}
+								</Typography>
+
+								<Grid container spacing={2} sx={{ mt: 0.4 }}>
+									<Grid item xs={12} md={6}>
+										<Typography sx={{ color: '#111111', fontWeight: 700, mb: 0.6 }}>Typical Price Range</Typography>
+										<Typography sx={{ color: '#555' }}>{brandInsights.priceRange}</Typography>
+										<Typography sx={{ color: '#111111', fontWeight: 700, mt: 1.2, mb: 0.6 }}>Market Snapshot</Typography>
+										<Typography sx={{ color: '#666', fontSize: '0.9rem' }}>
+											{brandInsights.salesInfo}
+										</Typography>
+									</Grid>
+									<Grid item xs={12} md={6}>
+										<Typography sx={{ color: '#111111', fontWeight: 700, mb: 0.6 }}>Well-Known Names</Typography>
+										<Stack spacing={0.55}>
+											{brandInsights.celebrityWearers?.slice(0, 2).map((person: any, idx: number) => (
+												<Typography key={idx} sx={{ color: '#555', fontSize: '0.9rem' }}>
+													• {person.name}
+												</Typography>
+											))}
+										</Stack>
+										<Typography sx={{ color: '#111111', fontWeight: 700, mt: 1.2, mb: 0.6 }}>Quick Facts</Typography>
+										<Stack spacing={0.45}>
+											{brandInsights.funFacts?.slice(0, 2).map((fact: string, idx: number) => (
+												<Typography key={idx} sx={{ color: '#555', fontSize: '0.9rem' }}>
+													{fact}
+												</Typography>
+											))}
+										</Stack>
+									</Grid>
+								</Grid>
+							</Paper>
+						</Container>
+					) : null}
+					<AiWatchFinder />
+					<AiChatAssistant />
+					<AiComparison />
+					<AiVisualSearch />
+					<AiWristAdvisor />
+				</Box>
 				<Box sx={{ mt: 'auto' }}>
 					<Footer />
 				</Box>

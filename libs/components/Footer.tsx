@@ -99,6 +99,9 @@ const GridFooter = () => {
 							<Typography sx={itemSx}>AI Help</Typography>
 						</Link>
 						<Typography sx={itemSx}>Do Not Sell or Share My Personal Information</Typography>
+						<Link href="/faq" style={{ textDecoration: 'none' }}>
+							<Typography sx={itemSx}>FAQ</Typography>
+						</Link>
 					</Box>
 
 					<Box>
