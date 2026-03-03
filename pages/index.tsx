@@ -6,7 +6,7 @@ import Footer from '../libs/components/Footer';
 import Link from 'next/link';
 import { getJwtToken, updateUserInfo } from '../libs/auth';
 import { useQuery } from '@apollo/client';
-import { GET_WATCHES } from '../apollo/user/query';
+import { GET_BEST_SELLER_WATCHES_ROW, GET_WATCHES } from '../apollo/user/query';
 import { REACT_APP_API_URL } from '../libs/config';
 import WatchIcon from '@mui/icons-material/Watch';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
@@ -110,21 +110,11 @@ const Home = () => {
 
 	const newArrivals = data?.getWatches?.list || [];
 
-	const { data: bestSellersData } = useQuery(GET_WATCHES, {
-		variables: {
-			input: {
-				page: 1,
-				limit: 3,
-				sort: 'updatedAt',
-				search: {
-					options: ['watchBestSeller'],
-				},
-			},
-		},
+	const { data: bestSellersData } = useQuery(GET_BEST_SELLER_WATCHES_ROW, {
 		fetchPolicy: 'network-only',
 	});
 
-	const bestSellers = bestSellersData?.getWatches?.list || [];
+	const bestSellers = bestSellersData?.getBestSellerWatchesRow?.list || [];
 
 	return (
 		<>
@@ -147,7 +137,72 @@ const Home = () => {
 				}}>
 					<Box sx={{ position: 'absolute', inset: 0, background: 'rgba(17, 17, 17, 0.5)' }} />
 					<Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
-						<WatchIcon sx={{ fontSize: 70, color: '#D4AF37', mb: 3 }} />
+						<Stack alignItems="center" sx={{ mb: 3.2 }}>
+							<Box
+								sx={{
+									width: 96,
+									height: 96,
+									borderRadius: '50%',
+									position: 'relative',
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'center',
+									border: '1.6px solid rgba(212,175,55,0.92)',
+									boxShadow: '0 10px 28px rgba(0,0,0,0.34), inset 0 0 0 6px rgba(212,175,55,0.1)',
+									background: 'radial-gradient(circle at 50% 38%, rgba(250,250,250,0.12), rgba(17,17,17,0.62))',
+								}}
+							>
+								<Box
+									sx={{
+										position: 'absolute',
+										top: -9,
+										left: '50%',
+										transform: 'translateX(-50%)',
+										color: '#D4AF37',
+										fontSize: '0.86rem',
+										letterSpacing: '1px',
+									}}
+								>
+									✦
+								</Box>
+								<Typography
+									sx={{
+										color: '#D4AF37',
+										fontSize: '1.78rem',
+										fontWeight: 600,
+										letterSpacing: '3px',
+										fontFamily: '"Georgia", "Times New Roman", serif',
+										lineHeight: 1,
+									}}
+								>
+									TW
+								</Typography>
+								<Box
+									sx={{
+										position: 'absolute',
+										bottom: 14,
+										left: '50%',
+										transform: 'translateX(-50%)',
+										width: 30,
+										height: 1.4,
+										background: '#D4AF37',
+										opacity: 0.78,
+									}}
+								/>
+							</Box>
+							<Typography
+								sx={{
+									color: 'rgba(212,175,55,0.82)',
+									mt: 1.1,
+									fontSize: '0.7rem',
+									letterSpacing: '3.2px',
+									textTransform: 'uppercase',
+									fontWeight: 500,
+								}}
+							>
+								Maison Horlogere
+							</Typography>
+						</Stack>
 						<Typography variant="h1" sx={{
 							fontSize: { xs: '2.5rem', md: '4.5rem' },
 							fontWeight: 700,

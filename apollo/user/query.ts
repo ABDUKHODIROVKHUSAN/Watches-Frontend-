@@ -43,6 +43,22 @@ export const GET_WATCHES = gql`
 	}
 `;
 
+export const GET_BEST_SELLER_WATCHES_ROW = gql`
+	query GetBestSellerWatchesRow {
+		getBestSellerWatchesRow {
+			list {
+				_id
+				watchBrand
+				watchTitle
+				watchImages
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
 export const GET_WATCH = gql`
 	query GetWatch($input: String!) {
 		getWatch(watchId: $input) {

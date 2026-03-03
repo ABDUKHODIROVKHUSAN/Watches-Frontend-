@@ -22,6 +22,7 @@ import { sweetInfoAlert } from '../../libs/sweetAlert';
 const WatchesPage = () => {
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
+	const [searchInput, setSearchInput] = useState('');
 	const [searchText, setSearchText] = useState('');
 	const [activeType, setActiveType] = useState('');
 	const [page, setPage] = useState(1);
@@ -36,9 +37,18 @@ const WatchesPage = () => {
 		const querySearch = router.query.search;
 		const incoming = Array.isArray(querySearch) ? querySearch[0] : querySearch;
 		if (!incoming) return;
-		setSearchText(String(incoming).trim());
+		const nextSearch = String(incoming).trim();
+		setSearchInput(nextSearch);
+		setSearchText(nextSearch);
 		setPage(1);
 	}, [router.isReady, router.query.search]);
+
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setSearchText(searchInput.trim());
+		}, 420);
+		return () => clearTimeout(timer);
+	}, [searchInput]);
 
 	const queryVariables = {
 		input: {
@@ -51,15 +61,18 @@ const WatchesPage = () => {
 		},
 	};
 
-	const { data, loading } = useQuery(GET_WATCHES, {
+	const { data, previousData, loading } = useQuery(GET_WATCHES, {
 		variables: queryVariables,
 		fetchPolicy: 'network-only',
+		notifyOnNetworkStatusChange: true,
 	});
 
 	const [likeTargetWatch] = useMutation(LIKE_TARGET_WATCH);
 
-	const watches = data?.getWatches?.list || [];
-	const total = data?.getWatches?.metaCounter?.[0]?.total || 0;
+	const resolvedData = data ?? previousData;
+	const watches = resolvedData?.getWatches?.list || [];
+	const total = resolvedData?.getWatches?.metaCounter?.[0]?.total || 0;
+	const isInitialLoading = loading && !resolvedData;
 
 	const types = [
 		{ label: 'All Watches', value: '' },
@@ -71,6 +84,7 @@ const WatchesPage = () => {
 	];
 
 	const resetToAllWatches = () => {
+		setSearchInput('');
 		setSearchText('');
 		setActiveType('');
 		setPage(1);
@@ -152,8 +166,8 @@ const WatchesPage = () => {
 						<TextField
 							size="small"
 							placeholder="Search watches..."
-							value={searchText}
-							onChange={(e) => { setSearchText(e.target.value); setPage(1); }}
+							value={searchInput}
+							onChange={(e) => { setSearchInput(e.target.value); setPage(1); }}
 							InputProps={{
 								startAdornment: (
 									<InputAdornment position="start">
@@ -202,62 +216,63 @@ const WatchesPage = () => {
 						</Stack>
 					</Stack>
 
-					{loading ? (
-						<Typography sx={{ color: '#999', textAlign: 'center', py: 10 }}>Loading watches...</Typography>
-					) : watches.length === 0 ? (
-						<Box
-							sx={{
-								border: '1px dashed rgba(212,175,55,0.58)',
-								borderRadius: '16px',
-								background: 'linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(248,248,248,0.92) 100%)',
-								px: { xs: 2.5, md: 4 },
-								py: { xs: 5, md: 6 },
-								textAlign: 'center',
-							}}
-						>
-							<WatchIcon sx={{ fontSize: 42, color: '#D4AF37', mb: 1.2 }} />
-							<Typography sx={{ color: '#111111', fontWeight: 600, fontSize: '1.08rem', mb: 0.7 }}>
-								No watches found
-							</Typography>
-							<Typography sx={{ color: '#666666', fontSize: '0.9rem', mb: 2.2 }}>
-								Try a different keyword or clear filters to discover more timepieces.
-							</Typography>
-							<Stack direction="row" justifyContent="center" spacing={1.2} flexWrap="wrap" useFlexGap>
-								<Button
-									variant="outlined"
-									onClick={resetToAllWatches}
-									sx={{
-										color: '#111111',
-										borderColor: 'rgba(0,0,0,0.24)',
-										fontSize: '0.78rem',
-										letterSpacing: '1.1px',
-										px: 2.6,
-										'&:hover': { borderColor: '#D4AF37', color: '#D4AF37' },
-									}}
-								>
-									Clear Filters
-								</Button>
-								<Button
-									variant="contained"
-									onClick={resetToAllWatches}
-									sx={{
-										background: '#111111',
-										color: '#FAFAFA',
-										fontSize: '0.78rem',
-										letterSpacing: '1.1px',
-										px: 2.6,
-										'&:hover': { background: '#2B2B2B' },
-									}}
-								>
-									Browse All
-								</Button>
-							</Stack>
-						</Box>
-					) : (
-						<Grid container spacing={3}>
-							{watches.map((watch: any) => (
-								<Grid item xs={12} sm={6} md={4} key={watch._id}>
-									<Card sx={{
+					<Box sx={{ minHeight: { xs: 420, md: 560 } }}>
+						{isInitialLoading ? (
+							<Typography sx={{ color: '#999', textAlign: 'center', py: 10 }}>Loading watches...</Typography>
+						) : watches.length === 0 ? (
+							<Box
+								sx={{
+									border: '1px dashed rgba(212,175,55,0.58)',
+									borderRadius: '16px',
+									background: 'linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(248,248,248,0.92) 100%)',
+									px: { xs: 2.5, md: 4 },
+									py: { xs: 5, md: 6 },
+									textAlign: 'center',
+								}}
+							>
+								<WatchIcon sx={{ fontSize: 42, color: '#D4AF37', mb: 1.2 }} />
+								<Typography sx={{ color: '#111111', fontWeight: 600, fontSize: '1.08rem', mb: 0.7 }}>
+									No watches found
+								</Typography>
+								<Typography sx={{ color: '#666666', fontSize: '0.9rem', mb: 2.2 }}>
+									Try a different keyword or clear filters to discover more timepieces.
+								</Typography>
+								<Stack direction="row" justifyContent="center" spacing={1.2} flexWrap="wrap" useFlexGap>
+									<Button
+										variant="outlined"
+										onClick={resetToAllWatches}
+										sx={{
+											color: '#111111',
+											borderColor: 'rgba(0,0,0,0.24)',
+											fontSize: '0.78rem',
+											letterSpacing: '1.1px',
+											px: 2.6,
+											'&:hover': { borderColor: '#D4AF37', color: '#D4AF37' },
+										}}
+									>
+										Clear Filters
+									</Button>
+									<Button
+										variant="contained"
+										onClick={resetToAllWatches}
+										sx={{
+											background: '#111111',
+											color: '#FAFAFA',
+											fontSize: '0.78rem',
+											letterSpacing: '1.1px',
+											px: 2.6,
+											'&:hover': { background: '#2B2B2B' },
+										}}
+									>
+										Browse All
+									</Button>
+								</Stack>
+							</Box>
+						) : (
+							<Grid container spacing={3}>
+								{watches.map((watch: any) => (
+									<Grid item xs={12} sm={6} md={4} key={watch._id}>
+										<Card sx={{
 										borderRadius: '16px',
 										overflow: 'hidden',
 										boxShadow: '0 2px 12px rgba(27,27,27,0.06)',
@@ -400,11 +415,12 @@ const WatchesPage = () => {
 												</IconButton>
 											</Stack>
 										</Box>
-									</Card>
-								</Grid>
-							))}
-						</Grid>
-					)}
+										</Card>
+									</Grid>
+								))}
+							</Grid>
+						)}
+					</Box>
 
 					{total > 12 && (
 						<Stack alignItems="center" sx={{ mt: 5 }}>

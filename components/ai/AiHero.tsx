@@ -61,6 +61,12 @@ const AiHero = ({ onQuickSearch }: AiHeroProps) => {
 						placeholder="Search by watch model, style, or brand..."
 						value={query}
 						onChange={(event) => setQuery(event.target.value)}
+						onKeyDown={(event) => {
+							if (event.key === 'Enter') {
+								event.preventDefault();
+								onQuickSearch?.(query.trim());
+							}
+						}}
 						InputProps={{
 							sx: {
 								background: 'rgba(255,255,255,0.95)',
