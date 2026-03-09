@@ -17,6 +17,9 @@ import Link from 'next/link';
 import { CREATE_ORDER } from '../../apollo/user/mutation';
 import { userVar } from '../../apollo/store';
 import { getPaymentDetails, isPaymentDetailsComplete } from '../../libs/payment';
+import { useLanguage } from '../../libs/i18n/LanguageContext';
+import { localizeWatchText } from '../../libs/i18n/watchText';
+import { useThemeMode } from '../../libs/theme/ThemeModeContext';
 
 type ManualWatchSpec = {
 	fullName: string;
@@ -172,6 +175,8 @@ const normalizeTitle = (title?: string) => (title || '').trim().toLowerCase();
 const WatchDetail = () => {
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
+	const { t, locale } = useLanguage();
+	const { isDark } = useThemeMode();
 	const { id } = router.query;
 	const [selectedImage, setSelectedImage] = useState(0);
 	const [initialImageSet, setInitialImageSet] = useState(false);
@@ -230,6 +235,8 @@ const WatchDetail = () => {
 	const [createOrderMutation, { loading: orderLoading }] = useMutation(CREATE_ORDER);
 
 	const watch = data?.getWatch;
+	const localizedWatchTitle = localizeWatchText(watch?.watchTitle, watch?.watchTitleI18n, locale);
+	const localizedWatchDesc = localizeWatchText(watch?.watchDesc, watch?.watchDescI18n, locale);
 	const ai = aiData?.getWatchAIInsights;
 	const galleryImages = Array.from({ length: 3 }, (_, i) => watch?.watchImages?.[i] || watch?.watchImages?.[0] || null);
 	const relatedCandidates = relatedData?.getWatches?.list || [];
@@ -243,7 +250,7 @@ const WatchDetail = () => {
 		)
 		.slice(0, 4);
 	const selectedSpec = MANUAL_WATCH_SPECS[normalizeTitle(watch?.watchTitle)] || {
-		fullName: watch?.watchTitle || 'Luxury Watch',
+		fullName: localizedWatchTitle || watch?.watchTitle || 'Luxury Watch',
 		diameter: '39-42 mm',
 		powerReserve: 'Up to 40-80 hours power reserve',
 		caseMaterial: 'Premium stainless steel case',
@@ -299,7 +306,7 @@ const WatchDetail = () => {
 
 	if (loading || !watch) {
 		return (
-			<Stack sx={{ background: '#FAFAFA', minHeight: '100vh' }}>
+			<Stack sx={{ background: isDark ? '#0b0f16' : '#FAFAFA', minHeight: '100vh' }}>
 				<Top />
 				<Stack sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', pt: 20 }}>
 					<CircularProgress sx={{ color: '#111111' }} />
@@ -310,13 +317,13 @@ const WatchDetail = () => {
 
 	return (
 		<>
-			<Head><title>{watch.watchTitle} - Watches</title></Head>
-			<Stack sx={{ background: '#FAFAFA', minHeight: '100vh' }}>
+			<Head><title>{localizedWatchTitle || watch.watchTitle} - Watches</title></Head>
+			<Stack sx={{ background: isDark ? '#0b0f16' : '#FAFAFA', minHeight: '100vh' }}>
 				<Top />
 				<Container maxWidth="lg" sx={{ pt: 13, pb: 6 }}>
 					<Link href="/watches" passHref>
 						<Button startIcon={<ArrowBackIcon />} sx={{ color: '#777', mb: 3, '&:hover': { color: '#111111' } }}>
-							Back to Collection
+							{t('watchDetail.back')}
 						</Button>
 					</Link>
 
@@ -374,7 +381,7 @@ const WatchDetail = () => {
 						<Grid item xs={12} md={6}>
 							<Chip label={watch.watchBrand} sx={{ background: 'rgba(17,17,17,0.08)', color: '#111111', fontWeight: 600, mb: 2 }} />
 							<Typography variant="h3" sx={{ color: '#111111', fontWeight: 700, mb: 1 }}>
-								{watch.watchTitle}
+								{localizedWatchTitle || watch.watchTitle}
 							</Typography>
 							<Typography variant="h4" sx={{ color: '#111111', fontWeight: 700, mb: 3 }}>
 								${watch.watchPrice?.toLocaleString()}
@@ -383,16 +390,16 @@ const WatchDetail = () => {
 							<Stack direction="row" spacing={3} sx={{ mb: 3 }}>
 								<Chip label={watch.watchType} variant="outlined" sx={{ color: '#777', borderColor: '#D4AF37' }} />
 								<Stack direction="row" alignItems="center" spacing={0.5} sx={{ color: '#888' }}>
-									<VisibilityIcon sx={{ fontSize: 18 }} /><span>{watch.watchViews} views</span>
+									<VisibilityIcon sx={{ fontSize: 18 }} /><span>{watch.watchViews} {t('watchDetail.views')}</span>
 								</Stack>
 								<Stack direction="row" alignItems="center" spacing={0.5} sx={{ color: '#888' }}>
-									<FavoriteIcon sx={{ fontSize: 18, color: '#111111' }} /><span>{watch.watchLikes} likes</span>
+									<FavoriteIcon sx={{ fontSize: 18, color: '#111111' }} /><span>{watch.watchLikes} {t('watchDetail.likes')}</span>
 								</Stack>
 							</Stack>
 
 							{watch.watchDesc && (
 								<Typography sx={{ color: '#666', mb: 3, lineHeight: 1.8 }}>
-									{watch.watchDesc}
+									{localizedWatchDesc || watch.watchDesc}
 								</Typography>
 							)}
 
@@ -414,7 +421,7 @@ const WatchDetail = () => {
 										'&.Mui-disabled': { background: '#D4AF37', color: '#111111' },
 									}}
 								>
-									{aiLoading ? 'Getting AI Insights...' : 'AI Help — Learn About This Watch'}
+									{aiLoading ? t('watchDetail.aiLoading') : t('watchDetail.aiButton')}
 								</Button>
 								<Button
 									variant="outlined"
@@ -431,7 +438,7 @@ const WatchDetail = () => {
 										'&:hover': { borderColor: '#D4AF37', color: '#D4AF37', background: 'rgba(212,175,55,0.08)' },
 									}}
 								>
-									{orderLoading ? 'Processing Order...' : 'Buy Now'}
+									{orderLoading ? t('watchDetail.processingOrder') : t('watchDetail.buyNow')}
 								</Button>
 							</Stack>
 						</Grid>
@@ -483,7 +490,7 @@ const WatchDetail = () => {
 
 					<Paper sx={{ background: 'rgba(255,255,255,0.72)', borderRadius: '16px', border: '1px solid #D4AF37', p: { xs: 2.5, md: 3.5 }, mt: 4, boxShadow: '0 4px 20px rgba(27,27,27,0.04)' }}>
 						<Typography variant="h5" sx={{ color: '#111111', mb: 2.2, fontWeight: 700 }}>
-							Watch Specifications
+							{t('watchDetail.specs')}
 						</Typography>
 						<Grid container spacing={2.5}>
 							<Grid item xs={12} md={6}>
@@ -525,7 +532,7 @@ const WatchDetail = () => {
 					{relatedWatches.length > 0 && (
 						<Paper sx={{ background: 'transparent', borderRadius: '0', border: 'none', p: 0, mt: 4, boxShadow: 'none' }}>
 							<Typography sx={{ color: '#111111', mb: 2.4, fontWeight: 500, fontSize: { xs: '1.3rem', md: '2rem' }, textAlign: 'center' }}>
-								You may also like
+								{t('watchDetail.youMayAlsoLike')}
 							</Typography>
 							<Grid container spacing={2}>
 								{relatedWatches.map((item: any) => (
@@ -573,7 +580,7 @@ const WatchDetail = () => {
 												</Box>
 												<Box sx={{ p: 1.35 }}>
 													<Typography sx={{ color: '#111111', fontSize: '0.78rem', letterSpacing: '0.7px', textTransform: 'uppercase', mb: 0.6, fontWeight: 600 }}>
-														{item.watchTitle}
+														{localizeWatchText(item.watchTitle, item.watchTitleI18n, locale)}
 													</Typography>
 													<Typography sx={{ color: '#111111', fontWeight: 700, fontSize: '0.95rem', mb: 1.2 }}>
 														${item.watchPrice?.toLocaleString()}
@@ -678,7 +685,7 @@ const WatchDetail = () => {
 					<DialogTitle sx={{ color: '#111111', fontWeight: 700, pb: 1 }}>Confirm Purchase</DialogTitle>
 					<DialogContent sx={{ pt: '8px !important' }}>
 						<Typography sx={{ color: '#666', mb: 1.2 }}>
-							You are purchasing <b>{watch.watchTitle}</b>
+							You are purchasing <b>{localizedWatchTitle || watch.watchTitle}</b>
 						</Typography>
 						<Typography sx={{ color: '#111111', fontWeight: 700, fontSize: '1.1rem', mb: 2 }}>
 							${watch.watchPrice?.toLocaleString()}

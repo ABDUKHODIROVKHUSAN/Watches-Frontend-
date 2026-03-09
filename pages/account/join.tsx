@@ -8,9 +8,11 @@ import { useRouter } from 'next/router';
 import { sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../libs/sweetAlert';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import { useThemeMode } from '../../libs/theme/ThemeModeContext';
 
 const JoinPage = () => {
 	const router = useRouter();
+	const { isDark } = useThemeMode();
 	const [tab, setTab] = useState(0);
 	const [loginNick, setLoginNick] = useState('');
 	const [loginPass, setLoginPass] = useState('');
@@ -49,14 +51,15 @@ const JoinPage = () => {
 
 	const inputSx = {
 		'& .MuiOutlinedInput-root': {
-			background: 'rgba(255,255,255,0.94)',
+			background: isDark ? 'rgba(16,23,34,0.92)' : 'rgba(255,255,255,0.94)',
 			borderRadius: '10px',
 			'& fieldset': { borderColor: '#D4AF37' },
 			'&:hover fieldset': { borderColor: '#111111' },
 			'&.Mui-focused fieldset': { borderColor: '#111111' },
+			color: isDark ? '#E5E7EB' : '#111111',
 		},
-		'& .MuiInputLabel-root': { color: '#888' },
-		'& .MuiInputLabel-root.Mui-focused': { color: '#111111' },
+		'& .MuiInputLabel-root': { color: isDark ? '#AEB6C2' : '#888' },
+		'& .MuiInputLabel-root.Mui-focused': { color: isDark ? '#E5E7EB' : '#111111' },
 	};
 
 	return (
@@ -64,7 +67,7 @@ const JoinPage = () => {
 			<Head><title>Join - Watches</title></Head>
 			<Stack
 				sx={{
-					background: '#FAFAFA',
+					background: isDark ? '#0b0f16' : '#FAFAFA',
 					minHeight: '100vh',
 					display: 'flex',
 					position: 'relative',
@@ -76,7 +79,9 @@ const JoinPage = () => {
 						position: 'absolute',
 						inset: 0,
 						backgroundImage:
-							'linear-gradient(rgba(250,250,250,0.93), rgba(250,250,250,0.93)), url(https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=1920&q=80)',
+							isDark
+								? 'linear-gradient(rgba(11,15,22,0.9), rgba(11,15,22,0.9)), url(https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=1920&q=80)'
+								: 'linear-gradient(rgba(250,250,250,0.93), rgba(250,250,250,0.93)), url(https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=1920&q=80)',
 						backgroundSize: 'cover',
 						backgroundPosition: 'center',
 						opacity: 0.32,
@@ -103,7 +108,7 @@ const JoinPage = () => {
 							minHeight: { xs: 'auto', md: 560 },
 							borderRadius: '20px',
 							border: '1px solid rgba(212,175,55,0.72)',
-							background: 'rgba(255,255,255,0.82)',
+							background: isDark ? 'rgba(16,23,34,0.92)' : 'rgba(255,255,255,0.82)',
 							boxShadow: '0 16px 40px rgba(17,17,17,0.18)',
 							overflow: 'hidden',
 							backdropFilter: 'blur(3px)',
@@ -147,10 +152,10 @@ const JoinPage = () => {
 						</Box>
 
 						<Box sx={{ width: { xs: '100%', md: '58%' }, p: { xs: 3, md: 5 } }}>
-							<Typography sx={{ color: '#111111', textAlign: 'center', mb: 0.5, fontWeight: 700, fontSize: { xs: '2rem', md: '2.2rem' } }}>
+							<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', textAlign: 'center', mb: 0.5, fontWeight: 700, fontSize: { xs: '2rem', md: '2.2rem' } }}>
 								Welcome
 							</Typography>
-							<Typography sx={{ color: '#666666', textAlign: 'center', mb: 2.6, fontSize: '0.92rem' }}>
+							<Typography sx={{ color: isDark ? '#AEB6C2' : '#666666', textAlign: 'center', mb: 2.6, fontSize: '0.92rem' }}>
 								Access your account and continue your watch journey.
 							</Typography>
 							<Tabs
@@ -160,7 +165,7 @@ const JoinPage = () => {
 								sx={{
 									mb: 2.5,
 									'& .MuiTab-root': {
-										color: '#888',
+										color: isDark ? '#AEB6C2' : '#888',
 										fontSize: '0.9rem',
 										fontWeight: 600,
 										textTransform: 'uppercase',
@@ -168,7 +173,7 @@ const JoinPage = () => {
 										minHeight: 48,
 										px: 2.8,
 									},
-									'& .Mui-selected': { color: '#111111' },
+									'& .Mui-selected': { color: isDark ? '#E5E7EB' : '#111111' },
 									'& .MuiTabs-indicator': { backgroundColor: '#D4AF37', height: 3, borderRadius: '6px' },
 								}}
 							>
@@ -213,6 +218,7 @@ const JoinPage = () => {
 														edge="end"
 														onClick={() => setShowLoginPassword((prev) => !prev)}
 														aria-label={showLoginPassword ? 'Hide password' : 'Show password'}
+														sx={{ color: isDark ? '#AEB6C2' : '#666666' }}
 													>
 														{showLoginPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
 													</IconButton>
@@ -225,7 +231,7 @@ const JoinPage = () => {
 										onClick={handleLogin}
 										fullWidth
 										sx={{
-											background: '#111111',
+											background: isDark ? '#1f2937' : '#111111',
 											color: '#FAFAFA',
 											fontWeight: 700,
 											py: 1.45,
@@ -236,13 +242,13 @@ const JoinPage = () => {
 									>
 										Login
 									</Button>
-									<Typography sx={{ color: '#666666', fontSize: '0.86rem', textAlign: 'center' }}>
+									<Typography sx={{ color: isDark ? '#AEB6C2' : '#666666', fontSize: '0.86rem', textAlign: 'center' }}>
 										Don&apos;t have an account?{' '}
 										<Box
 											component="span"
 											onClick={() => setTab(1)}
 											sx={{
-												color: '#111111',
+												color: isDark ? '#E5E7EB' : '#111111',
 												fontWeight: 700,
 												cursor: 'pointer',
 												textDecoration: 'underline',
@@ -291,6 +297,7 @@ const JoinPage = () => {
 														edge="end"
 														onClick={() => setShowSignupPassword((prev) => !prev)}
 														aria-label={showSignupPassword ? 'Hide password' : 'Show password'}
+														sx={{ color: isDark ? '#AEB6C2' : '#666666' }}
 													>
 														{showSignupPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
 													</IconButton>
@@ -311,7 +318,7 @@ const JoinPage = () => {
 										onClick={handleSignup}
 										fullWidth
 										sx={{
-											background: '#111111',
+											background: isDark ? '#1f2937' : '#111111',
 											color: '#FAFAFA',
 											fontWeight: 700,
 											py: 1.45,

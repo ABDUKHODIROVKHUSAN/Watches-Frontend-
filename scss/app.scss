@@ -13,6 +13,29 @@ html, body {
   scroll-behavior: smooth;
 }
 
+html[data-theme='dark'], body[data-theme='dark'] {
+  background: #0b0f16;
+  color: #E5E7EB;
+}
+
+html[data-theme='dark'] ::-webkit-scrollbar-track,
+body[data-theme='dark'] ::-webkit-scrollbar-track {
+  background: #0f1724;
+}
+
+html[data-theme='dark'] ::-webkit-scrollbar-thumb,
+body[data-theme='dark'] ::-webkit-scrollbar-thumb {
+  background: #D4AF37;
+}
+
+html[data-theme='dark'] .MuiDialog-paper,
+body[data-theme='dark'] .MuiDialog-paper,
+html[data-theme='dark'] .MuiMenu-paper,
+body[data-theme='dark'] .MuiMenu-paper {
+  background-color: #101722;
+  color: #E5E7EB;
+}
+
 a {
   text-decoration: none;
   color: inherit;

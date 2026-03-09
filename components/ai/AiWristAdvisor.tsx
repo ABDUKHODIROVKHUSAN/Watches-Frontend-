@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Button, Container, MenuItem, Paper, Stack, TextField, Typography } from '@mui/material';
+import { useThemeMode } from '../../libs/theme/ThemeModeContext';
 
 type WristShape = 'ROUND' | 'FLAT' | 'OVAL';
 type PreferredStyle = 'DRESS' | 'SPORT' | 'EVERYDAY';
@@ -11,6 +12,7 @@ type AdvisorResult = {
 };
 
 const AiWristAdvisor = () => {
+	const { isDark } = useThemeMode();
 	const [circumference, setCircumference] = React.useState('17');
 	const [shape, setShape] = React.useState<WristShape>('ROUND');
 	const [style, setStyle] = React.useState<PreferredStyle>('EVERYDAY');
@@ -53,10 +55,10 @@ const AiWristAdvisor = () => {
 
 	return (
 		<Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
-			<Typography sx={{ color: '#111111', fontSize: { xs: '1.5rem', md: '2rem' }, fontWeight: 700, mb: 1 }}>
+			<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontSize: { xs: '1.5rem', md: '2rem' }, fontWeight: 700, mb: 1 }}>
 				Wrist Size Advisor
 			</Typography>
-			<Typography sx={{ color: '#666666', mb: 2.6 }}>
+			<Typography sx={{ color: isDark ? '#AEB6C2' : '#666666', mb: 2.6 }}>
 				Get a quick recommendation for ideal case dimensions and fit profile.
 			</Typography>
 
@@ -64,7 +66,8 @@ const AiWristAdvisor = () => {
 				sx={{
 					p: { xs: 2, md: 2.8 },
 					borderRadius: '18px',
-					border: '1px solid rgba(17,17,17,0.12)',
+					border: isDark ? '1px solid rgba(212,175,55,0.34)' : '1px solid rgba(17,17,17,0.12)',
+					background: isDark ? '#101722' : '#FFFFFF',
 					boxShadow: '0 10px 24px rgba(17,17,17,0.05)',
 				}}
 			>
@@ -122,23 +125,25 @@ const AiWristAdvisor = () => {
 							mt: 2.3,
 							borderRadius: '14px',
 							border: '1px solid rgba(198,169,105,0.45)',
-							background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(250,248,242,0.9) 100%)',
+							background: isDark
+								? 'linear-gradient(180deg, rgba(16,23,34,1) 0%, rgba(20,30,45,0.96) 100%)'
+								: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(250,248,242,0.9) 100%)',
 							p: 2,
 						}}
 					>
-						<Typography sx={{ color: '#111111', fontWeight: 700, mb: 1 }}>Recommendation</Typography>
-						<Typography sx={{ color: '#555555', fontSize: '0.9rem', mb: 0.5 }}>
+						<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, mb: 1 }}>Recommendation</Typography>
+						<Typography sx={{ color: isDark ? '#CBD2DC' : '#555555', fontSize: '0.9rem', mb: 0.5 }}>
 							Case Size: <b>{result.caseSize}</b>
 						</Typography>
-						<Typography sx={{ color: '#555555', fontSize: '0.9rem', mb: 0.5 }}>
+						<Typography sx={{ color: isDark ? '#CBD2DC' : '#555555', fontSize: '0.9rem', mb: 0.5 }}>
 							Lug-to-Lug: <b>{result.lugToLug}</b>
 						</Typography>
-						<Typography sx={{ color: '#555555', fontSize: '0.9rem' }}>
+						<Typography sx={{ color: isDark ? '#CBD2DC' : '#555555', fontSize: '0.9rem' }}>
 							Suggested Style: <b>{result.styleSuggestion}</b>
 						</Typography>
 					</Box>
 				) : (
-					<Typography sx={{ mt: 2.2, color: '#7a7a7a', fontSize: '0.9rem' }}>
+					<Typography sx={{ mt: 2.2, color: isDark ? '#9CA3AF' : '#7a7a7a', fontSize: '0.9rem' }}>
 						Enter your wrist details and click calculate to view guidance.
 					</Typography>
 				)}

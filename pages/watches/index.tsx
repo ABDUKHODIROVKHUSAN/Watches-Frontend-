@@ -18,10 +18,17 @@ import { LIKE_TARGET_WATCH } from '../../apollo/user/mutation';
 import { addToCart } from '../../libs/cart';
 import { userVar } from '../../apollo/store';
 import { sweetInfoAlert } from '../../libs/sweetAlert';
+import { useLanguage } from '../../libs/i18n/LanguageContext';
+import { localizeWatchText } from '../../libs/i18n/watchText';
+import { useThemeMode } from '../../libs/theme/ThemeModeContext';
 
 const WatchesPage = () => {
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
+	const { t, locale } = useLanguage();
+	const { isDark } = useThemeMode();
+	const textPrimary = isDark ? '#E5E7EB' : '#111111';
+	const textMuted = isDark ? '#AEB6C2' : '#666666';
 	const [searchInput, setSearchInput] = useState('');
 	const [searchText, setSearchText] = useState('');
 	const [activeType, setActiveType] = useState('');
@@ -75,7 +82,7 @@ const WatchesPage = () => {
 	const isInitialLoading = loading && !resolvedData;
 
 	const types = [
-		{ label: 'All Watches', value: '' },
+		{ label: t('watches.all'), value: '' },
 		{ label: 'Luxury', value: 'LUXURY' },
 		{ label: 'Dress', value: 'DRESS' },
 		{ label: 'Sport', value: 'SPORT' },
@@ -96,7 +103,7 @@ const WatchesPage = () => {
 
 		const jwt = getJwtToken();
 		if (!jwt) {
-			await sweetInfoAlert('Please login first to like watches.');
+			await sweetInfoAlert(t('watches.likeLogin'));
 			return;
 		}
 
@@ -114,14 +121,15 @@ const WatchesPage = () => {
 	const handleAddToCart = (watch: any) => {
 		const jwt = getJwtToken();
 		if (!jwt) {
-			void sweetInfoAlert('Please login first to add watches to cart.');
+			void sweetInfoAlert(t('watches.cartLogin'));
 			return;
 		}
 
+		const localizedTitle = localizeWatchText(watch.watchTitle, watch.watchTitleI18n, locale);
 		addToCart(
 			{
 				_id: watch._id,
-				watchTitle: watch.watchTitle,
+				watchTitle: localizedTitle || watch.watchTitle,
 				watchBrand: watch.watchBrand,
 				watchPrice: Number(watch.watchPrice || 0),
 				watchImage: watch.watchImages?.[0] || '',
@@ -133,7 +141,7 @@ const WatchesPage = () => {
 	return (
 		<>
 			<Head><title>Timepiece Collection</title></Head>
-			<Stack sx={{ background: '#FAFAFA', minHeight: '100vh', display: 'flex' }}>
+			<Stack sx={{ background: isDark ? '#0b0f16' : '#FAFAFA', minHeight: '100vh', display: 'flex' }}>
 				<Top />
 
 				<Stack sx={{
@@ -148,10 +156,10 @@ const WatchesPage = () => {
 					backgroundPosition: 'center',
 				}}>
 					<WatchIcon sx={{ fontSize: 40, color: '#111111', mx: 'auto', mb: 1, position: 'relative', zIndex: 1 }} />
-					<Typography variant="h3" sx={{ color: '#111111', fontWeight: 700, fontSize: { xs: '1.8rem', md: '2.5rem' }, position: 'relative', zIndex: 1 }}>
+					<Typography variant="h3" sx={{ color: textPrimary, fontWeight: 700, fontSize: { xs: '1.8rem', md: '2.5rem' }, position: 'relative', zIndex: 1 }}>
 						Timepiece Collection
 					</Typography>
-					<Typography sx={{ color: '#777', mt: 1, fontSize: '0.95rem', position: 'relative', zIndex: 1 }}>
+					<Typography sx={{ color: isDark ? '#C8CDD6' : '#777', mt: 1, fontSize: '0.95rem', position: 'relative', zIndex: 1 }}>
 						Discover exquisite timepieces crafted with precision and elegance
 					</Typography>
 				</Stack>
@@ -165,7 +173,7 @@ const WatchesPage = () => {
 					>
 						<TextField
 							size="small"
-							placeholder="Search watches..."
+							placeholder={t('watches.searchPlaceholder')}
 							value={searchInput}
 							onChange={(e) => { setSearchInput(e.target.value); setPage(1); }}
 							InputProps={{
@@ -183,6 +191,7 @@ const WatchesPage = () => {
 									'& fieldset': { borderColor: '#D4AF37' },
 									'&:hover fieldset': { borderColor: '#111111' },
 									'&.Mui-focused fieldset': { borderColor: '#111111' },
+									color: textPrimary,
 								},
 							}}
 						/>
@@ -203,7 +212,7 @@ const WatchesPage = () => {
 										border: '1.5px solid',
 										borderColor: activeType === t.value ? '#111111' : '#D4AF37',
 										background: activeType === t.value ? '#111111' : 'rgba(255,255,255,0.6)',
-										color: activeType === t.value ? '#FAFAFA' : '#555',
+										color: activeType === t.value ? '#FAFAFA' : isDark ? '#CBD2DC' : '#555',
 										'&:hover': {
 											borderColor: activeType === t.value ? '#111111' : '#111111',
 											color: activeType === t.value ? '#FAFAFA' : '#111111',
@@ -218,7 +227,7 @@ const WatchesPage = () => {
 
 					<Box sx={{ minHeight: { xs: 420, md: 560 } }}>
 						{isInitialLoading ? (
-							<Typography sx={{ color: '#999', textAlign: 'center', py: 10 }}>Loading watches...</Typography>
+							<Typography sx={{ color: '#999', textAlign: 'center', py: 10 }}>{t('watches.loading')}</Typography>
 						) : watches.length === 0 ? (
 							<Box
 								sx={{
@@ -231,11 +240,11 @@ const WatchesPage = () => {
 								}}
 							>
 								<WatchIcon sx={{ fontSize: 42, color: '#D4AF37', mb: 1.2 }} />
-								<Typography sx={{ color: '#111111', fontWeight: 600, fontSize: '1.08rem', mb: 0.7 }}>
-									No watches found
+								<Typography sx={{ color: textPrimary, fontWeight: 600, fontSize: '1.08rem', mb: 0.7 }}>
+									{t('watches.noneTitle')}
 								</Typography>
-								<Typography sx={{ color: '#666666', fontSize: '0.9rem', mb: 2.2 }}>
-									Try a different keyword or clear filters to discover more timepieces.
+								<Typography sx={{ color: textMuted, fontSize: '0.9rem', mb: 2.2 }}>
+									{t('watches.noneDesc')}
 								</Typography>
 								<Stack direction="row" justifyContent="center" spacing={1.2} flexWrap="wrap" useFlexGap>
 									<Button
@@ -250,7 +259,7 @@ const WatchesPage = () => {
 											'&:hover': { borderColor: '#D4AF37', color: '#D4AF37' },
 										}}
 									>
-										Clear Filters
+										{t('watches.clearFilters')}
 									</Button>
 									<Button
 										variant="contained"
@@ -264,7 +273,7 @@ const WatchesPage = () => {
 											'&:hover': { background: '#2B2B2B' },
 										}}
 									>
-										Browse All
+										{t('watches.browseAll')}
 									</Button>
 								</Stack>
 							</Box>
@@ -278,7 +287,7 @@ const WatchesPage = () => {
 										boxShadow: '0 2px 12px rgba(27,27,27,0.06)',
 										border: '1px solid #D4AF37',
 										transition: 'all 0.3s',
-										background: 'rgba(255,255,255,0.8)',
+										background: isDark ? 'rgba(16,23,34,0.92)' : 'rgba(255,255,255,0.8)',
 										'&:hover': {
 											transform: 'translateY(-4px)',
 											boxShadow: '0 8px 30px rgba(17,17,17,0.22)',
@@ -321,7 +330,7 @@ const WatchesPage = () => {
 														textTransform: 'uppercase',
 														zIndex: 2,
 													}}>
-														Best Seller
+														{t('watches.bestSeller')}
 													</Box>
 												)}
 
@@ -366,7 +375,7 @@ const WatchesPage = () => {
 
 										<Box sx={{ p: 2.5 }}>
 											<Typography sx={{
-												color: '#555555',
+												color: isDark ? '#AEB6C2' : '#555555',
 												fontSize: '0.7rem',
 												fontWeight: 600,
 												letterSpacing: '1.5px',
@@ -378,7 +387,7 @@ const WatchesPage = () => {
 
 											<Link href={`/watches/detail?id=${watch._id}`} style={{ textDecoration: 'none' }}>
 												<Typography sx={{
-													color: '#111111',
+													color: textPrimary,
 													fontWeight: 600,
 													fontSize: '1.05rem',
 													mb: 1.5,
@@ -388,12 +397,12 @@ const WatchesPage = () => {
 													cursor: 'pointer',
 													'&:hover': { color: '#111111' },
 												}}>
-													{watch.watchTitle}
+													{localizeWatchText(watch.watchTitle, watch.watchTitleI18n, locale)}
 												</Typography>
 											</Link>
 
 											<Stack direction="row" alignItems="center" justifyContent="space-between">
-												<Typography sx={{ color: '#111111', fontWeight: 700, fontSize: '1.1rem' }}>
+												<Typography sx={{ color: textPrimary, fontWeight: 700, fontSize: '1.1rem' }}>
 													${watch.watchPrice?.toLocaleString()}
 												</Typography>
 
@@ -411,7 +420,7 @@ const WatchesPage = () => {
 													}}
 												>
 													<AddShoppingCartIcon sx={{ fontSize: 16, mr: 0.5 }} />
-													<span style={{ fontSize: '0.8rem', fontWeight: 500 }}>Add</span>
+													<span style={{ fontSize: '0.8rem', fontWeight: 500 }}>{t('watches.add')}</span>
 												</IconButton>
 											</Stack>
 										</Box>

@@ -104,9 +104,19 @@ export const CREATE_WATCH = gql`
 			watchStatus
 			watchBrand
 			watchTitle
+			watchTitleI18n {
+				en
+				ko
+				uz
+			}
 			watchPrice
 			watchImages
 			watchDesc
+			watchDescI18n {
+				en
+				ko
+				uz
+			}
 			watchBarter
 			watchRent
 			watchBestSeller

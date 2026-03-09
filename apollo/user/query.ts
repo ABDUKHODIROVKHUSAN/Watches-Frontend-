@@ -9,9 +9,19 @@ export const GET_WATCHES = gql`
 				watchStatus
 				watchBrand
 				watchTitle
+				watchTitleI18n {
+					en
+					ko
+					uz
+				}
 				watchPrice
 				watchImages
 				watchDesc
+				watchDescI18n {
+					en
+					ko
+					uz
+				}
 				watchBarter
 				watchRent
 				watchBestSeller
@@ -50,6 +60,11 @@ export const GET_BEST_SELLER_WATCHES_ROW = gql`
 				_id
 				watchBrand
 				watchTitle
+				watchTitleI18n {
+					en
+					ko
+					uz
+				}
 				watchImages
 			}
 			metaCounter {
@@ -67,9 +82,19 @@ export const GET_WATCH = gql`
 			watchStatus
 			watchBrand
 			watchTitle
+			watchTitleI18n {
+				en
+				ko
+				uz
+			}
 			watchPrice
 			watchImages
 			watchDesc
+			watchDescI18n {
+				en
+				ko
+				uz
+			}
 			watchBarter
 			watchRent
 			watchViews
@@ -164,6 +189,11 @@ export const GET_FAVORITE_WATCHES = gql`
 				watchType
 				watchBrand
 				watchTitle
+				watchTitleI18n {
+					en
+					ko
+					uz
+				}
 				watchPrice
 				watchImages
 				watchViews
@@ -191,6 +221,11 @@ export const GET_VISITED_WATCHES = gql`
 				watchType
 				watchBrand
 				watchTitle
+				watchTitleI18n {
+					en
+					ko
+					uz
+				}
 				watchPrice
 				watchImages
 				watchViews
@@ -219,9 +254,19 @@ export const GET_SELLER_WATCHES = gql`
 				watchStatus
 				watchBrand
 				watchTitle
+				watchTitleI18n {
+					en
+					ko
+					uz
+				}
 				watchPrice
 				watchImages
 				watchDesc
+				watchDescI18n {
+					en
+					ko
+					uz
+				}
 				watchBarter
 				watchRent
 				watchBestSeller

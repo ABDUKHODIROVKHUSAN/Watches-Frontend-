@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Button, Container, Stack, TextField, Typography } from '@mui/material';
+import { useThemeMode } from '../../libs/theme/ThemeModeContext';
 
 type ChatRole = 'user' | 'ai';
 
@@ -10,6 +11,7 @@ type ChatMessage = {
 };
 
 const AiChatAssistant = () => {
+	const { isDark } = useThemeMode();
 	const [message, setMessage] = React.useState('');
 	const [sending, setSending] = React.useState(false);
 	const [messages, setMessages] = React.useState<ChatMessage[]>([
@@ -63,18 +65,18 @@ const AiChatAssistant = () => {
 
 	return (
 		<Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
-			<Typography sx={{ color: '#111111', fontSize: { xs: '1.5rem', md: '2rem' }, fontWeight: 700, mb: 1 }}>
+			<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontSize: { xs: '1.5rem', md: '2rem' }, fontWeight: 700, mb: 1 }}>
 				AI Chat Assistant
 			</Typography>
-			<Typography sx={{ color: '#666666', mb: 3 }}>
+			<Typography sx={{ color: isDark ? '#AEB6C2' : '#666666', mb: 3 }}>
 				Talk to your personal watch concierge for quick recommendations and buying guidance.
 			</Typography>
 
 			<Box
 				sx={{
 					borderRadius: '18px',
-					border: '1px solid rgba(17,17,17,0.12)',
-					background: '#FFFFFF',
+					border: isDark ? '1px solid rgba(212,175,55,0.34)' : '1px solid rgba(17,17,17,0.12)',
+					background: isDark ? '#101722' : '#FFFFFF',
 					boxShadow: '0 10px 24px rgba(17,17,17,0.05)',
 					p: { xs: 1.2, md: 1.6 },
 				}}
@@ -101,11 +103,11 @@ const AiChatAssistant = () => {
 									px: 1.5,
 									py: 1.1,
 									borderRadius: item.role === 'user' ? '14px 14px 4px 14px' : '14px 14px 14px 4px',
-									background: item.role === 'user' ? '#111111' : '#F5F5F5',
-									border: item.role === 'user' ? '1px solid #111111' : '1px solid rgba(17,17,17,0.08)',
+									background: item.role === 'user' ? '#111111' : isDark ? '#182232' : '#F5F5F5',
+									border: item.role === 'user' ? '1px solid #111111' : isDark ? '1px solid rgba(212,175,55,0.25)' : '1px solid rgba(17,17,17,0.08)',
 								}}
 							>
-								<Typography sx={{ color: item.role === 'user' ? '#FAFAFA' : '#111111', fontSize: '0.9rem', lineHeight: 1.58 }}>
+								<Typography sx={{ color: item.role === 'user' ? '#FAFAFA' : isDark ? '#E5E7EB' : '#111111', fontSize: '0.9rem', lineHeight: 1.58 }}>
 									{item.content}
 								</Typography>
 							</Box>

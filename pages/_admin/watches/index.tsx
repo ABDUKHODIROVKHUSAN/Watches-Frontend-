@@ -26,6 +26,8 @@ import { GET_ALL_WATCHES_BY_ADMIN } from '../../../apollo/admin/query';
 import { REMOVE_WATCH_BY_ADMIN, UPDATE_WATCH_BY_ADMIN } from '../../../apollo/admin/mutation';
 import { REACT_APP_API_URL } from '../../../libs/config';
 import { sweetConfirmAlert, sweetErrorAlert } from '../../../libs/sweetAlert';
+import { useLanguage } from '../../../libs/i18n/LanguageContext';
+import { localizeWatchText } from '../../../libs/i18n/watchText';
 
 type WatchStatus = 'ACTIVE' | 'SOLD' | 'DELETE';
 
@@ -44,6 +46,7 @@ const STATUS_TABS: Array<'ALL' | WatchStatus> = ['ALL', 'ACTIVE', 'SOLD', 'DELET
 const WATCH_BRANDS = ['ALL', 'ROLEX', 'OMEGA', 'CARTIER', 'TAG_HEUER', 'PATEK_PHILIPPE', 'AUDEMARS_PIGUET', 'BREITLING', 'IWC', 'HUBLOT', 'TISSOT'];
 
 const AdminWatchesPage: NextPage = () => {
+	const { locale } = useLanguage();
 	const [inquiry, setInquiry] = useState<Inquiry>({
 		page: 1,
 		limit: 10,
@@ -218,7 +221,7 @@ const AdminWatchesPage: NextPage = () => {
 												)}
 												<Box sx={{ minWidth: 0 }}>
 													<Typography sx={{ color: '#111111', fontWeight: 600, fontSize: '0.9rem' }}>
-														{watch.watchTitle}
+														{localizeWatchText(watch.watchTitle, watch.watchTitleI18n, locale)}
 													</Typography>
 													<Typography sx={{ color: '#777777', fontSize: '0.78rem' }}>{watch._id}</Typography>
 												</Box>

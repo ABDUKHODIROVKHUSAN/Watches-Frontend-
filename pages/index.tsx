@@ -12,8 +12,13 @@ import WatchIcon from '@mui/icons-material/Watch';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
+import { useLanguage } from '../libs/i18n/LanguageContext';
+import { localizeWatchText } from '../libs/i18n/watchText';
+import { useThemeMode } from '../libs/theme/ThemeModeContext';
 
 const Home = () => {
+	const { locale } = useLanguage();
+	const { isDark } = useThemeMode();
 	const [hoveredBestSellerId, setHoveredBestSellerId] = useState<string | null>(null);
 	const [celebrityStartIndex, setCelebrityStartIndex] = useState(0);
 	const [showLeftCelebrityArrow, setShowLeftCelebrityArrow] = useState(false);
@@ -115,13 +120,18 @@ const Home = () => {
 	});
 
 	const bestSellers = bestSellersData?.getBestSellerWatchesRow?.list || [];
+	const pageBackground = isDark ? '#0b0f16' : '#FAFAFA';
+	const sectionLight = isDark ? '#101722' : '#FFFFFF';
+	const sectionAlt = isDark ? '#0f1724' : '#FAFAFA';
+	const textPrimary = isDark ? '#E5E7EB' : '#111111';
+	const textSecondary = isDark ? '#9CA3AF' : '#666';
 
 	return (
 		<>
 			<Head>
 				<title>Timeless Watches - Premium Luxury Timepieces</title>
 			</Head>
-			<Stack>
+			<Stack sx={{ background: pageBackground }}>
 				<Top />
 				<Stack sx={{
 					minHeight: '100vh',
@@ -240,12 +250,12 @@ const Home = () => {
 					</Container>
 				</Stack>
 
-					<Stack sx={{ background: '#FAFAFA', py: { xs: 8, md: 10 } }}>
+					<Stack sx={{ background: sectionAlt, py: { xs: 8, md: 10 } }}>
 					<Container maxWidth="lg">
-						<Typography variant="h4" sx={{ color: '#111111', textAlign: 'center', mb: 1, fontWeight: 600 }}>
+						<Typography variant="h4" sx={{ color: textPrimary, textAlign: 'center', mb: 1, fontWeight: 600 }}>
 							Featured Brands
 						</Typography>
-						<Typography sx={{ color: '#777', textAlign: 'center', mb: 5 }}>
+						<Typography sx={{ color: textSecondary, textAlign: 'center', mb: 5 }}>
 							Authorized dealer of world-renowned watchmakers
 						</Typography>
 						<Stack
@@ -263,13 +273,17 @@ const Home = () => {
 									px: 4, py: 2,
 									border: '1.5px solid #D4AF37',
 									borderRadius: '8px',
-									color: '#111111',
+									color: textPrimary,
 									fontWeight: 500,
 									letterSpacing: '2px',
 									fontSize: '0.85rem',
-									background: 'rgba(255,255,255,0.5)',
+									background: isDark ? 'rgba(15,23,36,0.55)' : 'rgba(255,255,255,0.5)',
 									transition: 'all 0.3s',
-									'&:hover': { borderColor: '#111111', color: '#111111', background: 'rgba(255,255,255,0.8)' },
+									'&:hover': {
+										borderColor: '#D4AF37',
+										color: textPrimary,
+										background: isDark ? 'rgba(16,23,34,0.92)' : 'rgba(255,255,255,0.8)',
+									},
 								}}>
 									{brand}
 								</Box>
@@ -279,11 +293,11 @@ const Home = () => {
 				</Stack>
 
 				{/* NEW ARRIVALS */}
-				<Stack id="new-arrivals" sx={{ background: '#FFFFFF', py: { xs: 8, md: 12 } }}>
+				<Stack id="new-arrivals" sx={{ background: sectionLight, py: { xs: 8, md: 12 } }}>
 					<Container maxWidth="lg">
 						<Stack alignItems="center" sx={{ mb: { xs: 5, md: 8 } }}>
 							<Typography sx={{
-								color: '#555555',
+								color: isDark ? '#AEB6C2' : '#555555',
 								fontSize: '0.8rem',
 								fontWeight: 500,
 								letterSpacing: '4px',
@@ -293,7 +307,7 @@ const Home = () => {
 								Latest Collection
 							</Typography>
 							<Typography sx={{
-								color: '#111111',
+								color: textPrimary,
 								fontSize: { xs: '1.8rem', md: '2.8rem' },
 								fontWeight: 300,
 								letterSpacing: '3px',
@@ -343,17 +357,17 @@ const Home = () => {
 												</Box>
 
 												<Typography sx={{
-													color: '#888',
+													color: isDark ? '#AEB6C2' : '#888',
 													fontSize: '0.75rem',
 													letterSpacing: '2px',
 													textTransform: 'uppercase',
 													mb: 0.5,
 												}}>
-													{watch.watchTitle}
+													{localizeWatchText(watch.watchTitle, watch.watchTitleI18n, locale)}
 												</Typography>
 
 												<Typography sx={{
-													color: '#111111',
+													color: textPrimary,
 													fontSize: '0.95rem',
 													fontWeight: 500,
 													letterSpacing: '1.5px',
@@ -364,7 +378,7 @@ const Home = () => {
 												</Typography>
 
 												<Typography sx={{
-													color: '#333333',
+													color: isDark ? '#BFC6D1' : '#333333',
 													fontSize: '0.8rem',
 													fontStyle: 'italic',
 													fontWeight: 400,
@@ -385,8 +399,8 @@ const Home = () => {
 						<Stack alignItems="center" sx={{ mt: { xs: 5, md: 8 } }}>
 							<Link href="/watches" passHref>
 								<Button variant="outlined" sx={{
-									color: '#111111',
-									borderColor: '#111111',
+									color: textPrimary,
+									borderColor: isDark ? '#AEB6C2' : '#111111',
 									px: 5,
 									py: 1.3,
 									fontSize: '0.8rem',
@@ -394,8 +408,8 @@ const Home = () => {
 									fontWeight: 500,
 									borderRadius: '2px',
 									'&:hover': {
-										borderColor: '#111111',
-										color: '#111111',
+										borderColor: '#D4AF37',
+										color: '#D4AF37',
 										background: 'transparent',
 									},
 								}}>
@@ -457,7 +471,7 @@ const Home = () => {
 
 													<Box sx={{ width: 16, height: 2, background: '#D4AF37', mb: 2 }} />
 													<Typography sx={{ color: '#FAFAFA', fontSize: '0.72rem', fontWeight: 600, letterSpacing: '1.8px', textTransform: 'uppercase', textAlign: 'center', mb: 0.5 }}>
-														{watch.watchTitle}
+														{localizeWatchText(watch.watchTitle, watch.watchTitleI18n, locale)}
 													</Typography>
 													<Typography sx={{ color: '#9aa7b2', fontSize: '0.78rem', letterSpacing: '1px', textTransform: 'uppercase', textAlign: 'center' }}>
 														{watch.watchBrand?.replace('_', ' ')}
@@ -610,14 +624,14 @@ const Home = () => {
 					</IconButton>
 				</Stack>
 
-				<Stack sx={{ background: 'rgba(17,17,17,0.06)', py: { xs: 8, md: 10 } }}>
+				<Stack sx={{ background: isDark ? '#0f1724' : 'rgba(17,17,17,0.06)', py: { xs: 8, md: 10 } }}>
 					<Container maxWidth="lg">
 						<Stack direction={{ xs: 'column', md: 'row' }} spacing={6} alignItems="center">
 							<Box flex={1}>
-								<Typography variant="h4" sx={{ color: '#111111', mb: 2, fontWeight: 600 }}>
+								<Typography variant="h4" sx={{ color: textPrimary, mb: 2, fontWeight: 600 }}>
 									AI-Powered Insights
 								</Typography>
-								<Typography sx={{ color: '#666', mb: 3, lineHeight: 1.8 }}>
+								<Typography sx={{ color: textSecondary, mb: 3, lineHeight: 1.8 }}>
 									Get detailed information about any watch with our AI assistant. Learn about celebrity wearers, fashion tips, market prices, and fascinating history — all at the click of a button.
 								</Typography>
 								<Link href="/watches" passHref>
@@ -636,7 +650,7 @@ const Home = () => {
 							<Box flex={1} sx={{
 								height: 300,
 								borderRadius: '16px',
-								background: 'rgba(255,255,255,0.5)',
+								background: isDark ? 'rgba(16,23,34,0.8)' : 'rgba(255,255,255,0.5)',
 								border: '1px solid #D4AF37',
 								display: 'flex',
 								alignItems: 'center',

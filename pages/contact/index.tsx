@@ -11,9 +11,13 @@ import EmailIcon from '@mui/icons-material/Email';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import SearchIcon from '@mui/icons-material/Search';
 import Link from 'next/link';
+import { useThemeMode } from '../../libs/theme/ThemeModeContext';
 
 const ContactPage = () => {
 	const [watchSearch, setWatchSearch] = useState('');
+	const { isDark } = useThemeMode();
+	const textPrimary = isDark ? '#E5E7EB' : '#111111';
+	const textSecondary = isDark ? '#AEB6C2' : '#666666';
 
 	useEffect(() => {
 		const jwt = getJwtToken();
@@ -23,7 +27,7 @@ const ContactPage = () => {
 	return (
 		<>
 			<Head><title>Contact - Timeless Watches</title></Head>
-			<Stack sx={{ background: '#FAFAFA', minHeight: '100vh', display: 'flex' }}>
+			<Stack sx={{ background: isDark ? '#0b0f16' : '#FAFAFA', minHeight: '100vh', display: 'flex' }}>
 				<Top />
 
 				{/* HERO */}
@@ -112,11 +116,11 @@ const ContactPage = () => {
 				</Stack>
 
 				{/* CONTACT METHODS + INFO */}
-				<Stack sx={{ background: '#F4F4F4', py: { xs: 6, md: 8 } }}>
+				<Stack sx={{ background: isDark ? '#0f1724' : '#F4F4F4', py: { xs: 6, md: 8 } }}>
 					<Container maxWidth="lg">
 						<Typography
 							sx={{
-								color: '#111111',
+								color: textPrimary,
 								textAlign: 'center',
 								fontSize: { xs: '1.05rem', md: '1.45rem' },
 								fontWeight: 700,
@@ -152,7 +156,7 @@ const ContactPage = () => {
 								<Grid item xs={12} md={4} key={item.title}>
 									<Box
 										sx={{
-											background: '#EFEFEF',
+										background: isDark ? '#101722' : '#EFEFEF',
 											border: '1px solid rgba(17,17,17,0.08)',
 											borderRadius: '6px',
 											py: 3.2,
@@ -170,11 +174,11 @@ const ContactPage = () => {
 											<IconButton disableRipple sx={{ color: '#111111' }}>
 												{item.icon}
 											</IconButton>
-											<Typography sx={{ color: '#111111', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
+											<Typography sx={{ color: textPrimary, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
 												{item.title}
 											</Typography>
-											<Typography sx={{ color: '#666666', fontSize: '0.84rem' }}>{item.subtitle}</Typography>
-											<Typography sx={{ color: '#111111', fontWeight: 500, fontSize: '0.88rem' }}>{item.detail}</Typography>
+											<Typography sx={{ color: textSecondary, fontSize: '0.84rem' }}>{item.subtitle}</Typography>
+											<Typography sx={{ color: textPrimary, fontWeight: 500, fontSize: '0.88rem' }}>{item.detail}</Typography>
 										</Stack>
 									</Box>
 								</Grid>
@@ -185,17 +189,17 @@ const ContactPage = () => {
 							<Grid item xs={12} md={5}>
 								<Box
 									sx={{
-										background: '#FFFFFF',
+										background: isDark ? '#101722' : '#FFFFFF',
 										border: '1px solid rgba(17,17,17,0.12)',
 										borderRadius: '14px',
 										p: 3,
 										height: '100%',
 									}}
 								>
-									<Typography sx={{ color: '#111111', fontWeight: 700, fontSize: '1.05rem', mb: 1.8 }}>
+									<Typography sx={{ color: textPrimary, fontWeight: 700, fontSize: '1.05rem', mb: 1.8 }}>
 										Need help with a specific watch?
 									</Typography>
-									<Typography sx={{ color: '#666666', fontSize: '0.88rem', mb: 2 }}>
+									<Typography sx={{ color: textSecondary, fontSize: '0.88rem', mb: 2 }}>
 										Search by watch name and our team will prioritize your inquiry.
 									</Typography>
 									<TextField
@@ -222,16 +226,20 @@ const ContactPage = () => {
 											},
 										}}
 									/>
-									<Typography sx={{ color: '#777777', fontSize: '0.78rem', mb: 2 }}>
+									<Typography sx={{ color: isDark ? '#9CA3AF' : '#777777', fontSize: '0.78rem', mb: 2 }}>
 										Current query: {watchSearch || '—'}
 									</Typography>
-									<Typography sx={{ color: '#111111', fontWeight: 600, mb: 1.2 }}>Follow Us</Typography>
+									<Typography sx={{ color: textPrimary, fontWeight: 600, mb: 1.2 }}>Follow Us</Typography>
 									<Stack direction="row" spacing={1.2}>
 										<IconButton
 											component="a"
 											href="https://facebook.com"
 											target="_blank"
-											sx={{ background: 'rgba(17,17,17,0.07)', color: '#111111', '&:hover': { background: '#111111', color: '#FAFAFA' } }}
+										sx={{
+											background: isDark ? 'rgba(229,231,235,0.1)' : 'rgba(17,17,17,0.07)',
+											color: textPrimary,
+											'&:hover': { background: '#111111', color: '#FAFAFA' },
+										}}
 										>
 											<FacebookIcon />
 										</IconButton>
@@ -239,7 +247,11 @@ const ContactPage = () => {
 											component="a"
 											href="https://instagram.com"
 											target="_blank"
-											sx={{ background: 'rgba(17,17,17,0.07)', color: '#111111', '&:hover': { background: '#111111', color: '#FAFAFA' } }}
+										sx={{
+											background: isDark ? 'rgba(229,231,235,0.1)' : 'rgba(17,17,17,0.07)',
+											color: textPrimary,
+											'&:hover': { background: '#111111', color: '#FAFAFA' },
+										}}
 										>
 											<InstagramIcon />
 										</IconButton>
@@ -250,7 +262,7 @@ const ContactPage = () => {
 							<Grid item xs={12} md={7}>
 								<Box
 									sx={{
-										background: '#FFFFFF',
+										background: isDark ? '#101722' : '#FFFFFF',
 										borderRadius: '14px',
 										border: '1px solid rgba(17,17,17,0.12)',
 										overflow: 'hidden',

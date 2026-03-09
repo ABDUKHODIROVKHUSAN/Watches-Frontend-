@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { GET_WATCHES } from '../../apollo/user/query';
 import { REACT_APP_API_URL } from '../../libs/config';
+import { useThemeMode } from '../../libs/theme/ThemeModeContext';
 
 const watchFinderSchema = z.object({
 	budget: z.enum(['UNDER_5K', '5K_10K', '10K_25K', '25K_50K', 'ABOVE_50K']),
@@ -66,6 +67,7 @@ const getBudgetRange = (budget: WatchFinderFormValues['budget']) => {
 };
 
 const AiWatchFinder = () => {
+	const { isDark } = useThemeMode();
 	const [loading, setLoading] = React.useState(false);
 	const [results, setResults] = React.useState<RecommendationItem[]>([]);
 	const [getWatches] = useLazyQuery(GET_WATCHES, { fetchPolicy: 'network-only' });
@@ -133,10 +135,10 @@ const AiWatchFinder = () => {
 	return (
 		<Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
 			<Stack spacing={2.2}>
-				<Typography sx={{ color: '#111111', fontSize: { xs: '1.5rem', md: '2rem' }, fontWeight: 700 }}>
+				<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontSize: { xs: '1.5rem', md: '2rem' }, fontWeight: 700 }}>
 					AI Watch Finder
 				</Typography>
-				<Typography sx={{ color: '#666666', maxWidth: 820 }}>
+				<Typography sx={{ color: isDark ? '#AEB6C2' : '#666666', maxWidth: 820 }}>
 					Answer a few questions and let AI shortlist watches that match your budget, style, and wrist profile.
 				</Typography>
 			</Stack>
@@ -148,8 +150,8 @@ const AiWatchFinder = () => {
 					mt: 3,
 					p: { xs: 2.2, md: 3 },
 					borderRadius: '18px',
-					border: '1px solid rgba(17,17,17,0.12)',
-					background: '#FFFFFF',
+					border: isDark ? '1px solid rgba(212,175,55,0.34)' : '1px solid rgba(17,17,17,0.12)',
+					background: isDark ? '#101722' : '#FFFFFF',
 					boxShadow: '0 10px 26px rgba(17,17,17,0.05)',
 				}}
 			>
@@ -244,7 +246,7 @@ const AiWatchFinder = () => {
 
 			<Stack spacing={1.6} sx={{ mt: 3 }}>
 				{!loading && results.length === 0 ? (
-					<Typography sx={{ color: '#7a7a7a', fontSize: '0.9rem' }}>
+					<Typography sx={{ color: isDark ? '#9CA3AF' : '#7a7a7a', fontSize: '0.9rem' }}>
 						No recommendations yet. Submit the form to see AI suggestions.
 					</Typography>
 				) : null}
@@ -271,7 +273,7 @@ const AiWatchFinder = () => {
 											width: '100%',
 											height: 190,
 											objectFit: 'cover',
-											background: '#F2F2F2',
+											background: isDark ? '#1a2434' : '#F2F2F2',
 											borderBottom: '1px solid rgba(17,17,17,0.08)',
 										}}
 									/>
@@ -280,7 +282,7 @@ const AiWatchFinder = () => {
 										sx={{
 											width: '100%',
 											height: 190,
-											background: '#F2F2F2',
+											background: isDark ? '#1a2434' : '#F2F2F2',
 											borderBottom: '1px solid rgba(17,17,17,0.08)',
 											display: 'flex',
 											alignItems: 'center',
@@ -291,14 +293,14 @@ const AiWatchFinder = () => {
 									</Box>
 								)}
 								<CardContent>
-									<Typography sx={{ color: '#777777', fontSize: '0.76rem', letterSpacing: '1px', textTransform: 'uppercase' }}>
+									<Typography sx={{ color: isDark ? '#AEB6C2' : '#777777', fontSize: '0.76rem', letterSpacing: '1px', textTransform: 'uppercase' }}>
 										{item.brand}
 									</Typography>
-									<Typography sx={{ color: '#111111', fontWeight: 700, fontSize: '1.1rem', mt: 0.6 }}>
+									<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, fontSize: '1.1rem', mt: 0.6 }}>
 										{item.title}
 									</Typography>
-									<Typography sx={{ color: '#111111', fontWeight: 600, mt: 0.8 }}>{item.price}</Typography>
-									<Typography sx={{ color: '#666666', fontSize: '0.88rem', mt: 1.2, lineHeight: 1.6 }}>
+									<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 600, mt: 0.8 }}>{item.price}</Typography>
+									<Typography sx={{ color: isDark ? '#AEB6C2' : '#666666', fontSize: '0.88rem', mt: 1.2, lineHeight: 1.6 }}>
 										{item.reason}
 									</Typography>
 								</CardContent>

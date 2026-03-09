@@ -53,6 +53,9 @@ import {
 } from '../../apollo/user/mutation';
 import { getPaymentDetails, setPaymentDetails } from '../../libs/payment';
 import { sweetConfirmAlert, sweetErrorAlert, sweetMixinSuccessAlert } from '../../libs/sweetAlert';
+import { useLanguage } from '../../libs/i18n/LanguageContext';
+import { localizeWatchText } from '../../libs/i18n/watchText';
+import { useThemeMode } from '../../libs/theme/ThemeModeContext';
 
 type TabKey = 'overview' | 'addWatch' | 'myWatches' | 'collection' | 'payment';
 type SellerWatchStatus = 'ACTIVE' | 'SOLD' | 'OUT_OF_STOCK';
@@ -60,6 +63,8 @@ type SellerWatchStatus = 'ACTIVE' | 'SOLD' | 'OUT_OF_STOCK';
 const MyPage = () => {
 	const user = useReactiveVar(userVar);
 	const router = useRouter();
+	const { locale } = useLanguage();
+	const { isDark } = useThemeMode();
 	const [activeTab, setActiveTab] = useState<TabKey>('overview');
 	const [editMode, setEditMode] = useState(false);
 	const [cardType, setCardType] = useState('VISA');
@@ -85,8 +90,12 @@ const MyPage = () => {
 		watchType: 'LUXURY',
 		watchBrand: 'ROLEX',
 		watchTitle: '',
+		watchTitleKo: '',
+		watchTitleUz: '',
 		watchPrice: '',
 		watchDesc: '',
+		watchDescKo: '',
+		watchDescUz: '',
 		watchBarter: false,
 		watchRent: false,
 		watchBestSeller: false,
@@ -96,6 +105,7 @@ const MyPage = () => {
 	const [creatingWatch, setCreatingWatch] = useState(false);
 	const [updatingWatchId, setUpdatingWatchId] = useState<string | null>(null);
 	const [editWatchOpen, setEditWatchOpen] = useState(false);
+	const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 	const [savingWatchEdit, setSavingWatchEdit] = useState(false);
 	const [editWatchFiles, setEditWatchFiles] = useState<File[]>([]);
 	const [editWatchForm, setEditWatchForm] = useState({
@@ -103,8 +113,12 @@ const MyPage = () => {
 		watchType: 'LUXURY',
 		watchBrand: 'ROLEX',
 		watchTitle: '',
+		watchTitleKo: '',
+		watchTitleUz: '',
 		watchPrice: '',
 		watchDesc: '',
+		watchDescKo: '',
+		watchDescUz: '',
 		watchBarter: false,
 		watchRent: false,
 		watchBestSeller: false,
@@ -402,9 +416,19 @@ const MyPage = () => {
 						watchType: addWatchForm.watchType,
 						watchBrand: addWatchForm.watchBrand,
 						watchTitle: addWatchForm.watchTitle.trim(),
+						watchTitleI18n: {
+							en: addWatchForm.watchTitle.trim(),
+							ko: addWatchForm.watchTitleKo.trim() || undefined,
+							uz: addWatchForm.watchTitleUz.trim() || undefined,
+						},
 						watchPrice: Number(addWatchForm.watchPrice),
 						watchImages: uploadedImages,
 						watchDesc: addWatchForm.watchDesc.trim() || undefined,
+						watchDescI18n: {
+							en: addWatchForm.watchDesc.trim() || undefined,
+							ko: addWatchForm.watchDescKo.trim() || undefined,
+							uz: addWatchForm.watchDescUz.trim() || undefined,
+						},
 						watchBarter: addWatchForm.watchBarter,
 						watchRent: addWatchForm.watchRent,
 						watchBestSeller: addWatchForm.watchBestSeller,
@@ -418,8 +442,12 @@ const MyPage = () => {
 				watchType: 'LUXURY',
 				watchBrand: 'ROLEX',
 				watchTitle: '',
+				watchTitleKo: '',
+				watchTitleUz: '',
 				watchPrice: '',
 				watchDesc: '',
+				watchDescKo: '',
+				watchDescUz: '',
 				watchBarter: false,
 				watchRent: false,
 				watchBestSeller: false,
@@ -448,9 +476,13 @@ const MyPage = () => {
 			_id: watch._id,
 			watchType: watch.watchType || 'LUXURY',
 			watchBrand: watch.watchBrand || 'ROLEX',
-			watchTitle: watch.watchTitle || '',
+			watchTitle: watch?.watchTitleI18n?.en || watch.watchTitle || '',
+			watchTitleKo: watch?.watchTitleI18n?.ko || '',
+			watchTitleUz: watch?.watchTitleI18n?.uz || '',
 			watchPrice: String(watch.watchPrice || ''),
-			watchDesc: watch.watchDesc || '',
+			watchDesc: watch?.watchDescI18n?.en || watch.watchDesc || '',
+			watchDescKo: watch?.watchDescI18n?.ko || '',
+			watchDescUz: watch?.watchDescI18n?.uz || '',
 			watchBarter: Boolean(watch.watchBarter),
 			watchRent: Boolean(watch.watchRent),
 			watchBestSeller: Boolean(watch.watchBestSeller),
@@ -499,8 +531,18 @@ const MyPage = () => {
 						watchType: editWatchForm.watchType,
 						watchBrand: editWatchForm.watchBrand,
 						watchTitle: editWatchForm.watchTitle.trim(),
+						watchTitleI18n: {
+							en: editWatchForm.watchTitle.trim(),
+							ko: editWatchForm.watchTitleKo.trim() || undefined,
+							uz: editWatchForm.watchTitleUz.trim() || undefined,
+						},
 						watchPrice: Number(editWatchForm.watchPrice),
 						watchDesc: editWatchForm.watchDesc.trim() || undefined,
+						watchDescI18n: {
+							en: editWatchForm.watchDesc.trim() || undefined,
+							ko: editWatchForm.watchDescKo.trim() || undefined,
+							uz: editWatchForm.watchDescUz.trim() || undefined,
+						},
 						watchBarter: editWatchForm.watchBarter,
 						watchRent: editWatchForm.watchRent,
 						watchBestSeller: editWatchForm.watchBestSeller,
@@ -550,10 +592,15 @@ const MyPage = () => {
 		}
 	};
 
+	const handleConfirmLogout = () => {
+		setLogoutDialogOpen(false);
+		logOut();
+	};
+
 	return (
 		<>
 			<Head><title>My Page - Watches</title></Head>
-			<Stack sx={{ background: '#FAFAFA', minHeight: '100vh', display: 'flex' }}>
+			<Stack sx={{ background: isDark ? '#0b0f16' : '#FAFAFA', minHeight: '100vh', display: 'flex' }}>
 				<Top />
 				<Container maxWidth="lg" sx={{ pt: 14, pb: 8 }}>
 					<Stack
@@ -642,7 +689,7 @@ const MyPage = () => {
 								<Button
 									variant="outlined"
 									startIcon={<LogoutIcon />}
-									onClick={() => logOut()}
+									onClick={() => setLogoutDialogOpen(true)}
 									sx={{
 										color: '#111111',
 										borderColor: 'rgba(0,0,0,0.24)',
@@ -897,7 +944,9 @@ const MyPage = () => {
 														</IconButton>
 													</Box>
 													<Box sx={{ p: 2 }}>
-														<Typography sx={{ color: '#111111', fontWeight: 600, mb: 0.3 }}>{watch.watchTitle}</Typography>
+														<Typography sx={{ color: '#111111', fontWeight: 600, mb: 0.3 }}>
+															{localizeWatchText(watch.watchTitle, watch.watchTitleI18n, locale)}
+														</Typography>
 														<Typography sx={{ color: '#666666', mb: 1.5, fontSize: '0.85rem' }}>
 															{watch.watchBrand?.replace('_', ' ')}
 														</Typography>
@@ -928,7 +977,7 @@ const MyPage = () => {
 								<Grid container spacing={2}>
 									<Grid item xs={12} md={6}>
 										<TextField
-											label="Watch Title"
+											label="Watch Title (EN)"
 											size="small"
 											fullWidth
 											value={addWatchForm.watchTitle}
@@ -948,6 +997,24 @@ const MyPage = () => {
 												<MenuItem key={opt} value={opt}>{opt}</MenuItem>
 											))}
 										</TextField>
+									</Grid>
+									<Grid item xs={12} md={3}>
+										<TextField
+											label="Watch Title (KO)"
+											size="small"
+											fullWidth
+											value={addWatchForm.watchTitleKo}
+											onChange={(e) => setAddWatchForm((prev) => ({ ...prev, watchTitleKo: e.target.value }))}
+										/>
+									</Grid>
+									<Grid item xs={12} md={3}>
+										<TextField
+											label="Watch Title (UZ)"
+											size="small"
+											fullWidth
+											value={addWatchForm.watchTitleUz}
+											onChange={(e) => setAddWatchForm((prev) => ({ ...prev, watchTitleUz: e.target.value }))}
+										/>
 									</Grid>
 									<Grid item xs={12} md={3}>
 										<TextField
@@ -1013,13 +1080,35 @@ const MyPage = () => {
 									</Grid>
 									<Grid item xs={12}>
 										<TextField
-											label="Description"
+											label="Description (EN)"
 											size="small"
 											fullWidth
 											multiline
 											minRows={3}
 											value={addWatchForm.watchDesc}
 											onChange={(e) => setAddWatchForm((prev) => ({ ...prev, watchDesc: e.target.value }))}
+										/>
+									</Grid>
+									<Grid item xs={12} md={6}>
+										<TextField
+											label="Description (KO)"
+											size="small"
+											fullWidth
+											multiline
+											minRows={2}
+											value={addWatchForm.watchDescKo}
+											onChange={(e) => setAddWatchForm((prev) => ({ ...prev, watchDescKo: e.target.value }))}
+										/>
+									</Grid>
+									<Grid item xs={12} md={6}>
+										<TextField
+											label="Description (UZ)"
+											size="small"
+											fullWidth
+											multiline
+											minRows={2}
+											value={addWatchForm.watchDescUz}
+											onChange={(e) => setAddWatchForm((prev) => ({ ...prev, watchDescUz: e.target.value }))}
 										/>
 									</Grid>
 									<Grid item xs={12}>
@@ -1133,7 +1222,9 @@ const MyPage = () => {
 														</IconButton>
 													</Box>
 													<Box sx={{ p: 2 }}>
-														<Typography sx={{ color: '#111111', fontWeight: 600, mb: 0.3 }}>{watch.watchTitle}</Typography>
+														<Typography sx={{ color: '#111111', fontWeight: 600, mb: 0.3 }}>
+															{localizeWatchText(watch.watchTitle, watch.watchTitleI18n, locale)}
+														</Typography>
 														<Typography sx={{ color: '#666666', mb: 1, fontSize: '0.85rem' }}>
 															{watch.watchBrand?.replace('_', ' ')} • ${Number(watch.watchPrice || 0).toLocaleString()}
 														</Typography>
@@ -1368,6 +1459,54 @@ const MyPage = () => {
 					</Stack>
 				</Container>
 				<Dialog
+					open={logoutDialogOpen}
+					onClose={() => setLogoutDialogOpen(false)}
+					PaperProps={{
+						sx: {
+							borderRadius: '14px',
+							background: isDark ? '#101722' : '#FFFFFF',
+							border: '1px solid rgba(212,175,55,0.5)',
+							boxShadow: '0 20px 45px rgba(0,0,0,0.3)',
+							minWidth: { xs: 'auto', sm: 420 },
+						},
+					}}
+				>
+					<DialogTitle sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, pb: 0.8 }}>
+						Logout Confirmation
+					</DialogTitle>
+					<DialogContent sx={{ pt: '8px !important' }}>
+						<Typography sx={{ color: isDark ? '#AEB6C2' : '#555555', fontSize: '0.94rem' }}>
+							Do you really want to logout?
+						</Typography>
+					</DialogContent>
+					<DialogActions sx={{ px: 3, pb: 2.2, pt: 0.5 }}>
+						<Button
+							onClick={() => setLogoutDialogOpen(false)}
+							variant="outlined"
+							sx={{
+								color: isDark ? '#E5E7EB' : '#111111',
+								borderColor: 'rgba(0,0,0,0.24)',
+								textTransform: 'none',
+							}}
+						>
+							No
+						</Button>
+						<Button
+							onClick={handleConfirmLogout}
+							variant="contained"
+							sx={{
+								background: '#111111',
+								color: '#D4AF37',
+								textTransform: 'none',
+								fontWeight: 700,
+								'&:hover': { background: '#232323' },
+							}}
+						>
+							Yes
+						</Button>
+					</DialogActions>
+				</Dialog>
+				<Dialog
 					open={editWatchOpen}
 					onClose={() => !savingWatchEdit && setEditWatchOpen(false)}
 					fullWidth
@@ -1378,7 +1517,7 @@ const MyPage = () => {
 						<Grid container spacing={2} sx={{ mt: 0.1 }}>
 							<Grid item xs={12} md={6}>
 								<TextField
-									label="Watch Title"
+									label="Watch Title (EN)"
 									size="small"
 									fullWidth
 									value={editWatchForm.watchTitle}
@@ -1398,6 +1537,24 @@ const MyPage = () => {
 										<MenuItem key={opt} value={opt}>{opt}</MenuItem>
 									))}
 								</TextField>
+							</Grid>
+							<Grid item xs={12} md={3}>
+								<TextField
+									label="Watch Title (KO)"
+									size="small"
+									fullWidth
+									value={editWatchForm.watchTitleKo}
+									onChange={(e) => setEditWatchForm((prev) => ({ ...prev, watchTitleKo: e.target.value }))}
+								/>
+							</Grid>
+							<Grid item xs={12} md={3}>
+								<TextField
+									label="Watch Title (UZ)"
+									size="small"
+									fullWidth
+									value={editWatchForm.watchTitleUz}
+									onChange={(e) => setEditWatchForm((prev) => ({ ...prev, watchTitleUz: e.target.value }))}
+								/>
 							</Grid>
 							<Grid item xs={12} md={3}>
 								<TextField
@@ -1463,13 +1620,35 @@ const MyPage = () => {
 							</Grid>
 							<Grid item xs={12}>
 								<TextField
-									label="Description"
+									label="Description (EN)"
 									size="small"
 									fullWidth
 									multiline
 									minRows={3}
 									value={editWatchForm.watchDesc}
 									onChange={(e) => setEditWatchForm((prev) => ({ ...prev, watchDesc: e.target.value }))}
+								/>
+							</Grid>
+							<Grid item xs={12} md={6}>
+								<TextField
+									label="Description (KO)"
+									size="small"
+									fullWidth
+									multiline
+									minRows={2}
+									value={editWatchForm.watchDescKo}
+									onChange={(e) => setEditWatchForm((prev) => ({ ...prev, watchDescKo: e.target.value }))}
+								/>
+							</Grid>
+							<Grid item xs={12} md={6}>
+								<TextField
+									label="Description (UZ)"
+									size="small"
+									fullWidth
+									multiline
+									minRows={2}
+									value={editWatchForm.watchDescUz}
+									onChange={(e) => setEditWatchForm((prev) => ({ ...prev, watchDescUz: e.target.value }))}
 								/>
 							</Grid>
 							<Grid item xs={12}>

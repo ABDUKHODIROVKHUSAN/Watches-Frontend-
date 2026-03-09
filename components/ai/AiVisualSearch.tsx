@@ -5,8 +5,10 @@ import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
 import Link from 'next/link';
 import { GET_WATCHES } from '../../apollo/user/query';
 import { REACT_APP_API_URL } from '../../libs/config';
+import { useThemeMode } from '../../libs/theme/ThemeModeContext';
 
 const AiVisualSearch = () => {
+	const { isDark } = useThemeMode();
 	const [dragging, setDragging] = React.useState(false);
 	const [preview, setPreview] = React.useState<string | null>(null);
 	const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
@@ -82,10 +84,10 @@ const AiVisualSearch = () => {
 
 	return (
 		<Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
-			<Typography sx={{ color: '#111111', fontSize: { xs: '1.5rem', md: '2rem' }, fontWeight: 700, mb: 1 }}>
+			<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontSize: { xs: '1.5rem', md: '2rem' }, fontWeight: 700, mb: 1 }}>
 				Visual Search
 			</Typography>
-			<Typography sx={{ color: '#666666', mb: 2.6 }}>
+			<Typography sx={{ color: isDark ? '#AEB6C2' : '#666666', mb: 2.6 }}>
 				Upload a watch photo and discover similar pieces in the marketplace.
 			</Typography>
 
@@ -106,15 +108,15 @@ const AiVisualSearch = () => {
 				sx={{
 					borderRadius: '20px',
 					border: dragging ? '2px solid #C6A969' : '1.5px dashed rgba(17,17,17,0.25)',
-					background: dragging ? 'rgba(198,169,105,0.08)' : '#FFFFFF',
+					background: dragging ? 'rgba(198,169,105,0.08)' : isDark ? '#101722' : '#FFFFFF',
 					p: { xs: 3, md: 5 },
 					textAlign: 'center',
 					transition: 'all 0.2s ease',
 				}}
 			>
 				<UploadFileOutlinedIcon sx={{ fontSize: 42, color: '#C6A969', mb: 1.2 }} />
-				<Typography sx={{ color: '#111111', fontWeight: 700, mb: 0.6 }}>Drag and drop image here</Typography>
-				<Typography sx={{ color: '#777777', fontSize: '0.88rem', mb: 2 }}>
+				<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, mb: 0.6 }}>Drag and drop image here</Typography>
+				<Typography sx={{ color: isDark ? '#AEB6C2' : '#777777', fontSize: '0.88rem', mb: 2 }}>
 					PNG / JPG up to 10MB. We will use this image to suggest visually similar watches.
 				</Typography>
 				<Button
@@ -122,7 +124,7 @@ const AiVisualSearch = () => {
 					component="label"
 					sx={{
 						borderColor: 'rgba(17,17,17,0.25)',
-						color: '#111111',
+						color: isDark ? '#E5E7EB' : '#111111',
 						fontWeight: 600,
 						textTransform: 'none',
 						borderRadius: '11px',
@@ -184,7 +186,7 @@ const AiVisualSearch = () => {
 
 			{results.length > 0 ? (
 				<Box sx={{ mt: 3 }}>
-					<Typography sx={{ color: '#111111', fontWeight: 700, mb: 1.5, fontSize: '1.05rem' }}>
+					<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, mb: 1.5, fontSize: '1.05rem' }}>
 						Similar Watches
 					</Typography>
 					<Grid container spacing={2}>
@@ -200,7 +202,7 @@ const AiVisualSearch = () => {
 									}}
 								>
 									<Link href={`/watches/detail?id=${watch._id}`} style={{ textDecoration: 'none' }}>
-										<Box sx={{ background: '#F3F3F0', height: 210, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+										<Box sx={{ background: isDark ? '#1a2434' : '#F3F3F0', height: 210, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 											{watch?.watchImages?.[0] ? (
 												<Box
 													component="img"
@@ -213,13 +215,13 @@ const AiVisualSearch = () => {
 											)}
 										</Box>
 										<Box sx={{ p: 1.6 }}>
-											<Typography sx={{ color: '#666', fontSize: '0.76rem', textTransform: 'uppercase', letterSpacing: '0.7px' }}>
+											<Typography sx={{ color: isDark ? '#AEB6C2' : '#666', fontSize: '0.76rem', textTransform: 'uppercase', letterSpacing: '0.7px' }}>
 												{watch.watchBrand}
 											</Typography>
-											<Typography sx={{ color: '#111111', fontWeight: 700, mt: 0.4 }}>
+											<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, mt: 0.4 }}>
 												{watch.watchTitle}
 											</Typography>
-											<Typography sx={{ color: '#111111', mt: 0.8, fontWeight: 600 }}>
+											<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', mt: 0.8, fontWeight: 600 }}>
 												${Number(watch.watchPrice || 0).toLocaleString()}
 											</Typography>
 										</Box>

@@ -41,8 +41,18 @@ export const GET_ALL_WATCHES_BY_ADMIN = gql`
 				watchStatus
 				watchBrand
 				watchTitle
+				watchTitleI18n {
+					en
+					ko
+					uz
+				}
 				watchPrice
 				watchImages
+				watchDescI18n {
+					en
+					ko
+					uz
+				}
 				watchViews
 				watchLikes
 				watchBestSeller
