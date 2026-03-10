@@ -125,6 +125,7 @@ const Home = () => {
 	const sectionAlt = isDark ? '#0f1724' : '#FAFAFA';
 	const textPrimary = isDark ? '#E5E7EB' : '#111111';
 	const textSecondary = isDark ? '#9CA3AF' : '#666';
+	const heroTitle = 'TIMELESS ELEGANCE';
 
 	return (
 		<>
@@ -135,7 +136,7 @@ const Home = () => {
 				<Top />
 				<Stack sx={{
 					minHeight: '100vh',
-					backgroundImage: 'url(https://images.unsplash.com/photo-1612817159949-195b6eb9e31a?w=1920&q=80)',
+					backgroundImage: 'url(https://images.unsplash.com/photo-1642515839492-a740aa8f6339?auto=format&fit=crop&w=1920&q=90)',
 					backgroundSize: 'cover',
 					backgroundPosition: 'center',
 					display: 'flex',
@@ -147,81 +148,57 @@ const Home = () => {
 				}}>
 					<Box sx={{ position: 'absolute', inset: 0, background: 'rgba(17, 17, 17, 0.5)' }} />
 					<Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
-						<Stack alignItems="center" sx={{ mb: 3.2 }}>
-							<Box
-								sx={{
-									width: 96,
-									height: 96,
-									borderRadius: '50%',
-									position: 'relative',
-									display: 'flex',
-									alignItems: 'center',
-									justifyContent: 'center',
-									border: '1.6px solid rgba(212,175,55,0.92)',
-									boxShadow: '0 10px 28px rgba(0,0,0,0.34), inset 0 0 0 6px rgba(212,175,55,0.1)',
-									background: 'radial-gradient(circle at 50% 38%, rgba(250,250,250,0.12), rgba(17,17,17,0.62))',
-								}}
-							>
+						<Box
+							component="h1"
+							sx={{
+								fontSize: { xs: '2.5rem', md: '4.5rem' },
+								fontWeight: 700,
+								color: 'rgba(250,250,250,0.62)',
+								mb: 2,
+								letterSpacing: '2px',
+								m: 0,
+								position: 'relative',
+								display: 'inline-flex',
+								flexWrap: 'wrap',
+								justifyContent: 'center',
+								gap: 0,
+								'@keyframes heroTitleReveal': {
+									'0%': { opacity: 0, transform: 'translateY(16px)' },
+									'100%': { opacity: 1, transform: 'translateY(0)' },
+								},
+								'@keyframes heroLetterShine': {
+									'0%, 78%, 100%': {
+										color: 'rgba(250,250,250,0.62)',
+										textShadow: '0 0 0 rgba(255,255,255,0)',
+									},
+									'84%': {
+										color: 'rgba(255,255,255,0.96)',
+										textShadow: '0 0 10px rgba(255,255,255,0.38)',
+									},
+									'90%': {
+										color: 'rgba(250,250,250,0.72)',
+										textShadow: '0 0 0 rgba(255,255,255,0)',
+									},
+								},
+							}}
+						>
+							{Array.from(heroTitle).map((char, idx) => (
 								<Box
+									key={`${char}-${idx}`}
+									component="span"
 									sx={{
-										position: 'absolute',
-										top: -9,
-										left: '50%',
-										transform: 'translateX(-50%)',
-										color: '#D4AF37',
-										fontSize: '0.86rem',
-										letterSpacing: '1px',
+										display: 'inline-block',
+										opacity: 0,
+										animation: `heroTitleReveal 650ms ease forwards, heroLetterShine 6.8s ease-in-out infinite`,
+										animationDelay: `${idx * 42}ms, ${950 + idx * 95}ms`,
+										whiteSpace: char === ' ' ? 'pre' : 'normal',
+										minWidth: char === ' ' ? '0.35em' : 'auto',
 									}}
 								>
-									✦
+									{char}
 								</Box>
-								<Typography
-									sx={{
-										color: '#D4AF37',
-										fontSize: '1.78rem',
-										fontWeight: 600,
-										letterSpacing: '3px',
-										fontFamily: '"Georgia", "Times New Roman", serif',
-										lineHeight: 1,
-									}}
-								>
-									TW
-								</Typography>
-								<Box
-									sx={{
-										position: 'absolute',
-										bottom: 14,
-										left: '50%',
-										transform: 'translateX(-50%)',
-										width: 30,
-										height: 1.4,
-										background: '#D4AF37',
-										opacity: 0.78,
-									}}
-								/>
-							</Box>
-							<Typography
-								sx={{
-									color: 'rgba(212,175,55,0.82)',
-									mt: 1.1,
-									fontSize: '0.7rem',
-									letterSpacing: '3.2px',
-									textTransform: 'uppercase',
-									fontWeight: 500,
-								}}
-							>
-								Maison Horlogere
-							</Typography>
-						</Stack>
-						<Typography variant="h1" sx={{
-							fontSize: { xs: '2.5rem', md: '4.5rem' },
-							fontWeight: 700,
-							color: 'rgba(250,250,250,0.62)',
-							mb: 2,
-							letterSpacing: '2px',
-						}}>
-							TIMELESS ELEGANCE
-						</Typography>
+							))}
+						</Box>
 						<Typography variant="h5" sx={{
 							color: '#D4AF37',
 							mb: 4,
@@ -248,6 +225,59 @@ const Home = () => {
 							</Button>
 						</Link>
 					</Container>
+					<Box
+						sx={{
+							position: 'absolute',
+							left: 0,
+							right: 0,
+							bottom: 18,
+							zIndex: 1,
+							px: { xs: 1.2, md: 2.2 },
+							pointerEvents: 'none',
+						}}
+					>
+						<Stack
+							direction="row"
+							justifyContent="center"
+							alignItems="center"
+							flexWrap="wrap"
+							useFlexGap
+							gap={{ xs: 1.6, md: 2.8 }}
+							sx={{
+								opacity: 0.38,
+							}}
+						>
+							{['ROLEX', 'SEIKO', 'OMEGA', 'TISSOT', 'CARTIER', 'IWC', 'HUBLOT', 'BREITLING'].map((brand, idx) => (
+								<Box
+									key={brand}
+									sx={{
+										color: 'rgba(250,250,250,0.78)',
+										fontSize: { xs: '0.58rem', md: '0.66rem' },
+										fontWeight: 600,
+										letterSpacing: { xs: '1.6px', md: '2.4px' },
+										textTransform: 'uppercase',
+										px: 0.2,
+										...(idx !== 0 && {
+											position: 'relative',
+											pl: { xs: 1.1, md: 1.6 },
+											'&::before': {
+												content: '""',
+												position: 'absolute',
+												left: 0,
+												top: '50%',
+												transform: 'translateY(-50%)',
+												width: { xs: 3, md: 4 },
+												height: 1,
+												background: 'rgba(212,175,55,0.6)',
+											},
+										}),
+									}}
+								>
+									{brand}
+								</Box>
+							))}
+						</Stack>
+					</Box>
 				</Stack>
 
 					<Stack sx={{ background: sectionAlt, py: { xs: 8, md: 10 } }}>
@@ -308,10 +338,9 @@ const Home = () => {
 							</Typography>
 							<Typography sx={{
 								color: textPrimary,
-								fontSize: { xs: '1.8rem', md: '2.8rem' },
-								fontWeight: 300,
-								letterSpacing: '3px',
-								fontFamily: '"Georgia", "Times New Roman", serif',
+								fontSize: { xs: '2.4rem', md: '3rem' },
+								fontWeight: 500,
+								letterSpacing: '0.5px',
 							}}>
 								NEW ARRIVALS
 							</Typography>
