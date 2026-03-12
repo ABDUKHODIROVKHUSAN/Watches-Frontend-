@@ -235,7 +235,7 @@ const WatchDetail = () => {
 	const [createOrderMutation, { loading: orderLoading }] = useMutation(CREATE_ORDER);
 
 	const watch = data?.getWatch;
-	const localizedWatchTitle = localizeWatchText(watch?.watchTitle, watch?.watchTitleI18n, locale);
+	const localizedWatchTitle = watch?.watchTitle;
 	const localizedWatchDesc = localizeWatchText(watch?.watchDesc, watch?.watchDescI18n, locale);
 	const ai = aiData?.getWatchAIInsights;
 	const galleryImages = Array.from({ length: 3 }, (_, i) => watch?.watchImages?.[i] || watch?.watchImages?.[0] || null);
@@ -299,7 +299,7 @@ const WatchDetail = () => {
 			setShippingAddress('');
 			router.push('/mypage');
 		} catch (err: any) {
-			const message = err?.message?.replace('GraphQL error: ', '') || 'Purchase failed. Please try again.';
+			const message = err?.message?.replace('GraphQL error: ', '') || t('watchDetail.purchaseFailed');
 			setPurchaseError(message);
 		}
 	};
@@ -447,20 +447,20 @@ const WatchDetail = () => {
 					{ai && (
 						<Paper sx={{ background: 'rgba(255,255,255,0.7)', borderRadius: '16px', border: '1px solid #D4AF37', p: 4, mt: 4, boxShadow: '0 4px 20px rgba(27,27,27,0.04)' }}>
 							<Typography variant="h5" sx={{ color: '#111111', mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-								<AutoAwesomeIcon /> AI Insights
+								<AutoAwesomeIcon /> {t('watchDetail.aiInsights')}
 							</Typography>
 							<Typography sx={{ color: '#666', mb: 3 }}>{ai.summary}</Typography>
 							<Divider sx={{ borderColor: '#D4AF37', mb: 3 }} />
 
 							<Grid container spacing={3}>
 								<Grid item xs={12} md={6}>
-									<Typography sx={{ color: '#111111', fontWeight: 600, mb: 1 }}>📊 Sales Info</Typography>
+									<Typography sx={{ color: '#111111', fontWeight: 600, mb: 1 }}>📊 {t('watchDetail.salesInfo')}</Typography>
 									<Typography sx={{ color: '#666', mb: 3 }}>{ai.salesInfo}</Typography>
 
-									<Typography sx={{ color: '#111111', fontWeight: 600, mb: 1 }}>💰 Price Range</Typography>
+									<Typography sx={{ color: '#111111', fontWeight: 600, mb: 1 }}>💰 {t('watchDetail.priceRange')}</Typography>
 									<Typography sx={{ color: '#666', mb: 3 }}>{ai.priceRange}</Typography>
 
-									<Typography sx={{ color: '#111111', fontWeight: 600, mb: 1 }}>🌟 Celebrity Wearers</Typography>
+									<Typography sx={{ color: '#111111', fontWeight: 600, mb: 1 }}>🌟 {t('watchDetail.celebrityWearers')}</Typography>
 									{ai.celebrityWearers?.map((c: any, i: number) => (
 										<Box key={i} sx={{ mb: 1 }}>
 											<Typography sx={{ color: '#111111', fontWeight: 500 }}>{c.name}</Typography>
@@ -469,15 +469,15 @@ const WatchDetail = () => {
 									))}
 								</Grid>
 								<Grid item xs={12} md={6}>
-									<Typography sx={{ color: '#111111', fontWeight: 600, mb: 1 }}>👔 Fashion Tips</Typography>
+									<Typography sx={{ color: '#111111', fontWeight: 600, mb: 1 }}>👔 {t('watchDetail.fashionTips')}</Typography>
 									{ai.fashionTips?.map((f: any, i: number) => (
 										<Box key={i} sx={{ mb: 1.5, p: 1.5, background: 'rgba(255,255,255,0.9)', borderRadius: '8px', border: '1px solid #D4AF37' }}>
 											<Typography sx={{ color: '#111111', fontWeight: 500 }}>{f.outfit}</Typography>
-											<Typography sx={{ color: '#888', fontSize: '0.85rem' }}>Best for: {f.occasion}</Typography>
+											<Typography sx={{ color: '#888', fontSize: '0.85rem' }}>{t('watchDetail.bestFor')}: {f.occasion}</Typography>
 										</Box>
 									))}
 
-									<Typography sx={{ color: '#111111', fontWeight: 600, mb: 1, mt: 2 }}>💡 Fun Facts</Typography>
+									<Typography sx={{ color: '#111111', fontWeight: 600, mb: 1, mt: 2 }}>💡 {t('watchDetail.funFacts')}</Typography>
 									{ai.funFacts?.map((fact: string, i: number) => (
 										<Typography key={i} sx={{ color: '#666', mb: 0.5, pl: 1, borderLeft: '2px solid #111111' }}>
 											{fact}
@@ -495,29 +495,29 @@ const WatchDetail = () => {
 						<Grid container spacing={2.5}>
 							<Grid item xs={12} md={6}>
 								<Stack spacing={1.1}>
-									<Typography sx={{ color: '#666', fontSize: '0.85rem' }}>Full Name</Typography>
+									<Typography sx={{ color: '#666', fontSize: '0.85rem' }}>{t('watchDetail.fullName')}</Typography>
 									<Typography sx={{ color: '#111111', fontWeight: 600 }}>{selectedSpec.fullName}</Typography>
-									<Typography sx={{ color: '#666', fontSize: '0.85rem', mt: 1.2 }}>Diameter</Typography>
+									<Typography sx={{ color: '#666', fontSize: '0.85rem', mt: 1.2 }}>{t('watchDetail.diameter')}</Typography>
 									<Typography sx={{ color: '#111111', fontWeight: 600 }}>{selectedSpec.diameter}</Typography>
-									<Typography sx={{ color: '#666', fontSize: '0.85rem', mt: 1.2 }}>Power Reserve</Typography>
+									<Typography sx={{ color: '#666', fontSize: '0.85rem', mt: 1.2 }}>{t('watchDetail.powerReserve')}</Typography>
 									<Typography sx={{ color: '#111111', fontWeight: 600 }}>{selectedSpec.powerReserve}</Typography>
 								</Stack>
 							</Grid>
 							<Grid item xs={12} md={6}>
 								<Stack spacing={1.1}>
-									<Typography sx={{ color: '#666', fontSize: '0.85rem' }}>Case Material</Typography>
+									<Typography sx={{ color: '#666', fontSize: '0.85rem' }}>{t('watchDetail.caseMaterial')}</Typography>
 									<Typography sx={{ color: '#111111', fontWeight: 600 }}>{selectedSpec.caseMaterial}</Typography>
-									<Typography sx={{ color: '#666', fontSize: '0.85rem', mt: 1.2 }}>Movement</Typography>
+									<Typography sx={{ color: '#666', fontSize: '0.85rem', mt: 1.2 }}>{t('watchDetail.movement')}</Typography>
 									<Typography sx={{ color: '#111111', fontWeight: 600 }}>{selectedSpec.movement}</Typography>
-									<Typography sx={{ color: '#666', fontSize: '0.85rem', mt: 1.2 }}>Crystal</Typography>
+									<Typography sx={{ color: '#666', fontSize: '0.85rem', mt: 1.2 }}>{t('watchDetail.crystal')}</Typography>
 									<Typography sx={{ color: '#111111', fontWeight: 600 }}>{selectedSpec.crystal}</Typography>
-									<Typography sx={{ color: '#666', fontSize: '0.85rem', mt: 1.2 }}>Bracelet</Typography>
+									<Typography sx={{ color: '#666', fontSize: '0.85rem', mt: 1.2 }}>{t('watchDetail.bracelet')}</Typography>
 									<Typography sx={{ color: '#111111', fontWeight: 600 }}>{selectedSpec.bracelet}</Typography>
 								</Stack>
 							</Grid>
 							<Grid item xs={12}>
 								<Divider sx={{ borderColor: 'rgba(212,175,55,0.5)', my: 0.5 }} />
-								<Typography sx={{ color: '#111111', fontWeight: 600, mb: 1 }}>Highlights</Typography>
+								<Typography sx={{ color: '#111111', fontWeight: 600, mb: 1 }}>{t('watchDetail.highlights')}</Typography>
 								<Stack spacing={0.8}>
 									{selectedSpec.highlights.map((item, idx) => (
 										<Typography key={idx} sx={{ color: '#666', pl: 1.2, borderLeft: '2px solid #D4AF37' }}>
@@ -580,7 +580,7 @@ const WatchDetail = () => {
 												</Box>
 												<Box sx={{ p: 1.35 }}>
 													<Typography sx={{ color: '#111111', fontSize: '0.78rem', letterSpacing: '0.7px', textTransform: 'uppercase', mb: 0.6, fontWeight: 600 }}>
-														{localizeWatchText(item.watchTitle, item.watchTitleI18n, locale)}
+														{item.watchTitle}
 													</Typography>
 													<Typography sx={{ color: '#111111', fontWeight: 700, fontSize: '0.95rem', mb: 1.2 }}>
 														${item.watchPrice?.toLocaleString()}
@@ -589,7 +589,7 @@ const WatchDetail = () => {
 														{(item.watchType || 'Watch').charAt(0).toUpperCase() + (item.watchType || 'watch').slice(1).toLowerCase()}
 														{'  '}
 														• {'  '}
-														+{Math.max(3, relatedWatches.length + 15)} models
+														+{Math.max(3, relatedWatches.length + 15)} {t('watchDetail.models')}
 													</Typography>
 												</Box>
 											</Box>
@@ -615,7 +615,7 @@ const WatchDetail = () => {
 					}}
 				>
 					<DialogTitle sx={{ color: '#111111', fontWeight: 700, pb: 0.7 }}>
-						Payment Setup Required
+						{t('watchDetail.paymentRequiredTitle')}
 					</DialogTitle>
 					<DialogContent sx={{ pt: '8px !important' }}>
 						<Box
@@ -627,14 +627,14 @@ const WatchDetail = () => {
 							}}
 						>
 							<Typography sx={{ color: '#111111', fontWeight: 600, fontSize: '0.95rem', mb: 0.8 }}>
-								Complete your card details first
+								{t('watchDetail.paymentRequiredHeading')}
 							</Typography>
 							<Typography sx={{ color: '#666666', fontSize: '0.9rem', lineHeight: 1.55 }}>
-								To keep checkout smooth and secure, please fill in your payment details in{' '}
+								{t('watchDetail.paymentRequiredMessage')}{' '}
 								<Box component="span" sx={{ color: '#111111', fontWeight: 600 }}>
-									My Page → Payment Details
+									{t('watchDetail.paymentRequiredPath')}
 								</Box>{' '}
-								before placing an order.
+								{t('watchDetail.paymentRequiredSuffix')}
 							</Typography>
 						</Box>
 					</DialogContent>
@@ -649,7 +649,7 @@ const WatchDetail = () => {
 								'&:hover': { borderColor: '#D4AF37', color: '#D4AF37', background: 'rgba(212,175,55,0.07)' },
 							}}
 						>
-							Not now
+							{t('watchDetail.notNow')}
 						</Button>
 						<Button
 							onClick={() => {
@@ -665,7 +665,7 @@ const WatchDetail = () => {
 								'&:hover': { background: '#292929' },
 							}}
 						>
-							Go to Payment Details
+							{t('watchDetail.goToPayment')}
 						</Button>
 					</DialogActions>
 				</Dialog>
@@ -682,16 +682,16 @@ const WatchDetail = () => {
 						},
 					}}
 				>
-					<DialogTitle sx={{ color: '#111111', fontWeight: 700, pb: 1 }}>Confirm Purchase</DialogTitle>
+					<DialogTitle sx={{ color: '#111111', fontWeight: 700, pb: 1 }}>{t('watchDetail.confirmPurchaseTitle')}</DialogTitle>
 					<DialogContent sx={{ pt: '8px !important' }}>
 						<Typography sx={{ color: '#666', mb: 1.2 }}>
-							You are purchasing <b>{localizedWatchTitle || watch.watchTitle}</b>
+							{t('watchDetail.purchasing')} <b>{localizedWatchTitle || watch.watchTitle}</b>
 						</Typography>
 						<Typography sx={{ color: '#111111', fontWeight: 700, fontSize: '1.1rem', mb: 2 }}>
 							${watch.watchPrice?.toLocaleString()}
 						</Typography>
 						<TextField
-							label="Shipping address (optional)"
+							label={t('watchDetail.shippingAddress')}
 							fullWidth
 							size="small"
 							value={shippingAddress}
@@ -719,7 +719,7 @@ const WatchDetail = () => {
 							variant="outlined"
 							sx={{ color: '#111111', borderColor: 'rgba(0,0,0,0.25)', textTransform: 'none' }}
 						>
-							Cancel
+							{t('common.cancel')}
 						</Button>
 						<Button
 							onClick={handleConfirmPurchase}
@@ -727,7 +727,7 @@ const WatchDetail = () => {
 							variant="contained"
 							sx={{ background: '#111111', color: '#D4AF37', textTransform: 'none', fontWeight: 700, '&:hover': { background: '#282828' } }}
 						>
-							{orderLoading ? 'Processing...' : 'Confirm Purchase'}
+							{orderLoading ? t('common.processing') : t('watchDetail.confirmPurchase')}
 						</Button>
 					</DialogActions>
 				</Dialog>

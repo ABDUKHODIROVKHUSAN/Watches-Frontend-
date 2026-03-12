@@ -9,6 +9,7 @@ import moment from 'moment';
 import { getJwtToken, logOut } from '../auth';
 import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../apollo/store';
+import { useLanguage } from '../i18n/LanguageContext';
 
 const Footer = () => {
 	return (
@@ -33,6 +34,7 @@ const Footer = () => {
 
 const GridFooter = () => {
 	const user = useReactiveVar(userVar);
+	const { t } = useLanguage();
 	const [hydrated, setHydrated] = useState(false);
 	const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
@@ -79,38 +81,38 @@ const GridFooter = () => {
 			<Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" spacing={4} sx={{ mb: { xs: 4, md: 5 } }}>
 				<Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 5, md: 6 }} flexWrap="wrap">
 					<Box>
-						<Typography sx={sectionTitleSx}>About Us</Typography>
+						<Typography sx={sectionTitleSx}>{t('footer.aboutUs')}</Typography>
 						<Link href="/" style={{ textDecoration: 'none' }}>
-							<Typography sx={itemSx}>Our Story</Typography>
+							<Typography sx={itemSx}>{t('footer.ourStory')}</Typography>
 						</Link>
 						<Link href="/watches" style={{ textDecoration: 'none' }}>
-							<Typography sx={itemSx}>Watches</Typography>
+							<Typography sx={itemSx}>{t('nav.watches')}</Typography>
 						</Link>
 						<Link href="/#celebrity-wearers" style={{ textDecoration: 'none' }}>
-							<Typography sx={itemSx}>We are chosen</Typography>
+							<Typography sx={itemSx}>{t('footer.weAreChosen')}</Typography>
 						</Link>
-						<Typography sx={itemSx}>Privacy Policy</Typography>
-						<Typography sx={itemSx}>Terms of Use</Typography>
+						<Typography sx={itemSx}>{t('footer.privacyPolicy')}</Typography>
+						<Typography sx={itemSx}>{t('footer.termsOfUse')}</Typography>
 					</Box>
 
 					<Box>
-						<Typography sx={sectionTitleSx}>Support</Typography>
+						<Typography sx={sectionTitleSx}>{t('footer.support')}</Typography>
 						<Link href="/ai-help" style={{ textDecoration: 'none' }}>
-							<Typography sx={itemSx}>AI Help</Typography>
+							<Typography sx={itemSx}>{t('nav.aiHelp')}</Typography>
 						</Link>
-						<Typography sx={itemSx}>Do Not Sell or Share My Personal Information</Typography>
+						<Typography sx={itemSx}>{t('footer.doNotSell')}</Typography>
 						<Link href="/faq" style={{ textDecoration: 'none' }}>
 							<Typography sx={itemSx}>FAQ</Typography>
 						</Link>
 					</Box>
 
 					<Box>
-						<Typography sx={sectionTitleSx}>Get in touch</Typography>
+						<Typography sx={sectionTitleSx}>{t('footer.getInTouch')}</Typography>
 						<Link href="/contact" style={{ textDecoration: 'none' }}>
-							<Typography sx={itemSx}>Contact</Typography>
+							<Typography sx={itemSx}>{t('nav.contact')}</Typography>
 						</Link>
 						<Link href="/#new-arrivals" style={{ textDecoration: 'none' }}>
-							<Typography sx={itemSx}>New releases</Typography>
+							<Typography sx={itemSx}>{t('footer.newReleases')}</Typography>
 						</Link>
 						{isLoggedIn ? (
 							<Button
@@ -127,17 +129,17 @@ const GridFooter = () => {
 									'&:hover': { color: '#D4AF37', background: 'transparent' },
 								}}
 							>
-								Logout
+								{t('auth.logout')}
 							</Button>
 						) : (
 							<Link href="/account/join" style={{ textDecoration: 'none' }}>
-								<Typography sx={itemSx}>Login</Typography>
+								<Typography sx={itemSx}>{t('footer.login')}</Typography>
 							</Link>
 						)}
 					</Box>
 
 					<Box>
-						<Typography sx={sectionTitleSx}>Follow Us</Typography>
+						<Typography sx={sectionTitleSx}>{t('footer.followUs')}</Typography>
 						<Stack direction="row" spacing={0.8}>
 							<IconButton size="small" sx={{ color: '#c9ced4', '&:hover': { color: '#D4AF37' } }}>
 								<InstagramIcon fontSize="small" />
@@ -157,7 +159,7 @@ const GridFooter = () => {
 
 				<Box sx={{ minWidth: { md: 290 } }}>
 					<Typography sx={{ color: '#FAFAFA', fontSize: '0.79rem', fontWeight: 700, letterSpacing: '1.2px', textTransform: 'uppercase', mb: 1.2 }}>
-						Official Dealer Partners
+						{t('footer.officialPartners')}
 					</Typography>
 					<Stack direction="row" spacing={2.8} alignItems="center" flexWrap="wrap" useFlexGap>
 						<Box
@@ -207,7 +209,7 @@ const GridFooter = () => {
 					<Typography sx={{ color: '#777', fontWeight: 400 }}>· Watches</Typography>
 				</Stack>
 				<Typography sx={{ color: '#5f6570', fontSize: '0.74rem' }}>
-					Copyright © 2009-{moment().year()}, Timeless Watches LLC. All Rights Reserved.
+					{t('footer.copyright')} © 2009-{moment().year()}, Timeless Watches LLC. {t('footer.allRightsReserved')}
 				</Typography>
 			</Stack>
 
@@ -226,11 +228,11 @@ const GridFooter = () => {
 				}}
 			>
 				<DialogTitle id="footer-logout-dialog-title" sx={{ color: '#111111', fontWeight: 700, pb: 0.8 }}>
-					Logout Confirmation
+					{t('top.logoutTitle')}
 				</DialogTitle>
 				<DialogContent sx={{ pt: '8px !important' }}>
 					<Typography sx={{ color: '#555555', fontSize: '0.94rem' }}>
-						Do you really want to logout from Timeless Watches?
+						{t('footer.logoutMessage')}
 					</Typography>
 				</DialogContent>
 				<DialogActions sx={{ px: 3, pb: 2.2, pt: 0.5 }}>
@@ -244,7 +246,7 @@ const GridFooter = () => {
 							'&:hover': { borderColor: '#111111', background: '#F7F7F7' },
 						}}
 					>
-						No
+						{t('common.no')}
 					</Button>
 					<Button
 						onClick={handleConfirmLogout}
@@ -257,7 +259,7 @@ const GridFooter = () => {
 							'&:hover': { background: '#232323' },
 						}}
 					>
-						Yes, Logout
+						{t('footer.yesLogout')}
 					</Button>
 				</DialogActions>
 			</Dialog>

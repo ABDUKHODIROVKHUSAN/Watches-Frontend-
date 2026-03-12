@@ -16,6 +16,7 @@ import {
 	Typography,
 } from '@mui/material';
 import { useThemeMode } from '../../libs/theme/ThemeModeContext';
+import { useLanguage } from '../../libs/i18n/LanguageContext';
 
 type WatchSpec = {
 	id: string;
@@ -59,6 +60,7 @@ const WATCHES: WatchSpec[] = [
 
 const AiComparison = () => {
 	const { isDark } = useThemeMode();
+	const { t } = useLanguage();
 	const [leftId, setLeftId] = React.useState(WATCHES[0].id);
 	const [rightId, setRightId] = React.useState(WATCHES[1].id);
 	const [showTable, setShowTable] = React.useState(false);
@@ -69,10 +71,10 @@ const AiComparison = () => {
 	return (
 		<Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
 			<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontSize: { xs: '1.5rem', md: '2rem' }, fontWeight: 700, mb: 1 }}>
-				Watch Comparison Tool
+				{t('ai.comparisonTitle')}
 			</Typography>
 			<Typography sx={{ color: isDark ? '#AEB6C2' : '#666666', mb: 2.6 }}>
-				Compare two watches side-by-side to evaluate specs, value, and wearability.
+				{t('ai.comparisonSubtitle')}
 			</Typography>
 
 			<Paper
@@ -87,7 +89,7 @@ const AiComparison = () => {
 				<Stack direction={{ xs: 'column', md: 'row' }} spacing={1.6} alignItems={{ md: 'center' }}>
 					<TextField
 						select
-						label="Watch A"
+						label={t('ai.watchA')}
 						value={leftId}
 						onChange={(event) => setLeftId(event.target.value)}
 						fullWidth
@@ -100,7 +102,7 @@ const AiComparison = () => {
 					</TextField>
 					<TextField
 						select
-						label="Watch B"
+						label={t('ai.watchB')}
 						value={rightId}
 						onChange={(event) => setRightId(event.target.value)}
 						fullWidth
@@ -125,7 +127,7 @@ const AiComparison = () => {
 							'&:hover': { background: '#232323' },
 						}}
 					>
-						Compare
+						{t('ai.compare')}
 					</Button>
 				</Stack>
 
@@ -134,7 +136,7 @@ const AiComparison = () => {
 						<Table>
 							<TableHead sx={{ background: isDark ? 'rgba(198,169,105,0.2)' : 'rgba(198,169,105,0.14)' }}>
 								<TableRow>
-									<TableCell sx={{ fontWeight: 700, color: isDark ? '#E5E7EB' : '#111111' }}>Specification</TableCell>
+									<TableCell sx={{ fontWeight: 700, color: isDark ? '#E5E7EB' : '#111111' }}>{t('ai.specification')}</TableCell>
 									<TableCell sx={{ fontWeight: 700, color: isDark ? '#E5E7EB' : '#111111' }}>{left.name}</TableCell>
 									<TableCell sx={{ fontWeight: 700, color: isDark ? '#E5E7EB' : '#111111' }}>{right.name}</TableCell>
 								</TableRow>
@@ -159,7 +161,7 @@ const AiComparison = () => {
 				) : (
 					<Box sx={{ mt: 2.2 }}>
 						<Typography sx={{ color: isDark ? '#9CA3AF' : '#7a7a7a', fontSize: '0.9rem' }}>
-							Select two models and click compare to view the table.
+							{t('ai.selectAndCompare')}
 						</Typography>
 					</Box>
 				)}

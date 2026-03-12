@@ -12,9 +12,11 @@ import AiVisualSearch from '../components/ai/AiVisualSearch';
 import AiWristAdvisor from '../components/ai/AiWristAdvisor';
 import { GET_WATCH_BRAND_AI_INSIGHTS } from '../apollo/user/query';
 import { useThemeMode } from '../libs/theme/ThemeModeContext';
+import { useLanguage } from '../libs/i18n/LanguageContext';
 
 const AiHelpPage = () => {
 	const { isDark } = useThemeMode();
+	const { t } = useLanguage();
 	const [latestBrand, setLatestBrand] = React.useState('');
 	const [brandSearchError, setBrandSearchError] = React.useState('');
 	const [getBrandInsights, { data, loading }] = useLazyQuery(GET_WATCH_BRAND_AI_INSIGHTS, {
@@ -30,7 +32,7 @@ const AiHelpPage = () => {
 			await getBrandInsights({ variables: { brand: text } });
 		} catch (error) {
 			console.log('Brand AI search failed:', error);
-			setBrandSearchError('Could not fetch brand insights right now. Please try again.');
+			setBrandSearchError(t('ai.brandSearchFailed'));
 		}
 	};
 
@@ -39,7 +41,7 @@ const AiHelpPage = () => {
 	return (
 		<>
 			<Head>
-				<title>AI Help - Timeless Watches</title>
+				<title>{t('ai.metaTitle')}</title>
 			</Head>
 			<Stack sx={{ minHeight: '100vh', background: isDark ? '#0b0f16' : '#FAFAFA', display: 'flex' }}>
 				<Top />
@@ -50,7 +52,7 @@ const AiHelpPage = () => {
 							<Stack direction="row" spacing={1.2} alignItems="center">
 								<CircularProgress size={22} sx={{ color: isDark ? '#E5E7EB' : '#111111' }} />
 								<Typography sx={{ color: isDark ? '#CBD2DC' : '#444' }}>
-									Finding well-known details for <b>{latestBrand}</b>...
+									{t('ai.findingBrandDetails')} <b>{latestBrand}</b>...
 								</Typography>
 							</Stack>
 						</Container>
@@ -64,7 +66,7 @@ const AiHelpPage = () => {
 						<Container maxWidth="lg" sx={{ py: 4 }}>
 							<Paper sx={{ borderRadius: '16px', border: '1px solid #D4AF37', p: { xs: 2, md: 2.4 }, background: isDark ? '#101722' : '#FFFFFF' }}>
 								<Typography sx={{ color: isDark ? '#AEB6C2' : '#777', fontSize: '0.78rem', letterSpacing: '1.4px', textTransform: 'uppercase', mb: 0.6 }}>
-									Brand Insights
+									{t('ai.brandInsights')}
 								</Typography>
 								<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontSize: { xs: '1.2rem', md: '1.45rem' }, fontWeight: 700 }}>
 									{brandInsights.watchBrand} - {brandInsights.watchTitle}
@@ -75,15 +77,15 @@ const AiHelpPage = () => {
 
 								<Grid container spacing={2} sx={{ mt: 0.4 }}>
 									<Grid item xs={12} md={6}>
-										<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, mb: 0.6 }}>Typical Price Range</Typography>
+										<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, mb: 0.6 }}>{t('ai.typicalPriceRange')}</Typography>
 										<Typography sx={{ color: isDark ? '#CBD2DC' : '#555' }}>{brandInsights.priceRange}</Typography>
-										<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, mt: 1.2, mb: 0.6 }}>Market Snapshot</Typography>
+										<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, mt: 1.2, mb: 0.6 }}>{t('ai.marketSnapshot')}</Typography>
 										<Typography sx={{ color: isDark ? '#AEB6C2' : '#666', fontSize: '0.9rem' }}>
 											{brandInsights.salesInfo}
 										</Typography>
 									</Grid>
 									<Grid item xs={12} md={6}>
-										<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, mb: 0.6 }}>Well-Known Names</Typography>
+										<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, mb: 0.6 }}>{t('ai.wellKnownNames')}</Typography>
 										<Stack spacing={0.55}>
 											{brandInsights.celebrityWearers?.slice(0, 2).map((person: any, idx: number) => (
 												<Typography key={idx} sx={{ color: isDark ? '#CBD2DC' : '#555', fontSize: '0.9rem' }}>
@@ -91,7 +93,7 @@ const AiHelpPage = () => {
 												</Typography>
 											))}
 										</Stack>
-										<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, mt: 1.2, mb: 0.6 }}>Quick Facts</Typography>
+										<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, mt: 1.2, mb: 0.6 }}>{t('ai.quickFacts')}</Typography>
 										<Stack spacing={0.45}>
 											{brandInsights.funFacts?.slice(0, 2).map((fact: string, idx: number) => (
 												<Typography key={idx} sx={{ color: isDark ? '#CBD2DC' : '#555', fontSize: '0.9rem' }}>

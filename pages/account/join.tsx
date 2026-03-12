@@ -9,10 +9,12 @@ import { sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../libs/sweetAl
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { useThemeMode } from '../../libs/theme/ThemeModeContext';
+import { useLanguage } from '../../libs/i18n/LanguageContext';
 
 const JoinPage = () => {
 	const router = useRouter();
 	const { isDark } = useThemeMode();
+	const { t } = useLanguage();
 	const [tab, setTab] = useState(0);
 	const [loginNick, setLoginNick] = useState('');
 	const [loginPass, setLoginPass] = useState('');
@@ -29,23 +31,23 @@ const JoinPage = () => {
 
 	const handleLogin = async () => {
 		try {
-			if (!loginNick || !loginPass) return sweetMixinErrorAlert('Please fill all fields');
+			if (!loginNick || !loginPass) return sweetMixinErrorAlert(t('join.fillAll'));
 			await logIn(loginNick, loginPass);
-			await sweetMixinSuccessAlert('Login successful!');
+			await sweetMixinSuccessAlert(t('join.loginSuccess'));
 			router.push('/');
 		} catch (err) {
-			sweetMixinErrorAlert('Login failed. Check your credentials.');
+			sweetMixinErrorAlert(t('join.loginFailed'));
 		}
 	};
 
 	const handleSignup = async () => {
 		try {
-			if (!signNick || !signPass || !signPhone) return sweetMixinErrorAlert('Please fill all fields');
+			if (!signNick || !signPass || !signPhone) return sweetMixinErrorAlert(t('join.fillAll'));
 			await signUp(signNick, signPass, signPhone, signRole);
-			await sweetMixinSuccessAlert('Welcome!');
+			await sweetMixinSuccessAlert(t('join.signupWelcome'));
 			router.push('/');
 		} catch (err) {
-			sweetMixinErrorAlert('Signup failed. Nick or phone may already exist.');
+			sweetMixinErrorAlert(t('join.signupFailed'));
 		}
 	};
 
@@ -64,7 +66,7 @@ const JoinPage = () => {
 
 	return (
 		<>
-			<Head><title>Join - Watches</title></Head>
+			<Head><title>{t('join.metaTitle')}</title></Head>
 			<Stack
 				sx={{
 					background: isDark ? '#0b0f16' : '#FAFAFA',
@@ -153,10 +155,10 @@ const JoinPage = () => {
 
 						<Box sx={{ width: { xs: '100%', md: '58%' }, p: { xs: 3, md: 5 } }}>
 							<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', textAlign: 'center', mb: 0.5, fontWeight: 700, fontSize: { xs: '2rem', md: '2.2rem' } }}>
-								Welcome
+								{t('join.title')}
 							</Typography>
 							<Typography sx={{ color: isDark ? '#AEB6C2' : '#666666', textAlign: 'center', mb: 2.6, fontSize: '0.92rem' }}>
-								Access your account and continue your watch journey.
+								{tab === 0 ? t('join.loginSubtitle') : t('join.signupSubtitle')}
 							</Typography>
 							<Tabs
 								value={tab}
@@ -177,14 +179,14 @@ const JoinPage = () => {
 									'& .MuiTabs-indicator': { backgroundColor: '#D4AF37', height: 3, borderRadius: '6px' },
 								}}
 							>
-								<Tab label="Login" />
-								<Tab label="Sign Up" />
+								<Tab label={t('join.loginTab')} />
+								<Tab label={t('join.signUpTab')} />
 							</Tabs>
 
 							{tab === 0 ? (
 								<Stack spacing={2.1}>
 									<TextField
-										label="Nickname"
+										label={t('join.nickname')}
 										value={loginNick}
 										onChange={(e) => setLoginNick(e.target.value)}
 										onKeyDown={(e) => {
@@ -198,7 +200,7 @@ const JoinPage = () => {
 										sx={inputSx}
 									/>
 									<TextField
-										label="Password"
+										label={t('join.password')}
 										type={showLoginPassword ? 'text' : 'password'}
 										value={loginPass}
 										onChange={(e) => setLoginPass(e.target.value)}
@@ -240,10 +242,10 @@ const JoinPage = () => {
 											'&:hover': { background: '#2B2B2B' },
 										}}
 									>
-										Login
+										{t('join.loginTab')}
 									</Button>
 									<Typography sx={{ color: isDark ? '#AEB6C2' : '#666666', fontSize: '0.86rem', textAlign: 'center' }}>
-										Don&apos;t have an account?{' '}
+										{t('join.noAccount')}{' '}
 										<Box
 											component="span"
 											onClick={() => setTab(1)}
@@ -256,14 +258,14 @@ const JoinPage = () => {
 												'&:hover': { color: '#D4AF37' },
 											}}
 										>
-											Sign up
+											{t('join.signUpLink')}
 										</Box>
 									</Typography>
 								</Stack>
 							) : (
 								<Stack spacing={2.1}>
 									<TextField
-										label="Account Type"
+										label={t('join.accountType')}
 										select
 										value={signRole}
 										onChange={(e) => setSignRole(e.target.value as 'USER' | 'AGENT')}
@@ -271,11 +273,11 @@ const JoinPage = () => {
 										size="medium"
 										sx={inputSx}
 									>
-										<MenuItem value="USER">User</MenuItem>
-										<MenuItem value="AGENT">Seller</MenuItem>
+										<MenuItem value="USER">{t('join.user')}</MenuItem>
+										<MenuItem value="AGENT">{t('join.seller')}</MenuItem>
 									</TextField>
 									<TextField
-										label="Nickname"
+										label={t('join.nickname')}
 										value={signNick}
 										onChange={(e) => setSignNick(e.target.value)}
 										fullWidth
@@ -283,7 +285,7 @@ const JoinPage = () => {
 										sx={inputSx}
 									/>
 									<TextField
-										label="Password"
+										label={t('join.password')}
 										type={showSignupPassword ? 'text' : 'password'}
 										value={signPass}
 										onChange={(e) => setSignPass(e.target.value)}
@@ -306,7 +308,7 @@ const JoinPage = () => {
 										}}
 									/>
 									<TextField
-										label="Phone"
+										label={t('join.phone')}
 										value={signPhone}
 										onChange={(e) => setSignPhone(e.target.value)}
 										fullWidth
@@ -327,7 +329,7 @@ const JoinPage = () => {
 											'&:hover': { background: '#2B2B2B' },
 										}}
 									>
-										Sign Up
+										{t('join.signUpTab')}
 									</Button>
 								</Stack>
 							)}

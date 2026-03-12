@@ -12,10 +12,12 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import SearchIcon from '@mui/icons-material/Search';
 import Link from 'next/link';
 import { useThemeMode } from '../../libs/theme/ThemeModeContext';
+import { useLanguage } from '../../libs/i18n/LanguageContext';
 
 const ContactPage = () => {
 	const [watchSearch, setWatchSearch] = useState('');
 	const { isDark } = useThemeMode();
+	const { t } = useLanguage();
 	const textPrimary = isDark ? '#E5E7EB' : '#111111';
 	const textSecondary = isDark ? '#AEB6C2' : '#666666';
 
@@ -26,7 +28,7 @@ const ContactPage = () => {
 
 	return (
 		<>
-			<Head><title>Contact - Timeless Watches</title></Head>
+			<Head><title>{t('contact.metaTitle')}</title></Head>
 			<Stack sx={{ background: isDark ? '#0b0f16' : '#FAFAFA', minHeight: '100vh', display: 'flex' }}>
 				<Top />
 
@@ -86,11 +88,10 @@ const ContactPage = () => {
 								mb: 1.3,
 							}}
 						>
-							CONTACT
+							{t('contact.title')}
 						</Typography>
 						<Typography sx={{ color: 'rgba(250,250,250,0.78)', fontSize: '0.9rem', maxWidth: 520, mx: 'auto', mb: 2.4 }}>
-							Do you have a question about Timeless Watches products or services?
-							We are here for you.
+							{t('contact.subtitle')}
 						</Typography>
 						<Stack direction="row" justifyContent="center" spacing={3}>
 							<Link href="/faq" style={{ textDecoration: 'none' }}>
@@ -105,11 +106,11 @@ const ContactPage = () => {
 										'&:hover': { color: '#D4AF37' },
 									}}
 								>
-									› READ OUR FAQ
+									› {t('contact.readFaq')}
 								</Typography>
 							</Link>
 							<Typography sx={{ color: '#FAFAFA', fontSize: '0.72rem', fontWeight: 600, letterSpacing: '1.5px' }}>
-								› SERVICE REQUEST
+								› {t('contact.serviceRequest')}
 							</Typography>
 						</Stack>
 					</Box>
@@ -129,26 +130,26 @@ const ContactPage = () => {
 								mb: 4.2,
 							}}
 						>
-							How would you prefer to contact us?
+							{t('contact.preferContact')}
 						</Typography>
 
 						<Grid container spacing={2.2} sx={{ mb: 4.5 }}>
 							{[
 								{
-									title: 'By Phone',
-									subtitle: 'Talk to our advisors',
+									title: t('contact.byPhone'),
+									subtitle: t('contact.byPhoneSub'),
 									detail: '+82 10 1234 5678',
 									icon: <PhoneIcon sx={{ color: '#111111' }} />,
 								},
 								{
-									title: 'By Email',
-									subtitle: 'Send us your inquiry',
+									title: t('contact.byEmail'),
+									subtitle: t('contact.byEmailSub'),
 									detail: 'info@watches-store.com',
 									icon: <EmailIcon sx={{ color: '#111111' }} />,
 								},
 								{
-									title: 'In Store',
-									subtitle: 'Visit our flagship',
+									title: t('contact.inStore'),
+									subtitle: t('contact.inStoreSub'),
 									detail: 'Gangnam-gu, Seoul',
 									icon: <LocationOnIcon sx={{ color: '#111111' }} />,
 								},
@@ -197,15 +198,15 @@ const ContactPage = () => {
 									}}
 								>
 									<Typography sx={{ color: textPrimary, fontWeight: 700, fontSize: '1.05rem', mb: 1.8 }}>
-										Need help with a specific watch?
+										{t('contact.helpSpecific')}
 									</Typography>
 									<Typography sx={{ color: textSecondary, fontSize: '0.88rem', mb: 2 }}>
-										Search by watch name and our team will prioritize your inquiry.
+										{t('contact.searchHelp')}
 									</Typography>
 									<TextField
 										fullWidth
 										size="small"
-										placeholder="Search watch name (e.g. Rolex Submariner)"
+										placeholder={t('contact.searchPlaceholder')}
 										value={watchSearch}
 										onChange={(e) => setWatchSearch(e.target.value)}
 										InputProps={{
@@ -227,9 +228,9 @@ const ContactPage = () => {
 										}}
 									/>
 									<Typography sx={{ color: isDark ? '#9CA3AF' : '#777777', fontSize: '0.78rem', mb: 2 }}>
-										Current query: {watchSearch || '—'}
+										{t('contact.currentQuery')} {watchSearch || '—'}
 									</Typography>
-									<Typography sx={{ color: textPrimary, fontWeight: 600, mb: 1.2 }}>Follow Us</Typography>
+									<Typography sx={{ color: textPrimary, fontWeight: 600, mb: 1.2 }}>{t('footer.followUs')}</Typography>
 									<Stack direction="row" spacing={1.2}>
 										<IconButton
 											component="a"

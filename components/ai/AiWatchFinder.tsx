@@ -19,6 +19,7 @@ import {
 import { GET_WATCHES } from '../../apollo/user/query';
 import { REACT_APP_API_URL } from '../../libs/config';
 import { useThemeMode } from '../../libs/theme/ThemeModeContext';
+import { useLanguage } from '../../libs/i18n/LanguageContext';
 
 const watchFinderSchema = z.object({
 	budget: z.enum(['UNDER_5K', '5K_10K', '10K_25K', '25K_50K', 'ABOVE_50K']),
@@ -68,6 +69,7 @@ const getBudgetRange = (budget: WatchFinderFormValues['budget']) => {
 
 const AiWatchFinder = () => {
 	const { isDark } = useThemeMode();
+	const { t } = useLanguage();
 	const [loading, setLoading] = React.useState(false);
 	const [results, setResults] = React.useState<RecommendationItem[]>([]);
 	const [getWatches] = useLazyQuery(GET_WATCHES, { fetchPolicy: 'network-only' });
@@ -136,10 +138,10 @@ const AiWatchFinder = () => {
 		<Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
 			<Stack spacing={2.2}>
 				<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontSize: { xs: '1.5rem', md: '2rem' }, fontWeight: 700 }}>
-					AI Watch Finder
+					{t('ai.finderTitle')}
 				</Typography>
 				<Typography sx={{ color: isDark ? '#AEB6C2' : '#666666', maxWidth: 820 }}>
-					Answer a few questions and let AI shortlist watches that match your budget, style, and wrist profile.
+					{t('ai.finderSubtitle')}
 				</Typography>
 			</Stack>
 
@@ -160,7 +162,7 @@ const AiWatchFinder = () => {
 						<TextField
 							select
 							fullWidth
-							label="Budget"
+							label={t('ai.budget')}
 							{...register('budget')}
 							error={Boolean(errors.budget)}
 							helperText={errors.budget?.message}
@@ -176,7 +178,7 @@ const AiWatchFinder = () => {
 						<TextField
 							select
 							fullWidth
-							label="Style"
+							label={t('ai.style')}
 							{...register('style')}
 							error={Boolean(errors.style)}
 							helperText={errors.style?.message}
@@ -192,7 +194,7 @@ const AiWatchFinder = () => {
 						<TextField
 							type="number"
 							fullWidth
-							label="Wrist Size (cm)"
+							label={t('ai.wristSize')}
 							{...register('wristSize', { valueAsNumber: true })}
 							error={Boolean(errors.wristSize)}
 							helperText={errors.wristSize?.message}
@@ -201,8 +203,8 @@ const AiWatchFinder = () => {
 					<Grid item xs={12} md={6}>
 						<TextField
 							fullWidth
-							label="Preferred Brand (optional)"
-							placeholder="Rolex, Omega, Cartier..."
+							label={t('ai.preferredBrand')}
+							placeholder={t('ai.preferredBrandPlaceholder')}
 							{...register('preferredBrand')}
 							error={Boolean(errors.preferredBrand)}
 							helperText={errors.preferredBrand?.message}
@@ -212,7 +214,7 @@ const AiWatchFinder = () => {
 						<TextField
 							select
 							fullWidth
-							label="Movement"
+							label={t('ai.movement')}
 							{...register('movement')}
 							error={Boolean(errors.movement)}
 							helperText={errors.movement?.message}
@@ -239,7 +241,7 @@ const AiWatchFinder = () => {
 							'&:hover': { background: '#252525' },
 						}}
 					>
-						{loading ? <CircularProgress size={20} sx={{ color: '#C6A969' }} /> : 'Find My Watch'}
+						{loading ? <CircularProgress size={20} sx={{ color: '#C6A969' }} /> : t('ai.findMyWatch')}
 					</Button>
 				</Stack>
 			</Box>
@@ -247,7 +249,7 @@ const AiWatchFinder = () => {
 			<Stack spacing={1.6} sx={{ mt: 3 }}>
 				{!loading && results.length === 0 ? (
 					<Typography sx={{ color: isDark ? '#9CA3AF' : '#7a7a7a', fontSize: '0.9rem' }}>
-						No recommendations yet. Submit the form to see AI suggestions.
+						{t('ai.noRecommendations')}
 					</Typography>
 				) : null}
 				<Grid container spacing={2}>

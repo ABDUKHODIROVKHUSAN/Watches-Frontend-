@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { Stack, Container, Typography, Box, Button } from '@mui/material';
 import Top from '../libs/components/Top';
 import Footer from '../libs/components/Footer';
+import { useLanguage } from '../libs/i18n/LanguageContext';
 
 type FaqItem = {
 	id: string;
@@ -51,6 +52,7 @@ const FAQ_ITEMS: FaqItem[] = [
 
 const FaqPage = () => {
 	const [openAnswers, setOpenAnswers] = useState<Record<string, boolean>>({});
+	const { t } = useLanguage();
 
 	const toggleAnswer = (id: string) => {
 		setOpenAnswers((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -59,7 +61,7 @@ const FaqPage = () => {
 	return (
 		<>
 			<Head>
-				<title>FAQ - Timeless Watches</title>
+				<title>{t('faq.metaTitle')}</title>
 			</Head>
 			<Stack sx={{ background: '#FAFAFA', minHeight: '100vh', display: 'flex' }}>
 				<Top />
@@ -97,10 +99,10 @@ const FaqPage = () => {
 							Timeless Watches
 						</Typography>
 						<Typography sx={{ color: '#FAFAFA', fontSize: { xs: '2rem', md: '2.7rem' }, fontWeight: 700, mb: 1.2 }}>
-							Frequently Asked Questions
+							{t('faq.title')}
 						</Typography>
 						<Typography sx={{ color: 'rgba(250,250,250,0.78)', fontSize: '0.92rem', maxWidth: 680, mx: 'auto' }}>
-							Quick answers to common questions about orders, authenticity, payment, and support.
+							{t('faq.subtitle')}
 						</Typography>
 					</Container>
 				</Stack>
@@ -142,7 +144,7 @@ const FaqPage = () => {
 												},
 											}}
 										>
-											{isOpen ? 'Hide Answer' : 'See Answer'}
+											{isOpen ? t('faq.hideAnswer') : t('faq.seeAnswer')}
 										</Button>
 									</Stack>
 									{isOpen && (

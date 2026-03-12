@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Button, Container, Stack, TextField, Typography } from '@mui/material';
+import { useLanguage } from '../../libs/i18n/LanguageContext';
 
 type AiHeroProps = {
 	onQuickSearch?: (value: string) => void;
@@ -7,6 +8,7 @@ type AiHeroProps = {
 
 const AiHero = ({ onQuickSearch }: AiHeroProps) => {
 	const [query, setQuery] = React.useState('');
+	const { t } = useLanguage();
 
 	return (
 		<Stack
@@ -50,15 +52,15 @@ const AiHero = ({ onQuickSearch }: AiHeroProps) => {
 						mb: 1.2,
 					}}
 				>
-					AI Watch Assistant
+					{t('ai.heroTitle')}
 				</Typography>
 				<Typography sx={{ color: 'rgba(250,250,250,0.8)', fontSize: '1rem', mb: 3.5 }}>
-					Find your perfect timepiece with intelligent guidance
+					{t('ai.heroSubtitle')}
 				</Typography>
 				<Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.2} sx={{ maxWidth: 640, mx: 'auto' }}>
 					<TextField
 						fullWidth
-						placeholder="Search by watch model, style, or brand..."
+						placeholder={t('ai.heroPlaceholder')}
 						value={query}
 						onChange={(event) => setQuery(event.target.value)}
 						onKeyDown={(event) => {
@@ -89,7 +91,7 @@ const AiHero = ({ onQuickSearch }: AiHeroProps) => {
 							'&:hover': { background: '#d4b57b' },
 						}}
 					>
-						Search
+						{t('common.search')}
 					</Button>
 				</Stack>
 			</Container>

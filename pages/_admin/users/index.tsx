@@ -7,6 +7,7 @@ import { GET_ALL_MEMBERS_BY_ADMIN } from '../../../apollo/admin/query';
 import { UPDATE_MEMBER_BY_ADMIN } from '../../../apollo/admin/mutation';
 import { REACT_APP_API_URL } from '../../../libs/config';
 import { sweetErrorAlert } from '../../../libs/sweetAlert';
+import { useLanguage } from '../../../libs/i18n/LanguageContext';
 
 type MemberStatus = 'ACTIVE' | 'BLOCK' | 'DELETE';
 type MemberType = 'USER' | 'AGENT' | 'ADMIN';
@@ -26,6 +27,7 @@ const STATUS_TABS: Array<'ALL' | MemberStatus> = ['ALL', 'ACTIVE', 'BLOCK', 'DEL
 const TYPE_OPTIONS: Array<'ALL' | MemberType> = ['ALL', 'USER', 'AGENT', 'ADMIN'];
 
 const AdminUsersPage: NextPage = () => {
+	const { t } = useLanguage();
 	const [inquiry, setInquiry] = useState<Inquiry>({
 		page: 1,
 		limit: 10,
@@ -94,7 +96,7 @@ const AdminUsersPage: NextPage = () => {
 			});
 			await refetch({ input: inquiry });
 		} catch (err: any) {
-			await sweetErrorAlert(err?.message || 'Failed to update member');
+			await sweetErrorAlert(err?.message || t('admin.updateMemberFailed'));
 		} finally {
 			setUpdatingId(null);
 		}
@@ -104,7 +106,7 @@ const AdminUsersPage: NextPage = () => {
 
 	return (
 		<Box>
-			<Typography sx={{ color: '#111111', fontSize: '1.6rem', fontWeight: 700, mb: 2.2 }}>Users Admin</Typography>
+			<Typography sx={{ color: '#111111', fontSize: '1.6rem', fontWeight: 700, mb: 2.2 }}>{t('admin.usersTitle')}</Typography>
 
 			<Stack
 				sx={{
@@ -170,7 +172,7 @@ const AdminUsersPage: NextPage = () => {
 							{isEmpty && (
 								<TableRow>
 									<TableCell align="center" colSpan={6}>
-										<Typography sx={{ color: '#777777', py: 2 }}>No members found.</Typography>
+										<Typography sx={{ color: '#777777', py: 2 }}>{t('admin.noMembers')}</Typography>
 									</TableCell>
 								</TableRow>
 							)}

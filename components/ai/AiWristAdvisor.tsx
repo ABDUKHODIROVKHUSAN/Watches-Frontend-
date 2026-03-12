@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Button, Container, MenuItem, Paper, Stack, TextField, Typography } from '@mui/material';
 import { useThemeMode } from '../../libs/theme/ThemeModeContext';
+import { useLanguage } from '../../libs/i18n/LanguageContext';
 
 type WristShape = 'ROUND' | 'FLAT' | 'OVAL';
 type PreferredStyle = 'DRESS' | 'SPORT' | 'EVERYDAY';
@@ -13,6 +14,7 @@ type AdvisorResult = {
 
 const AiWristAdvisor = () => {
 	const { isDark } = useThemeMode();
+	const { t } = useLanguage();
 	const [circumference, setCircumference] = React.useState('17');
 	const [shape, setShape] = React.useState<WristShape>('ROUND');
 	const [style, setStyle] = React.useState<PreferredStyle>('EVERYDAY');
@@ -56,10 +58,10 @@ const AiWristAdvisor = () => {
 	return (
 		<Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
 			<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontSize: { xs: '1.5rem', md: '2rem' }, fontWeight: 700, mb: 1 }}>
-				Wrist Size Advisor
+				{t('ai.wristAdvisorTitle')}
 			</Typography>
 			<Typography sx={{ color: isDark ? '#AEB6C2' : '#666666', mb: 2.6 }}>
-				Get a quick recommendation for ideal case dimensions and fit profile.
+				{t('ai.wristAdvisorSubtitle')}
 			</Typography>
 
 			<Paper
@@ -73,7 +75,7 @@ const AiWristAdvisor = () => {
 			>
 				<Stack direction={{ xs: 'column', md: 'row' }} spacing={1.6}>
 					<TextField
-						label="Wrist Circumference (cm)"
+						label={t('ai.wristCircumference')}
 						type="number"
 						value={circumference}
 						onChange={(event) => setCircumference(event.target.value)}
@@ -81,7 +83,7 @@ const AiWristAdvisor = () => {
 					/>
 					<TextField
 						select
-						label="Wrist Shape"
+						label={t('ai.wristShape')}
 						value={shape}
 						onChange={(event) => setShape(event.target.value as WristShape)}
 						fullWidth
@@ -92,14 +94,14 @@ const AiWristAdvisor = () => {
 					</TextField>
 					<TextField
 						select
-						label="Preferred Style"
+						label={t('ai.preferredStyle')}
 						value={style}
 						onChange={(event) => setStyle(event.target.value as PreferredStyle)}
 						fullWidth
 					>
 						<MenuItem value="DRESS">Dress</MenuItem>
 						<MenuItem value="SPORT">Sport</MenuItem>
-						<MenuItem value="EVERYDAY">Everyday</MenuItem>
+						<MenuItem value="EVERYDAY">{t('ai.everyday')}</MenuItem>
 					</TextField>
 					<Button
 						variant="contained"
@@ -115,7 +117,7 @@ const AiWristAdvisor = () => {
 							'&:hover': { background: '#232323' },
 						}}
 					>
-						Calculate
+						{t('ai.calculate')}
 					</Button>
 				</Stack>
 
@@ -131,20 +133,20 @@ const AiWristAdvisor = () => {
 							p: 2,
 						}}
 					>
-						<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, mb: 1 }}>Recommendation</Typography>
+						<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, mb: 1 }}>{t('ai.recommendation')}</Typography>
 						<Typography sx={{ color: isDark ? '#CBD2DC' : '#555555', fontSize: '0.9rem', mb: 0.5 }}>
-							Case Size: <b>{result.caseSize}</b>
+							{t('ai.caseSize')}: <b>{result.caseSize}</b>
 						</Typography>
 						<Typography sx={{ color: isDark ? '#CBD2DC' : '#555555', fontSize: '0.9rem', mb: 0.5 }}>
-							Lug-to-Lug: <b>{result.lugToLug}</b>
+							{t('ai.lugToLug')}: <b>{result.lugToLug}</b>
 						</Typography>
 						<Typography sx={{ color: isDark ? '#CBD2DC' : '#555555', fontSize: '0.9rem' }}>
-							Suggested Style: <b>{result.styleSuggestion}</b>
+							{t('ai.suggestedStyle')}: <b>{result.styleSuggestion}</b>
 						</Typography>
 					</Box>
 				) : (
 					<Typography sx={{ mt: 2.2, color: isDark ? '#9CA3AF' : '#7a7a7a', fontSize: '0.9rem' }}>
-						Enter your wrist details and click calculate to view guidance.
+						{t('ai.enterDetails')}
 					</Typography>
 				)}
 			</Paper>

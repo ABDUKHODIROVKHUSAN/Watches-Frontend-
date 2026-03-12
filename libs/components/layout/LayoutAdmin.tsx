@@ -23,6 +23,7 @@ import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 import { getJwtToken, logOut, updateUserInfo } from '../../auth';
 import { REACT_APP_API_URL } from '../../config';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 const drawerWidth = 260;
 
@@ -30,6 +31,7 @@ const withAdminLayout = (Component: ComponentType) => {
 	return (props: object) => {
 		const router = useRouter();
 		const user = useReactiveVar(userVar);
+		const { t } = useLanguage();
 		const [loading, setLoading] = useState(true);
 
 		useEffect(() => {
@@ -68,7 +70,7 @@ const withAdminLayout = (Component: ComponentType) => {
 						<Toolbar sx={{ justifyContent: 'space-between' }}>
 							<Stack direction="row" spacing={1} alignItems="center">
 								<DashboardOutlinedIcon sx={{ color: '#111111' }} />
-								<Typography sx={{ color: '#111111', fontWeight: 700 }}>Admin Dashboard</Typography>
+								<Typography sx={{ color: '#111111', fontWeight: 700 }}>{t('admin.dashboard')}</Typography>
 							</Stack>
 
 							<Stack direction="row" spacing={1.2} alignItems="center">
@@ -100,7 +102,7 @@ const withAdminLayout = (Component: ComponentType) => {
 							<Typography sx={{ color: '#D4AF37', fontSize: '0.74rem', letterSpacing: '1.6px' }}>
 								TIMELESS ADMIN
 							</Typography>
-							<Typography sx={{ mt: 0.4, fontWeight: 700 }}>Watches Management</Typography>
+							<Typography sx={{ mt: 0.4, fontWeight: 700 }}>{t('admin.management')}</Typography>
 						</Box>
 						<Divider sx={{ borderColor: 'rgba(250,250,250,0.2)' }} />
 
@@ -118,7 +120,7 @@ const withAdminLayout = (Component: ComponentType) => {
 										'&:hover': { background: router.pathname.startsWith('/_admin/users') ? '#D4AF37' : '#2A2A2A' },
 									}}
 								>
-									Users
+									{t('admin.users')}
 								</Button>
 							</Link>
 
@@ -135,7 +137,7 @@ const withAdminLayout = (Component: ComponentType) => {
 										'&:hover': { background: router.pathname.startsWith('/_admin/watches') ? '#D4AF37' : '#2A2A2A' },
 									}}
 								>
-									Watches
+									{t('admin.watches')}
 								</Button>
 							</Link>
 
@@ -150,7 +152,7 @@ const withAdminLayout = (Component: ComponentType) => {
 										'&:hover': { background: '#2A2A2A' },
 									}}
 								>
-									Back to Site
+									{t('admin.backToSite')}
 								</Button>
 							</Link>
 						</Stack>

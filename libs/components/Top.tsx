@@ -111,9 +111,9 @@ const Top = () => {
 	];
 
 	const localeMenu: { locale: AppLocale; label: string; flag: string }[] = [
-		{ locale: 'en', label: 'English', flag: '🇬🇧' },
-		{ locale: 'ko', label: 'Korean', flag: '🇰🇷' },
-		{ locale: 'uz', label: 'Uzbek', flag: '🇺🇿' },
+		{ locale: 'en', label: t('locale.english'), flag: '🇬🇧' },
+		{ locale: 'ko', label: t('locale.korean'), flag: '🇰🇷' },
+		{ locale: 'uz', label: t('locale.uzbek'), flag: '🇺🇿' },
 	];
 	const activeLocale = localeMenu.find((item) => item.locale === locale) ?? localeMenu[0];
 
@@ -269,7 +269,7 @@ const Top = () => {
 									}}
 									sx={{ fontSize: '1rem', fontWeight: 500, textTransform: 'none' }}
 								>
-									<PersonOutlineRoundedIcon fontSize="small" sx={{ mr: 1 }} /> My Page
+									<PersonOutlineRoundedIcon fontSize="small" sx={{ mr: 1 }} /> {t('nav.myPage')}
 								</MenuItem>
 								<MenuItem
 									onClick={() => {
@@ -398,11 +398,11 @@ const Top = () => {
 				}}
 			>
 				<DialogTitle sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, pb: 0.8 }}>
-					Logout Confirmation
+					{t('top.logoutTitle')}
 				</DialogTitle>
 				<DialogContent sx={{ pt: '8px !important' }}>
 					<Typography sx={{ color: isDark ? '#AEB6C2' : '#555555', fontSize: '0.94rem' }}>
-						Do you really want to logout?
+						{t('top.logoutMessage')}
 					</Typography>
 				</DialogContent>
 				<DialogActions sx={{ px: 3, pb: 2.2, pt: 0.5 }}>
@@ -415,7 +415,7 @@ const Top = () => {
 							textTransform: 'none',
 						}}
 					>
-						No
+						{t('common.no')}
 					</Button>
 					<Button
 						onClick={() => {
@@ -431,7 +431,7 @@ const Top = () => {
 							'&:hover': { background: '#232323' },
 						}}
 					>
-						Yes
+						{t('common.yes')}
 					</Button>
 				</DialogActions>
 			</Dialog>

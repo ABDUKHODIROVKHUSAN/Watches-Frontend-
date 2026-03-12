@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Button, Container, Stack, TextField, Typography } from '@mui/material';
 import { useThemeMode } from '../../libs/theme/ThemeModeContext';
+import { useLanguage } from '../../libs/i18n/LanguageContext';
 
 type ChatRole = 'user' | 'ai';
 
@@ -12,13 +13,14 @@ type ChatMessage = {
 
 const AiChatAssistant = () => {
 	const { isDark } = useThemeMode();
+	const { t } = useLanguage();
 	const [message, setMessage] = React.useState('');
 	const [sending, setSending] = React.useState(false);
 	const [messages, setMessages] = React.useState<ChatMessage[]>([
 		{
 			id: 'seed-1',
 			role: 'ai',
-			content: 'Welcome to Timeless AI Assistant. Ask me about styles, value, movement types, or watch recommendations.',
+			content: t('ai.chatSubtitle'),
 		},
 	]);
 
@@ -66,10 +68,10 @@ const AiChatAssistant = () => {
 	return (
 		<Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
 			<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontSize: { xs: '1.5rem', md: '2rem' }, fontWeight: 700, mb: 1 }}>
-				AI Chat Assistant
+				{t('ai.chatTitle')}
 			</Typography>
 			<Typography sx={{ color: isDark ? '#AEB6C2' : '#666666', mb: 3 }}>
-				Talk to your personal watch concierge for quick recommendations and buying guidance.
+				{t('ai.chatSubtitle')}
 			</Typography>
 
 			<Box
@@ -118,7 +120,7 @@ const AiChatAssistant = () => {
 				<Stack direction="row" spacing={1} sx={{ mt: 1.2 }}>
 					<TextField
 						fullWidth
-						placeholder="Ask about models, movement, value, styling..."
+						placeholder={t('ai.chatPlaceholder')}
 						value={message}
 						onChange={(event) => setMessage(event.target.value)}
 						onKeyDown={(event) => {
@@ -142,7 +144,7 @@ const AiChatAssistant = () => {
 							'&:hover': { background: '#232323' },
 						}}
 					>
-						{sending ? 'Sending...' : 'Send'}
+						{sending ? t('ai.sending') : t('ai.send')}
 					</Button>
 				</Stack>
 			</Box>

@@ -13,6 +13,8 @@ services:
 
     volumes:
       - ./:/usr/src/watches-frontend
+      - /usr/src/watches-frontend/node_modules
+      - /usr/src/watches-frontend/.next
     working_dir: /usr/src/watches-frontend
 
     networks:

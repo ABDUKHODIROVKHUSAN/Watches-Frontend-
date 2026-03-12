@@ -27,7 +27,6 @@ import { REMOVE_WATCH_BY_ADMIN, UPDATE_WATCH_BY_ADMIN } from '../../../apollo/ad
 import { REACT_APP_API_URL } from '../../../libs/config';
 import { sweetConfirmAlert, sweetErrorAlert } from '../../../libs/sweetAlert';
 import { useLanguage } from '../../../libs/i18n/LanguageContext';
-import { localizeWatchText } from '../../../libs/i18n/watchText';
 
 type WatchStatus = 'ACTIVE' | 'SOLD' | 'DELETE';
 
@@ -46,7 +45,7 @@ const STATUS_TABS: Array<'ALL' | WatchStatus> = ['ALL', 'ACTIVE', 'SOLD', 'DELET
 const WATCH_BRANDS = ['ALL', 'ROLEX', 'OMEGA', 'CARTIER', 'TAG_HEUER', 'PATEK_PHILIPPE', 'AUDEMARS_PIGUET', 'BREITLING', 'IWC', 'HUBLOT', 'TISSOT'];
 
 const AdminWatchesPage: NextPage = () => {
-	const { locale } = useLanguage();
+	const { t } = useLanguage();
 	const [inquiry, setInquiry] = useState<Inquiry>({
 		page: 1,
 		limit: 10,
@@ -114,7 +113,7 @@ const AdminWatchesPage: NextPage = () => {
 			await updateWatchByAdmin({ variables: { input: { _id: watchId, watchStatus } } });
 			await refetch({ input: inquiry });
 		} catch (err: any) {
-			await sweetErrorAlert(err?.message || 'Failed to update watch');
+			await sweetErrorAlert(err?.message || t('admin.updateWatchFailed'));
 		} finally {
 			setUpdatingId(null);
 		}
@@ -122,13 +121,13 @@ const AdminWatchesPage: NextPage = () => {
 
 	const handleRemove = async (watchId: string) => {
 		try {
-			const confirmed = await sweetConfirmAlert('Are you sure to remove this watch permanently?');
+			const confirmed = await sweetConfirmAlert(t('admin.removeConfirm'));
 			if (!confirmed) return;
 			setRemovingId(watchId);
 			await removeWatchByAdmin({ variables: { input: watchId } });
 			await refetch({ input: inquiry });
 		} catch (err: any) {
-			await sweetErrorAlert(err?.message || 'Failed to remove watch');
+			await sweetErrorAlert(err?.message || t('admin.removeWatchFailed'));
 		} finally {
 			setRemovingId(null);
 		}
@@ -138,7 +137,7 @@ const AdminWatchesPage: NextPage = () => {
 
 	return (
 		<Box>
-			<Typography sx={{ color: '#111111', fontSize: '1.6rem', fontWeight: 700, mb: 2.2 }}>Watches Admin</Typography>
+			<Typography sx={{ color: '#111111', fontSize: '1.6rem', fontWeight: 700, mb: 2.2 }}>{t('admin.watchesTitle')}</Typography>
 
 			<Stack
 				sx={{
@@ -200,7 +199,7 @@ const AdminWatchesPage: NextPage = () => {
 							{empty && (
 								<TableRow>
 									<TableCell align="center" colSpan={6}>
-										<Typography sx={{ color: '#777777', py: 2 }}>No watches found.</Typography>
+										<Typography sx={{ color: '#777777', py: 2 }}>{t('admin.noWatches')}</Typography>
 									</TableCell>
 								</TableRow>
 							)}
@@ -221,7 +220,7 @@ const AdminWatchesPage: NextPage = () => {
 												)}
 												<Box sx={{ minWidth: 0 }}>
 													<Typography sx={{ color: '#111111', fontWeight: 600, fontSize: '0.9rem' }}>
-														{localizeWatchText(watch.watchTitle, watch.watchTitleI18n, locale)}
+														{watch.watchTitle}
 													</Typography>
 													<Typography sx={{ color: '#777777', fontSize: '0.78rem' }}>{watch._id}</Typography>
 												</Box>
@@ -263,7 +262,7 @@ const AdminWatchesPage: NextPage = () => {
 														'&:hover': { borderColor: '#D4AF37', color: '#D4AF37' },
 													}}
 												>
-													Remove
+													{t('admin.remove')}
 												</Button>
 											) : (
 												<Typography sx={{ color: '#777777', fontSize: '0.8rem' }}>-</Typography>

@@ -63,7 +63,7 @@ type SellerWatchStatus = 'ACTIVE' | 'SOLD' | 'OUT_OF_STOCK';
 const MyPage = () => {
 	const user = useReactiveVar(userVar);
 	const router = useRouter();
-	const { locale } = useLanguage();
+	const { t } = useLanguage();
 	const { isDark } = useThemeMode();
 	const [activeTab, setActiveTab] = useState<TabKey>('overview');
 	const [editMode, setEditMode] = useState(false);
@@ -699,19 +699,19 @@ const MyPage = () => {
 										'&:hover': { borderColor: '#D4AF37', color: '#D4AF37' },
 									}}
 								>
-									Logout
+									{t('auth.logout')}
 								</Button>
 							</Stack>
 						</Stack>
 
 						<Grid container spacing={2} sx={{ mb: 3 }}>
 							{[
-								{ icon: <WatchIcon />, label: 'Watches Owned', value: user.memberWatches, color: '#f59e0b' },
-								{ icon: <FavoriteIcon />, label: 'Wishlist Items', value: favoriteWatches.length || user.memberLikes, color: '#ec4899' },
-								{ icon: <ShoppingBagOutlinedIcon />, label: 'Total Orders', value: totalOrders, color: '#6366f1' },
+								{ icon: <WatchIcon />, label: t('mypage.watchesOwned'), value: user.memberWatches, color: '#f59e0b' },
+								{ icon: <FavoriteIcon />, label: t('mypage.wishlistItems'), value: favoriteWatches.length || user.memberLikes, color: '#ec4899' },
+								{ icon: <ShoppingBagOutlinedIcon />, label: t('mypage.totalOrders'), value: totalOrders, color: '#6366f1' },
 								{
 									icon: <TrendingUpOutlinedIcon />,
-									label: 'Collection Value',
+									label: t('mypage.collectionValue'),
 									value: `$${Math.round(totalCollectionValue / 1000)}K`,
 									color: '#14b8a6',
 								},
@@ -736,23 +736,23 @@ const MyPage = () => {
 						</Grid>
 
 						<Stack direction="row" spacing={3} sx={{ mb: 2, flexWrap: 'wrap', rowGap: 0.5 }}>
-							<Button onClick={() => setActiveTab('overview')} sx={tabButtonSx('overview')}>Overview</Button>
-							{isSeller && <Button onClick={() => setActiveTab('addWatch')} sx={tabButtonSx('addWatch')}>Add Watch</Button>}
-							{isSeller && <Button onClick={() => setActiveTab('myWatches')} sx={tabButtonSx('myWatches')}>My Watches</Button>}
-							<Button onClick={() => setActiveTab('collection')} sx={tabButtonSx('collection')}>Collection</Button>
-							<Button onClick={() => setActiveTab('payment')} sx={tabButtonSx('payment')}>Payment Details</Button>
+							<Button onClick={() => setActiveTab('overview')} sx={tabButtonSx('overview')}>{t('mypage.overview')}</Button>
+							{isSeller && <Button onClick={() => setActiveTab('addWatch')} sx={tabButtonSx('addWatch')}>{t('mypage.addWatch')}</Button>}
+							{isSeller && <Button onClick={() => setActiveTab('myWatches')} sx={tabButtonSx('myWatches')}>{t('mypage.myWatches')}</Button>}
+							<Button onClick={() => setActiveTab('collection')} sx={tabButtonSx('collection')}>{t('mypage.collection')}</Button>
+							<Button onClick={() => setActiveTab('payment')} sx={tabButtonSx('payment')}>{t('mypage.paymentDetails')}</Button>
 						</Stack>
 						<Divider sx={{ borderColor: 'rgba(0,0,0,0.12)', mb: 3 }} />
 
 						{activeTab === 'overview' && (
 							<Grid container spacing={2}>
 								{[
-									{ label: 'Phone Number', value: user.memberPhone || '+1 000 000 0000', icon: <PhoneIphoneOutlinedIcon /> },
-									{ label: 'Full Name', value: profileForm.memberFullName || user.memberFullName || user.memberNick || 'User', icon: <AutoAwesomeOutlinedIcon /> },
-									{ label: 'Email', value: profileEmail, icon: <AlternateEmailOutlinedIcon /> },
-									{ label: 'Address', value: user.memberAddress || 'New York, USA', icon: <LocationOnOutlinedIcon /> },
-									{ label: 'Wishlist Items', value: String(favoriteWatches.length || user.memberLikes || 0), icon: <FavoriteIcon /> },
-									{ label: 'Hours Browsed', value: `${estimatedBrowsingHours} hrs`, icon: <VisibilityIcon /> },
+									{ field: 'phone', label: t('mypage.phoneNumber'), value: user.memberPhone || '+1 000 000 0000', icon: <PhoneIphoneOutlinedIcon /> },
+									{ field: 'name', label: t('mypage.fullName'), value: profileForm.memberFullName || user.memberFullName || user.memberNick || 'User', icon: <AutoAwesomeOutlinedIcon /> },
+									{ field: 'email', label: t('mypage.email'), value: profileEmail, icon: <AlternateEmailOutlinedIcon /> },
+									{ field: 'address', label: t('mypage.address'), value: user.memberAddress || 'New York, USA', icon: <LocationOnOutlinedIcon /> },
+									{ field: 'wishlist', label: t('mypage.wishlistItems'), value: String(favoriteWatches.length || user.memberLikes || 0), icon: <FavoriteIcon /> },
+									{ field: 'hours', label: t('mypage.hoursBrowsed'), value: `${estimatedBrowsingHours} ${t('mypage.hrs')}`, icon: <VisibilityIcon /> },
 								].map((item) => (
 									<Grid item xs={12} md={6} key={item.label}>
 										<Box
@@ -767,27 +767,27 @@ const MyPage = () => {
 												<Box sx={{ color: '#D4AF37' }}>{item.icon}</Box>
 												<Typography sx={{ color: '#666666', fontSize: '0.85rem' }}>{item.label}</Typography>
 											</Stack>
-											{editMode && (item.label === 'Phone Number' || item.label === 'Full Name' || item.label === 'Address' || item.label === 'Email') ? (
+											{editMode && (item.field === 'phone' || item.field === 'name' || item.field === 'address' || item.field === 'email') ? (
 													<TextField
 														size="small"
 														fullWidth
 														value={
-															item.label === 'Phone Number'
+															item.field === 'phone'
 																? profileForm.memberPhone
-																: item.label === 'Full Name'
+																: item.field === 'name'
 																	? profileForm.memberFullName
-																	: item.label === 'Address'
+																	: item.field === 'address'
 																		? profileForm.memberAddress
 																		: profileForm.memberEmail
 														}
 														onChange={(e) =>
 															setProfileForm((prev) => ({
 																...prev,
-																[item.label === 'Phone Number'
+																[item.field === 'phone'
 																	? 'memberPhone'
-																	: item.label === 'Full Name'
+																	: item.field === 'name'
 																		? 'memberFullName'
-																		: item.label === 'Address'
+																		: item.field === 'address'
 																			? 'memberAddress'
 																			: 'memberEmail']: e.target.value,
 															}))
@@ -945,7 +945,7 @@ const MyPage = () => {
 													</Box>
 													<Box sx={{ p: 2 }}>
 														<Typography sx={{ color: '#111111', fontWeight: 600, mb: 0.3 }}>
-															{localizeWatchText(watch.watchTitle, watch.watchTitleI18n, locale)}
+															{watch.watchTitle}
 														</Typography>
 														<Typography sx={{ color: '#666666', mb: 1.5, fontSize: '0.85rem' }}>
 															{watch.watchBrand?.replace('_', ' ')}
@@ -1175,7 +1175,7 @@ const MyPage = () => {
 									>
 										<Typography sx={{ color: '#111111', fontWeight: 600, mb: 0.8 }}>No watches listed yet</Typography>
 										<Typography sx={{ color: '#666666', fontSize: '0.88rem' }}>
-											Use the Add Watch tab to publish your first watch.
+											{t('mypage.useAddWatch')}
 										</Typography>
 									</Box>
 								) : (
@@ -1223,7 +1223,7 @@ const MyPage = () => {
 													</Box>
 													<Box sx={{ p: 2 }}>
 														<Typography sx={{ color: '#111111', fontWeight: 600, mb: 0.3 }}>
-															{localizeWatchText(watch.watchTitle, watch.watchTitleI18n, locale)}
+															{watch.watchTitle}
 														</Typography>
 														<Typography sx={{ color: '#666666', mb: 1, fontSize: '0.85rem' }}>
 															{watch.watchBrand?.replace('_', ' ')} • ${Number(watch.watchPrice || 0).toLocaleString()}
@@ -1472,11 +1472,11 @@ const MyPage = () => {
 					}}
 				>
 					<DialogTitle sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, pb: 0.8 }}>
-						Logout Confirmation
+						{t('top.logoutTitle')}
 					</DialogTitle>
 					<DialogContent sx={{ pt: '8px !important' }}>
 						<Typography sx={{ color: isDark ? '#AEB6C2' : '#555555', fontSize: '0.94rem' }}>
-							Do you really want to logout?
+							{t('top.logoutMessage')}
 						</Typography>
 					</DialogContent>
 					<DialogActions sx={{ px: 3, pb: 2.2, pt: 0.5 }}>
@@ -1489,7 +1489,7 @@ const MyPage = () => {
 								textTransform: 'none',
 							}}
 						>
-							No
+							{t('common.no')}
 						</Button>
 						<Button
 							onClick={handleConfirmLogout}
@@ -1502,7 +1502,7 @@ const MyPage = () => {
 								'&:hover': { background: '#232323' },
 							}}
 						>
-							Yes
+							{t('common.yes')}
 						</Button>
 					</DialogActions>
 				</Dialog>

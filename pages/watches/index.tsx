@@ -19,13 +19,12 @@ import { addToCart } from '../../libs/cart';
 import { userVar } from '../../apollo/store';
 import { sweetInfoAlert } from '../../libs/sweetAlert';
 import { useLanguage } from '../../libs/i18n/LanguageContext';
-import { localizeWatchText } from '../../libs/i18n/watchText';
 import { useThemeMode } from '../../libs/theme/ThemeModeContext';
 
 const WatchesPage = () => {
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
-	const { t, locale } = useLanguage();
+	const { t } = useLanguage();
 	const { isDark } = useThemeMode();
 	const textPrimary = isDark ? '#E5E7EB' : '#111111';
 	const textMuted = isDark ? '#AEB6C2' : '#666666';
@@ -83,11 +82,11 @@ const WatchesPage = () => {
 
 	const types = [
 		{ label: t('watches.all'), value: '' },
-		{ label: 'Luxury', value: 'LUXURY' },
-		{ label: 'Dress', value: 'DRESS' },
-		{ label: 'Sport', value: 'SPORT' },
-		{ label: 'Classic', value: 'CLASSIC' },
-		{ label: 'Smart', value: 'SMART' },
+		{ label: t('watches.type.luxury'), value: 'LUXURY' },
+		{ label: t('watches.type.dress'), value: 'DRESS' },
+		{ label: t('watches.type.sport'), value: 'SPORT' },
+		{ label: t('watches.type.classic'), value: 'CLASSIC' },
+		{ label: t('watches.type.smart'), value: 'SMART' },
 	];
 
 	const resetToAllWatches = () => {
@@ -125,11 +124,10 @@ const WatchesPage = () => {
 			return;
 		}
 
-		const localizedTitle = localizeWatchText(watch.watchTitle, watch.watchTitleI18n, locale);
 		addToCart(
 			{
 				_id: watch._id,
-				watchTitle: localizedTitle || watch.watchTitle,
+				watchTitle: watch.watchTitle,
 				watchBrand: watch.watchBrand,
 				watchPrice: Number(watch.watchPrice || 0),
 				watchImage: watch.watchImages?.[0] || '',
@@ -140,7 +138,7 @@ const WatchesPage = () => {
 
 	return (
 		<>
-			<Head><title>Timepiece Collection</title></Head>
+			<Head><title>{t('watches.heroTitle')}</title></Head>
 			<Stack sx={{ background: isDark ? '#0b0f16' : '#FAFAFA', minHeight: '100vh', display: 'flex' }}>
 				<Top />
 
@@ -157,10 +155,10 @@ const WatchesPage = () => {
 				}}>
 					<WatchIcon sx={{ fontSize: 40, color: '#111111', mx: 'auto', mb: 1, position: 'relative', zIndex: 1 }} />
 					<Typography variant="h3" sx={{ color: textPrimary, fontWeight: 700, fontSize: { xs: '1.8rem', md: '2.5rem' }, position: 'relative', zIndex: 1 }}>
-						Timepiece Collection
+						{t('watches.heroTitle')}
 					</Typography>
 					<Typography sx={{ color: isDark ? '#C8CDD6' : '#777', mt: 1, fontSize: '0.95rem', position: 'relative', zIndex: 1 }}>
-						Discover exquisite timepieces crafted with precision and elegance
+						{t('watches.heroSubtitle')}
 					</Typography>
 				</Stack>
 
@@ -397,7 +395,7 @@ const WatchesPage = () => {
 													cursor: 'pointer',
 													'&:hover': { color: '#111111' },
 												}}>
-													{localizeWatchText(watch.watchTitle, watch.watchTitleI18n, locale)}
+													{watch.watchTitle}
 												</Typography>
 											</Link>
 

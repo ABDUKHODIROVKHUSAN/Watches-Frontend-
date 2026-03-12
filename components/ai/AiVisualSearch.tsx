@@ -6,9 +6,11 @@ import Link from 'next/link';
 import { GET_WATCHES } from '../../apollo/user/query';
 import { REACT_APP_API_URL } from '../../libs/config';
 import { useThemeMode } from '../../libs/theme/ThemeModeContext';
+import { useLanguage } from '../../libs/i18n/LanguageContext';
 
 const AiVisualSearch = () => {
 	const { isDark } = useThemeMode();
+	const { t } = useLanguage();
 	const [dragging, setDragging] = React.useState(false);
 	const [preview, setPreview] = React.useState<string | null>(null);
 	const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
@@ -64,7 +66,7 @@ const AiVisualSearch = () => {
 
 			const fetched: any[] = response?.data?.getWatches?.list || [];
 			if (fetched.length === 0) {
-				setSearchError('No watches found in catalog right now.');
+				setSearchError(t('ai.catalogEmpty'));
 				return;
 			}
 
@@ -78,17 +80,17 @@ const AiVisualSearch = () => {
 			setResults(picked);
 		} catch (error) {
 			console.log('Visual search failed:', error);
-			setSearchError('Could not process visual search right now. Please try again.');
+			setSearchError(t('ai.visualFailed'));
 		}
 	};
 
 	return (
 		<Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
 			<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontSize: { xs: '1.5rem', md: '2rem' }, fontWeight: 700, mb: 1 }}>
-				Visual Search
+				{t('ai.visualTitle')}
 			</Typography>
 			<Typography sx={{ color: isDark ? '#AEB6C2' : '#666666', mb: 2.6 }}>
-				Upload a watch photo and discover similar pieces in the marketplace.
+				{t('ai.visualSubtitle')}
 			</Typography>
 
 			<Box
@@ -115,9 +117,9 @@ const AiVisualSearch = () => {
 				}}
 			>
 				<UploadFileOutlinedIcon sx={{ fontSize: 42, color: '#C6A969', mb: 1.2 }} />
-				<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, mb: 0.6 }}>Drag and drop image here</Typography>
+				<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, mb: 0.6 }}>{t('ai.dragDrop')}</Typography>
 				<Typography sx={{ color: isDark ? '#AEB6C2' : '#777777', fontSize: '0.88rem', mb: 2 }}>
-					PNG / JPG up to 10MB. We will use this image to suggest visually similar watches.
+					{t('ai.fileHint')}
 				</Typography>
 				<Button
 					variant="outlined"
@@ -131,7 +133,7 @@ const AiVisualSearch = () => {
 						'&:hover': { borderColor: '#C6A969', color: '#C6A969' },
 					}}
 				>
-					Choose File
+					{t('ai.chooseFile')}
 					<input
 						type="file"
 						hidden
@@ -172,7 +174,7 @@ const AiVisualSearch = () => {
 								'&.Mui-disabled': { background: '#2A2A2A', color: 'rgba(198,169,105,0.65)' },
 							}}
 						>
-							{searching ? <CircularProgress size={20} sx={{ color: '#C6A969' }} /> : 'Find Similar Watches'}
+							{searching ? <CircularProgress size={20} sx={{ color: '#C6A969' }} /> : t('ai.findSimilar')}
 						</Button>
 					</Stack>
 				) : null}
@@ -187,7 +189,7 @@ const AiVisualSearch = () => {
 			{results.length > 0 ? (
 				<Box sx={{ mt: 3 }}>
 					<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, mb: 1.5, fontSize: '1.05rem' }}>
-						Similar Watches
+						{t('ai.similarWatches')}
 					</Typography>
 					<Grid container spacing={2}>
 						{results.map((watch) => (

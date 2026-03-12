@@ -13,11 +13,10 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
 import { useLanguage } from '../libs/i18n/LanguageContext';
-import { localizeWatchText } from '../libs/i18n/watchText';
 import { useThemeMode } from '../libs/theme/ThemeModeContext';
 
 const Home = () => {
-	const { locale } = useLanguage();
+	const { t, locale } = useLanguage();
 	const { isDark } = useThemeMode();
 	const [hoveredBestSellerId, setHoveredBestSellerId] = useState<string | null>(null);
 	const [celebrityStartIndex, setCelebrityStartIndex] = useState(0);
@@ -126,11 +125,20 @@ const Home = () => {
 	const textPrimary = isDark ? '#E5E7EB' : '#111111';
 	const textSecondary = isDark ? '#9CA3AF' : '#666';
 	const heroTitle = 'TIMELESS ELEGANCE';
+	const featuredBrandsLabel = locale === 'ko' ? '주요 브랜드' : locale === 'uz' ? 'Mashhur brendlar' : 'Featured Brands';
+	const featuredBrandsSubtitle =
+		locale === 'ko'
+			? '세계적인 워치메이커 공식 판매처'
+			: locale === 'uz'
+				? 'Dunyo miqyosidagi soat brendlarining rasmiy hamkori'
+				: 'Authorized dealer of world-renowned watchmakers';
+	const latestCollectionLabel = locale === 'ko' ? '최신 컬렉션' : locale === 'uz' ? 'So‘nggi kolleksiya' : 'Latest Collection';
+	const newArrivalsLabel = locale === 'ko' ? '신상품' : locale === 'uz' ? 'YANGI KELGANLAR' : 'NEW ARRIVALS';
 
 	return (
 		<>
 			<Head>
-				<title>Timeless Watches - Premium Luxury Timepieces</title>
+				<title>{t('home.metaTitle')}</title>
 			</Head>
 			<Stack sx={{ background: pageBackground }}>
 				<Top />
@@ -206,10 +214,10 @@ const Home = () => {
 							letterSpacing: '4px',
 							textTransform: 'uppercase',
 						}}>
-							Premium Luxury Watches
+							{t('home.heroSubtitle')}
 						</Typography>
 						<Typography sx={{ color: 'rgba(248,250,249,0.86)', mb: 5, maxWidth: 600, mx: 'auto', lineHeight: 1.8 }}>
-							Discover our curated collection of the world&apos;s finest timepieces. From Rolex to Patek Philippe, find the perfect watch that speaks to your style.
+							{t('home.heroDescription')}
 						</Typography>
 						<Link href="/watches" passHref>
 							<Button variant="outlined" size="large" sx={{
@@ -221,7 +229,7 @@ const Home = () => {
 								letterSpacing: '2px',
 								'&:hover': { borderColor: '#FAFAFA', color: '#FAFAFA', background: 'rgba(17,17,17,0.18)' },
 							}}>
-								EXPLORE COLLECTION
+								{t('home.exploreCollection')}
 							</Button>
 						</Link>
 					</Container>
@@ -283,10 +291,10 @@ const Home = () => {
 					<Stack sx={{ background: sectionAlt, py: { xs: 8, md: 10 } }}>
 					<Container maxWidth="lg">
 						<Typography variant="h4" sx={{ color: textPrimary, textAlign: 'center', mb: 1, fontWeight: 600 }}>
-							Featured Brands
+							{featuredBrandsLabel}
 						</Typography>
 						<Typography sx={{ color: textSecondary, textAlign: 'center', mb: 5 }}>
-							Authorized dealer of world-renowned watchmakers
+							{featuredBrandsSubtitle}
 						</Typography>
 						<Stack
 							direction="row"
@@ -334,7 +342,7 @@ const Home = () => {
 								textTransform: 'uppercase',
 								mb: 1.5,
 							}}>
-								Latest Collection
+								{latestCollectionLabel}
 							</Typography>
 							<Typography sx={{
 								color: textPrimary,
@@ -342,7 +350,7 @@ const Home = () => {
 								fontWeight: 500,
 								letterSpacing: '0.5px',
 							}}>
-								NEW ARRIVALS
+								{newArrivalsLabel}
 							</Typography>
 							<Box sx={{ width: 40, height: 1.5, background: '#D4AF37', mt: 2 }} />
 						</Stack>
@@ -392,7 +400,7 @@ const Home = () => {
 													textTransform: 'uppercase',
 													mb: 0.5,
 												}}>
-													{localizeWatchText(watch.watchTitle, watch.watchTitleI18n, locale)}
+													{watch.watchTitle}
 												</Typography>
 
 												<Typography sx={{
@@ -421,7 +429,7 @@ const Home = () => {
 							</Grid>
 						) : (
 							<Typography sx={{ color: '#999', textAlign: 'center', py: 6 }}>
-								No watches available yet
+								{t('home.noWatches')}
 							</Typography>
 						)}
 
@@ -442,7 +450,7 @@ const Home = () => {
 										background: 'transparent',
 									},
 								}}>
-									VIEW ALL WATCHES
+									{t('watches.viewAll')}
 								</Button>
 							</Link>
 						</Stack>
@@ -454,7 +462,7 @@ const Home = () => {
 					<Container maxWidth="xl">
 						<Stack sx={{ mb: { xs: 6, md: 8 }, pl: { md: 2 } }}>
 							<Typography sx={{ color: '#FAFAFA', fontSize: { xs: '1.8rem', md: '2.2rem' }, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
-								Best Sellers
+								{t('home.bestSellers')}
 							</Typography>
 						</Stack>
 
@@ -500,7 +508,7 @@ const Home = () => {
 
 													<Box sx={{ width: 16, height: 2, background: '#D4AF37', mb: 2 }} />
 													<Typography sx={{ color: '#FAFAFA', fontSize: '0.72rem', fontWeight: 600, letterSpacing: '1.8px', textTransform: 'uppercase', textAlign: 'center', mb: 0.5 }}>
-														{localizeWatchText(watch.watchTitle, watch.watchTitleI18n, locale)}
+														{watch.watchTitle}
 													</Typography>
 													<Typography sx={{ color: '#9aa7b2', fontSize: '0.78rem', letterSpacing: '1px', textTransform: 'uppercase', textAlign: 'center' }}>
 														{watch.watchBrand?.replace('_', ' ')}
@@ -513,7 +521,7 @@ const Home = () => {
 							</Grid>
 						) : (
 							<Typography sx={{ color: 'rgba(248,250,249,0.74)', textAlign: 'center', py: 4 }}>
-								No best sellers selected yet
+								{t('home.noBestSellers')}
 							</Typography>
 						)}
 					</Container>
@@ -658,10 +666,10 @@ const Home = () => {
 						<Stack direction={{ xs: 'column', md: 'row' }} spacing={6} alignItems="center">
 							<Box flex={1}>
 								<Typography variant="h4" sx={{ color: textPrimary, mb: 2, fontWeight: 600 }}>
-									AI-Powered Insights
+									{t('home.aiInsightsTitle')}
 								</Typography>
 								<Typography sx={{ color: textSecondary, mb: 3, lineHeight: 1.8 }}>
-									Get detailed information about any watch with our AI assistant. Learn about celebrity wearers, fashion tips, market prices, and fascinating history — all at the click of a button.
+									{t('home.aiInsightsDesc')}
 								</Typography>
 								<Link href="/watches" passHref>
 									<Button variant="contained" sx={{
@@ -672,7 +680,7 @@ const Home = () => {
 										borderRadius: '8px',
 										'&:hover': { background: '#2B2B2B' },
 									}}>
-										Browse Watches
+										{t('home.browseWatches')}
 									</Button>
 								</Link>
 							</Box>
