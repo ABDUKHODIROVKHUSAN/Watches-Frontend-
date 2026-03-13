@@ -22,6 +22,10 @@ export const GET_WATCHES = gql`
 					ko
 					uz
 				}
+				strapMaterial
+				caseMaterial
+				dialColor
+				strapColor
 				watchBarter
 				watchRent
 				watchBestSeller
@@ -95,6 +99,10 @@ export const GET_WATCH = gql`
 				ko
 				uz
 			}
+			strapMaterial
+			caseMaterial
+			dialColor
+			strapColor
 			watchBarter
 			watchRent
 			watchViews
@@ -267,6 +275,10 @@ export const GET_SELLER_WATCHES = gql`
 					ko
 					uz
 				}
+				strapMaterial
+				caseMaterial
+				dialColor
+				strapColor
 				watchBarter
 				watchRent
 				watchBestSeller

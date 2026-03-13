@@ -96,6 +96,10 @@ const MyPage = () => {
 		watchDesc: '',
 		watchDescKo: '',
 		watchDescUz: '',
+		strapMaterial: '',
+		caseMaterial: '',
+		dialColor: '',
+		strapColor: '',
 		watchBarter: false,
 		watchRent: false,
 		watchBestSeller: false,
@@ -119,6 +123,10 @@ const MyPage = () => {
 		watchDesc: '',
 		watchDescKo: '',
 		watchDescUz: '',
+		strapMaterial: '',
+		caseMaterial: '',
+		dialColor: '',
+		strapColor: '',
 		watchBarter: false,
 		watchRent: false,
 		watchBestSeller: false,
@@ -132,7 +140,9 @@ const MyPage = () => {
 	const [createWatchMutation] = useMutation(CREATE_WATCH);
 	const [updateWatchMutation] = useMutation(UPDATE_WATCH);
 	const [likeTargetWatchMutation] = useMutation(LIKE_TARGET_WATCH);
-	const isSeller = user?.memberType === 'AGENT';
+	const isSeller = user?.role === 'seller' && user?.sellerStatus === 'approved';
+	const isSellerPending = user?.sellerStatus === 'pending';
+	const isSellerApproved = user?.sellerStatus === 'approved';
 
 	useEffect(() => {
 		const jwt = getJwtToken();
@@ -176,6 +186,7 @@ const MyPage = () => {
 	const displayTitle = 'Luxury Watch Collector & Enthusiast';
 	const profileEmail =
 		profileForm.memberEmail ||
+		user.memberEmail ||
 		`${(profileForm.memberNick || user.memberNick || 'member').toLowerCase().replace(/\s+/g, '.')}@timeless.com`;
 
 	const tabButtonSx = (key: TabKey) => ({
@@ -192,7 +203,7 @@ const MyPage = () => {
 
 	useEffect(() => {
 		if (!user?._id) return;
-		const savedEmail = localStorage.getItem(`memberEmail:${user._id}`) || '';
+		const savedEmail = localStorage.getItem(`memberEmail:${user._id}`) || user.memberEmail || '';
 		const savedSeconds = Number(localStorage.getItem(`browseSeconds:${user._id}`) || 0);
 		const savedPayment = getPaymentDetails(user._id);
 		setProfileForm({
@@ -267,6 +278,7 @@ const MyPage = () => {
 			if (safeNick.length >= 3 && safeNick.length <= 12) updateInput.memberNick = safeNick;
 			if (safeFullName.length >= 3 && safeFullName.length <= 100) updateInput.memberFullName = safeFullName;
 			if (safePhone) updateInput.memberPhone = safePhone;
+			if (profileForm.memberEmail?.trim()) updateInput.memberEmail = profileForm.memberEmail.trim();
 			if (safeAddress.length >= 3 && safeAddress.length <= 100) updateInput.memberAddress = safeAddress;
 			if (nextMemberImage) updateInput.memberImage = nextMemberImage;
 
@@ -429,6 +441,10 @@ const MyPage = () => {
 							ko: addWatchForm.watchDescKo.trim() || undefined,
 							uz: addWatchForm.watchDescUz.trim() || undefined,
 						},
+						strapMaterial: addWatchForm.strapMaterial.trim() || undefined,
+						caseMaterial: addWatchForm.caseMaterial.trim() || undefined,
+						dialColor: addWatchForm.dialColor.trim() || undefined,
+						strapColor: addWatchForm.strapColor.trim() || undefined,
 						watchBarter: addWatchForm.watchBarter,
 						watchRent: addWatchForm.watchRent,
 						watchBestSeller: addWatchForm.watchBestSeller,
@@ -448,6 +464,10 @@ const MyPage = () => {
 				watchDesc: '',
 				watchDescKo: '',
 				watchDescUz: '',
+				strapMaterial: '',
+				caseMaterial: '',
+				dialColor: '',
+				strapColor: '',
 				watchBarter: false,
 				watchRent: false,
 				watchBestSeller: false,
@@ -483,6 +503,10 @@ const MyPage = () => {
 			watchDesc: watch?.watchDescI18n?.en || watch.watchDesc || '',
 			watchDescKo: watch?.watchDescI18n?.ko || '',
 			watchDescUz: watch?.watchDescI18n?.uz || '',
+			strapMaterial: watch?.strapMaterial || '',
+			caseMaterial: watch?.caseMaterial || '',
+			dialColor: watch?.dialColor || '',
+			strapColor: watch?.strapColor || '',
 			watchBarter: Boolean(watch.watchBarter),
 			watchRent: Boolean(watch.watchRent),
 			watchBestSeller: Boolean(watch.watchBestSeller),
@@ -543,6 +567,10 @@ const MyPage = () => {
 							ko: editWatchForm.watchDescKo.trim() || undefined,
 							uz: editWatchForm.watchDescUz.trim() || undefined,
 						},
+						strapMaterial: editWatchForm.strapMaterial.trim() || undefined,
+						caseMaterial: editWatchForm.caseMaterial.trim() || undefined,
+						dialColor: editWatchForm.dialColor.trim() || undefined,
+						strapColor: editWatchForm.strapColor.trim() || undefined,
 						watchBarter: editWatchForm.watchBarter,
 						watchRent: editWatchForm.watchRent,
 						watchBestSeller: editWatchForm.watchBestSeller,
@@ -677,6 +705,16 @@ const MyPage = () => {
 											<Typography sx={{ color: '#666666', fontSize: '0.8rem' }}>Member account</Typography>
 										</Stack>
 									</Stack>
+									{isSellerPending && (
+										<Typography sx={{ color: '#B26A00', fontSize: '0.82rem', fontWeight: 600, mt: 0.5 }}>
+											Your seller account is under review by the administrator.
+										</Typography>
+									)}
+									{isSellerApproved && (
+										<Typography sx={{ color: '#2e7d32', fontSize: '0.82rem', fontWeight: 600, mt: 0.5 }}>
+											Your seller account has been approved. You can now add products.
+										</Typography>
+									)}
 								</Stack>
 							</Stack>
 							<Stack direction="row" spacing={1} justifyContent="flex-end">
@@ -1040,6 +1078,46 @@ const MyPage = () => {
 												<MenuItem key={opt} value={opt}>{opt}</MenuItem>
 											))}
 										</TextField>
+									</Grid>
+									<Grid item xs={12} md={3}>
+										<TextField
+											label="Strap Material"
+											size="small"
+											fullWidth
+											placeholder="steel, leather..."
+											value={addWatchForm.strapMaterial}
+											onChange={(e) => setAddWatchForm((prev) => ({ ...prev, strapMaterial: e.target.value }))}
+										/>
+									</Grid>
+									<Grid item xs={12} md={3}>
+										<TextField
+											label="Case Material"
+											size="small"
+											fullWidth
+											placeholder="steel, titanium..."
+											value={addWatchForm.caseMaterial}
+											onChange={(e) => setAddWatchForm((prev) => ({ ...prev, caseMaterial: e.target.value }))}
+										/>
+									</Grid>
+									<Grid item xs={12} md={3}>
+										<TextField
+											label="Dial Color"
+											size="small"
+											fullWidth
+											placeholder="black, blue..."
+											value={addWatchForm.dialColor}
+											onChange={(e) => setAddWatchForm((prev) => ({ ...prev, dialColor: e.target.value }))}
+										/>
+									</Grid>
+									<Grid item xs={12} md={3}>
+										<TextField
+											label="Strap Color"
+											size="small"
+											fullWidth
+											placeholder="silver, brown..."
+											value={addWatchForm.strapColor}
+											onChange={(e) => setAddWatchForm((prev) => ({ ...prev, strapColor: e.target.value }))}
+										/>
 									</Grid>
 									<Grid item xs={12} md={4}>
 										<TextField
@@ -1580,6 +1658,46 @@ const MyPage = () => {
 										<MenuItem key={opt} value={opt}>{opt}</MenuItem>
 									))}
 								</TextField>
+							</Grid>
+							<Grid item xs={12} md={3}>
+								<TextField
+									label="Strap Material"
+									size="small"
+									fullWidth
+									placeholder="steel, leather..."
+									value={editWatchForm.strapMaterial}
+									onChange={(e) => setEditWatchForm((prev) => ({ ...prev, strapMaterial: e.target.value }))}
+								/>
+							</Grid>
+							<Grid item xs={12} md={3}>
+								<TextField
+									label="Case Material"
+									size="small"
+									fullWidth
+									placeholder="steel, titanium..."
+									value={editWatchForm.caseMaterial}
+									onChange={(e) => setEditWatchForm((prev) => ({ ...prev, caseMaterial: e.target.value }))}
+								/>
+							</Grid>
+							<Grid item xs={12} md={3}>
+								<TextField
+									label="Dial Color"
+									size="small"
+									fullWidth
+									placeholder="black, blue..."
+									value={editWatchForm.dialColor}
+									onChange={(e) => setEditWatchForm((prev) => ({ ...prev, dialColor: e.target.value }))}
+								/>
+							</Grid>
+							<Grid item xs={12} md={3}>
+								<TextField
+									label="Strap Color"
+									size="small"
+									fullWidth
+									placeholder="silver, brown..."
+									value={editWatchForm.strapColor}
+									onChange={(e) => setEditWatchForm((prev) => ({ ...prev, strapColor: e.target.value }))}
+								/>
 							</Grid>
 							<Grid item xs={12} md={4}>
 								<TextField

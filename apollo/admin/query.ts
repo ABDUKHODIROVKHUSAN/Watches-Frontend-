@@ -9,6 +9,7 @@ export const GET_ALL_MEMBERS_BY_ADMIN = gql`
 				memberStatus
 				memberAuthType
 				memberPhone
+				memberEmail
 				memberNick
 				memberFullName
 				memberImage
@@ -72,6 +73,23 @@ export const GET_ALL_WATCHES_BY_ADMIN = gql`
 			metaCounter {
 				total
 			}
+		}
+	}
+`;
+
+export const GET_SELLER_REQUESTS = gql`
+	query GetSellerRequests {
+		getSellerRequests {
+			_id
+			memberNick
+			memberFullName
+			memberPhone
+			memberEmail
+			memberStatus
+			role
+			sellerStatus
+			sellerRequestedAt
+			createdAt
 		}
 	}
 `;

@@ -1,7 +1,12 @@
 import React from 'react';
 import { Box, Button, Container, Stack, TextField, Typography } from '@mui/material';
+import { useMutation } from '@apollo/client';
+import { useRouter } from 'next/router';
 import { useThemeMode } from '../../libs/theme/ThemeModeContext';
 import { useLanguage } from '../../libs/i18n/LanguageContext';
+import { AI_CHAT } from '../../apollo/user/mutation';
+import { getJwtToken } from '../../libs/auth';
+import { sweetInfoAlert } from '../../libs/sweetAlert';
 
 type ChatRole = 'user' | 'ai';
 
@@ -13,9 +18,11 @@ type ChatMessage = {
 
 const AiChatAssistant = () => {
 	const { isDark } = useThemeMode();
-	const { t } = useLanguage();
+	const { t, locale } = useLanguage();
+	const router = useRouter();
 	const [message, setMessage] = React.useState('');
 	const [sending, setSending] = React.useState(false);
+	const [aiChatMutation] = useMutation(AI_CHAT);
 	const [messages, setMessages] = React.useState<ChatMessage[]>([
 		{
 			id: 'seed-1',
@@ -31,17 +38,13 @@ const AiChatAssistant = () => {
 		listRef.current.scrollTop = listRef.current.scrollHeight;
 	}, [messages]);
 
-	const getMockResponse = (text: string): string => {
-		if (text.toLowerCase().includes('rolex')) {
-			return 'Rolex is excellent for long-term value and everyday prestige. If you want sport-luxury, consider Submariner or GMT-Master II.';
-		}
-		if (text.toLowerCase().includes('dress')) {
-			return 'For dress-focused elegance, look at Cartier Tank, Jaeger-LeCoultre Reverso, or slim Patek Calatrava profiles.';
-		}
-		return 'Great question. Based on your interest, I suggest balancing case size, movement preference, and versatility before deciding.';
-	};
-
 	const handleSend = async () => {
+		const jwt = getJwtToken();
+		if (!jwt) {
+			await sweetInfoAlert(t('ai.loginRequired'));
+			return;
+		}
+
 		const cleaned = message.trim();
 		if (!cleaned || sending) return;
 
@@ -54,14 +57,34 @@ const AiChatAssistant = () => {
 		setMessage('');
 		setSending(true);
 
-		// TODO: connect to aiChat GraphQL mutation
-		await new Promise((resolve) => setTimeout(resolve, 800));
-		const aiReply: ChatMessage = {
-			id: `ai-${Date.now()}`,
-			role: 'ai',
-			content: getMockResponse(cleaned),
-		};
-		setMessages((prev) => [...prev, aiReply]);
+		try {
+			const { data } = await aiChatMutation({
+				variables: { message: cleaned, locale },
+			});
+			const payload = data?.aiChat;
+			const answer = String(payload?.reply || t('ai.chatFallback'));
+			setMessages((prev) => [
+				...prev,
+				{
+					id: `ai-${Date.now()}`,
+					role: 'ai',
+					content: answer,
+				},
+			]);
+
+			if (payload?.actionType === 'OPEN_PAGE' && payload?.actionTarget) {
+				void router.push(payload.actionTarget);
+			}
+		} catch (err) {
+			setMessages((prev) => [
+				...prev,
+				{
+					id: `ai-${Date.now()}`,
+					role: 'ai',
+					content: t('ai.chatError'),
+				},
+			]);
+		}
 		setSending(false);
 	};
 
@@ -73,6 +96,26 @@ const AiChatAssistant = () => {
 			<Typography sx={{ color: isDark ? '#AEB6C2' : '#666666', mb: 3 }}>
 				{t('ai.chatSubtitle')}
 			</Typography>
+			<Box
+				sx={{
+					height: { xs: 180, md: 210 },
+					borderRadius: '18px',
+					overflow: 'hidden',
+					mb: 2.2,
+					border: isDark ? '1px solid rgba(212,175,55,0.28)' : '1px solid rgba(17,17,17,0.1)',
+					backgroundImage:
+						'linear-gradient(120deg, rgba(16,23,34,0.8), rgba(16,23,34,0.34)), url(https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=1400&q=80)',
+					backgroundSize: 'cover',
+					backgroundPosition: 'center',
+					display: 'flex',
+					alignItems: 'flex-end',
+					p: 2,
+				}}
+			>
+				<Typography sx={{ color: '#FAFAFA', fontWeight: 700, fontSize: { xs: '1rem', md: '1.15rem' } }}>
+					{t('ai.chatVisualCaption')}
+				</Typography>
+			</Box>
 
 			<Box
 				sx={{

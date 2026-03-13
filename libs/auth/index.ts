@@ -37,9 +37,15 @@ const requestJwtToken = async ({ nick, password }: { nick: string; password: str
 	return { jwtToken: accessToken };
 };
 
-export const signUp = async (nick: string, password: string, phone: string, type: string): Promise<void> => {
+export const signUp = async (
+	nick: string,
+	password: string,
+	phone: string,
+	email: string,
+	accountType: 'USER' | 'SELLER',
+): Promise<void> => {
 	try {
-		const { jwtToken } = await requestSignUpJwtToken({ nick, password, phone, type });
+		const { jwtToken } = await requestSignUpJwtToken({ nick, password, phone, email, accountType });
 		if (jwtToken) {
 			updateStorage({ jwtToken });
 			updateUserInfo(jwtToken);
@@ -50,12 +56,30 @@ export const signUp = async (nick: string, password: string, phone: string, type
 	}
 };
 
-const requestSignUpJwtToken = async ({ nick, password, phone, type }: { nick: string; password: string; phone: string; type: string }): Promise<{ jwtToken: string }> => {
+const requestSignUpJwtToken = async ({
+	nick,
+	password,
+	phone,
+	email,
+	accountType,
+}: {
+	nick: string;
+	password: string;
+	phone: string;
+	email: string;
+	accountType: 'USER' | 'SELLER';
+}): Promise<{ jwtToken: string }> => {
 	const apolloClient = await initializeApollo();
 	const result = await apolloClient.mutate({
 		mutation: SIGN_UP,
 		variables: {
-			input: { memberNick: nick, memberPassword: password, memberPhone: phone, memberType: type },
+			input: {
+				memberNick: nick,
+				memberPassword: password,
+				memberPhone: phone,
+				memberEmail: email,
+				requestSellerAccess: accountType === 'SELLER',
+			},
 		},
 		fetchPolicy: 'network-only',
 	});
@@ -71,12 +95,20 @@ export const updateStorage = ({ jwtToken }: { jwtToken: any }) => {
 export const updateUserInfo = (jwtToken: any) => {
 	if (!jwtToken) return false;
 	const claims = decodeJWT<UserPayload>(jwtToken);
+	const fallbackRole =
+		claims.role ??
+		(claims.memberType === 'ADMIN' ? 'admin' : claims.memberType === 'AGENT' ? 'seller' : 'user');
+	const fallbackSellerStatus = claims.sellerStatus ?? (fallbackRole === 'seller' ? 'approved' : 'none');
 	userVar({
 		_id: claims._id ?? '',
 		memberType: claims.memberType ?? '',
+		role: fallbackRole,
+		sellerStatus: fallbackSellerStatus,
+		sellerRequestedAt: claims.sellerRequestedAt ?? '',
 		memberStatus: claims.memberStatus ?? '',
 		memberAuthType: claims.memberAuthType ?? '',
 		memberPhone: claims.memberPhone ?? '',
+		memberEmail: claims.memberEmail ?? '',
 		memberNick: claims.memberNick ?? '',
 		memberFullName: claims.memberFullName ?? '',
 		memberImage: claims.memberImage ? `${claims.memberImage}` : '/img/profile/defaultUser.svg',
@@ -99,9 +131,13 @@ export const logOut = () => {
 	userVar({
 		_id: '',
 		memberType: '',
+		role: '',
+		sellerStatus: '',
+		sellerRequestedAt: '',
 		memberStatus: '',
 		memberAuthType: '',
 		memberPhone: '',
+		memberEmail: '',
 		memberNick: '',
 		memberFullName: '',
 		memberImage: '',

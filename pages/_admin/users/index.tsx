@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import type { NextPage } from 'next';
-import { Avatar, Box, Chip, List, ListItem, MenuItem, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@mui/material';
+import { Avatar, Box, Button, Chip, List, ListItem, MenuItem, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@mui/material';
 import { useMutation, useQuery } from '@apollo/client';
 import withAdminLayout from '../../../libs/components/layout/LayoutAdmin';
-import { GET_ALL_MEMBERS_BY_ADMIN } from '../../../apollo/admin/query';
-import { UPDATE_MEMBER_BY_ADMIN } from '../../../apollo/admin/mutation';
+import { GET_ALL_MEMBERS_BY_ADMIN, GET_SELLER_REQUESTS } from '../../../apollo/admin/query';
+import { APPROVE_SELLER, REJECT_SELLER, UPDATE_MEMBER_BY_ADMIN } from '../../../apollo/admin/mutation';
 import { REACT_APP_API_URL } from '../../../libs/config';
 import { sweetErrorAlert } from '../../../libs/sweetAlert';
 import { useLanguage } from '../../../libs/i18n/LanguageContext';
@@ -40,6 +40,7 @@ const AdminUsersPage: NextPage = () => {
 	const [rows, setRows] = useState<any[]>([]);
 	const [total, setTotal] = useState(0);
 	const [updatingId, setUpdatingId] = useState<string | null>(null);
+	const [sellerActionId, setSellerActionId] = useState<string | null>(null);
 
 	const { data, loading, refetch } = useQuery(GET_ALL_MEMBERS_BY_ADMIN, {
 		variables: { input: inquiry },
@@ -52,6 +53,14 @@ const AdminUsersPage: NextPage = () => {
 	});
 
 	const [updateMemberByAdmin] = useMutation(UPDATE_MEMBER_BY_ADMIN);
+	const { data: sellerRequestsData, loading: sellerRequestsLoading, refetch: refetchSellerRequests } = useQuery(
+		GET_SELLER_REQUESTS,
+		{
+			fetchPolicy: 'network-only',
+		},
+	);
+	const [approveSeller] = useMutation(APPROVE_SELLER);
+	const [rejectSeller] = useMutation(REJECT_SELLER);
 
 	useEffect(() => {
 		refetch({ input: inquiry }).then();
@@ -102,11 +111,109 @@ const AdminUsersPage: NextPage = () => {
 		}
 	};
 
+	const handleApproveSeller = async (userId: string) => {
+		try {
+			setSellerActionId(userId);
+			await approveSeller({ variables: { userId } });
+			await Promise.all([refetchSellerRequests(), refetch({ input: inquiry })]);
+		} catch (err: any) {
+			await sweetErrorAlert(err?.message || 'Failed to approve seller request.');
+		} finally {
+			setSellerActionId(null);
+		}
+	};
+
+	const handleRejectSeller = async (userId: string) => {
+		try {
+			setSellerActionId(userId);
+			await rejectSeller({ variables: { userId } });
+			await Promise.all([refetchSellerRequests(), refetch({ input: inquiry })]);
+		} catch (err: any) {
+			await sweetErrorAlert(err?.message || 'Failed to reject seller request.');
+		} finally {
+			setSellerActionId(null);
+		}
+	};
+
 	const isEmpty = useMemo(() => !loading && rows.length === 0, [loading, rows.length]);
+	const sellerRequests = sellerRequestsData?.getSellerRequests ?? [];
 
 	return (
 		<Box>
 			<Typography sx={{ color: '#111111', fontSize: '1.6rem', fontWeight: 700, mb: 2.2 }}>{t('admin.usersTitle')}</Typography>
+
+			<Stack
+				sx={{
+					background: '#FFFFFF',
+					border: '1px solid rgba(212,175,55,0.38)',
+					borderRadius: '12px',
+					overflow: 'hidden',
+					boxShadow: '0 6px 20px rgba(17,17,17,0.07)',
+					mb: 2.2,
+				}}
+			>
+				<Stack sx={{ px: 2.2, py: 1.8 }}>
+					<Typography sx={{ color: '#111111', fontWeight: 700, mb: 1 }}>Pending Seller Requests</Typography>
+					{sellerRequestsLoading ? (
+						<Typography sx={{ color: '#777777', fontSize: '0.9rem' }}>Loading seller requests...</Typography>
+					) : sellerRequests.length === 0 ? (
+						<Typography sx={{ color: '#777777', fontSize: '0.9rem' }}>No pending seller requests.</Typography>
+					) : (
+						<Stack spacing={1}>
+							{sellerRequests.map((request: any) => {
+								const requestDate = request?.sellerRequestedAt || request?.createdAt;
+								const requestEmail =
+									request?.memberEmail ||
+									`${(request?.memberNick || 'member').toLowerCase()}@timeless.com`;
+								return (
+									<Stack
+										key={request._id}
+										direction={{ xs: 'column', md: 'row' }}
+										spacing={1}
+										justifyContent="space-between"
+										sx={{
+											border: '1px solid rgba(0,0,0,0.1)',
+											borderRadius: '10px',
+											px: 1.2,
+											py: 1,
+										}}
+									>
+										<Stack>
+											<Typography sx={{ color: '#111111', fontWeight: 600 }}>
+												{request.memberFullName || request.memberNick}
+											</Typography>
+											<Typography sx={{ color: '#666666', fontSize: '0.84rem' }}>{requestEmail}</Typography>
+											<Typography sx={{ color: '#666666', fontSize: '0.8rem' }}>
+												Request date: {new Date(requestDate).toLocaleString()}
+											</Typography>
+										</Stack>
+										<Stack direction="row" spacing={1}>
+											<Button
+												size="small"
+												variant="contained"
+												onClick={() => handleApproveSeller(request._id)}
+												disabled={sellerActionId === request._id}
+												sx={{ background: '#1b5e20', '&:hover': { background: '#2e7d32' } }}
+											>
+												Approve
+											</Button>
+											<Button
+												size="small"
+												variant="outlined"
+												onClick={() => handleRejectSeller(request._id)}
+												disabled={sellerActionId === request._id}
+												sx={{ color: '#b71c1c', borderColor: '#b71c1c' }}
+											>
+												Reject
+											</Button>
+										</Stack>
+									</Stack>
+								);
+							})}
+						</Stack>
+					)}
+				</Stack>
+			</Stack>
 
 			<Stack
 				sx={{

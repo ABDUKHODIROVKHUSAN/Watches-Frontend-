@@ -3,9 +3,13 @@ import { makeVar } from '@apollo/client';
 export interface UserPayload {
 	_id: string;
 	memberType: string;
+	role: string;
+	sellerStatus: string;
+	sellerRequestedAt?: string;
 	memberStatus: string;
 	memberAuthType: string;
 	memberPhone: string;
+	memberEmail: string;
 	memberNick: string;
 	memberFullName: string;
 	memberImage: string;
@@ -24,9 +28,13 @@ export interface UserPayload {
 export const userVar = makeVar<UserPayload>({
 	_id: '',
 	memberType: '',
+	role: '',
+	sellerStatus: '',
+	sellerRequestedAt: '',
 	memberStatus: '',
 	memberAuthType: '',
 	memberPhone: '',
+	memberEmail: '',
 	memberNick: '',
 	memberFullName: '',
 	memberImage: '',

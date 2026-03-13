@@ -32,3 +32,25 @@ export const REMOVE_WATCH_BY_ADMIN = gql`
 		}
 	}
 `;
+
+export const APPROVE_SELLER = gql`
+	mutation ApproveSeller($userId: String!) {
+		approveSeller(userId: $userId) {
+			_id
+			role
+			sellerStatus
+			updatedAt
+		}
+	}
+`;
+
+export const REJECT_SELLER = gql`
+	mutation RejectSeller($userId: String!) {
+		rejectSeller(userId: $userId) {
+			_id
+			role
+			sellerStatus
+			updatedAt
+		}
+	}
+`;

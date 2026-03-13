@@ -1,43 +1,29 @@
 import React from 'react';
-import { useLazyQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { Box, Button, Card, CircularProgress, Container, Grid, Stack, Typography } from '@mui/material';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
+import WatchIcon from '@mui/icons-material/Watch';
 import Link from 'next/link';
-import { GET_WATCHES } from '../../apollo/user/query';
+import { VISUAL_SEARCH_WATCHES } from '../../apollo/user/mutation';
 import { REACT_APP_API_URL } from '../../libs/config';
 import { useThemeMode } from '../../libs/theme/ThemeModeContext';
 import { useLanguage } from '../../libs/i18n/LanguageContext';
 
 const AiVisualSearch = () => {
 	const { isDark } = useThemeMode();
-	const { t } = useLanguage();
+	const { t, locale } = useLanguage();
 	const [dragging, setDragging] = React.useState(false);
 	const [preview, setPreview] = React.useState<string | null>(null);
 	const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
 	const [searchError, setSearchError] = React.useState('');
 	const [results, setResults] = React.useState<any[]>([]);
-
-	const [fetchWatches, { loading: searching }] = useLazyQuery(GET_WATCHES, {
-		fetchPolicy: 'network-only',
-	});
+	const [visualSearchMutation, { loading: searching }] = useMutation(VISUAL_SEARCH_WATCHES);
 
 	React.useEffect(() => {
 		return () => {
 			if (preview) URL.revokeObjectURL(preview);
 		};
 	}, [preview]);
-
-	const tokenize = (text: string) =>
-		text
-			.toLowerCase()
-			.replace(/[^a-z0-9\s]/g, ' ')
-			.split(/\s+/)
-			.filter((token) => token.length >= 3);
-
-	const scoreWatchMatch = (watch: any, tokens: string[]) => {
-		const haystack = `${watch?.watchTitle || ''} ${watch?.watchBrand || ''} ${watch?.watchType || ''}`.toLowerCase();
-		return tokens.reduce((score, token) => (haystack.includes(token) ? score + 1 : score), 0);
-	};
 
 	const onFile = (file?: File | null) => {
 		if (!file) return;
@@ -54,30 +40,19 @@ const AiVisualSearch = () => {
 		setResults([]);
 
 		try {
-			const response = await fetchWatches({
+			const response = await visualSearchMutation({
 				variables: {
-					input: {
-						page: 1,
-						limit: 40,
-						search: {},
-					},
+					file: selectedFile,
+					locale,
 				},
 			});
 
-			const fetched: any[] = response?.data?.getWatches?.list || [];
-			if (fetched.length === 0) {
+			const matched: any[] = response?.data?.visualSearchWatches || [];
+			if (matched.length === 0) {
 				setSearchError(t('ai.catalogEmpty'));
 				return;
 			}
-
-			const fileTokens = tokenize(selectedFile.name.replace(/\.[^/.]+$/, ''));
-			const ranked = [...fetched].sort((a, b) => scoreWatchMatch(b, fileTokens) - scoreWatchMatch(a, fileTokens));
-			const hasStrongMatch = fileTokens.length > 0 && scoreWatchMatch(ranked[0], fileTokens) > 0;
-			const picked = hasStrongMatch
-				? ranked.slice(0, 6)
-				: [...fetched].sort((a, b) => (Number(b?.watchLikes || 0) - Number(a?.watchLikes || 0))).slice(0, 6);
-
-			setResults(picked);
+			setResults(matched.slice(0, 6));
 		} catch (error) {
 			console.log('Visual search failed:', error);
 			setSearchError(t('ai.visualFailed'));
@@ -108,6 +83,8 @@ const AiVisualSearch = () => {
 					onFile(event.dataTransfer.files?.[0] ?? null);
 				}}
 				sx={{
+					position: 'relative',
+					overflow: 'hidden',
 					borderRadius: '20px',
 					border: dragging ? '2px solid #C6A969' : '1.5px dashed rgba(17,17,17,0.25)',
 					background: dragging ? 'rgba(198,169,105,0.08)' : isDark ? '#101722' : '#FFFFFF',
@@ -116,6 +93,37 @@ const AiVisualSearch = () => {
 					transition: 'all 0.2s ease',
 				}}
 			>
+				<Box
+					sx={{
+						position: 'absolute',
+						inset: 0,
+						backgroundImage:
+							'url(https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=1400&q=80)',
+						backgroundSize: 'cover',
+						backgroundPosition: 'center',
+						opacity: 0.16,
+						pointerEvents: 'none',
+					}}
+				/>
+				<WatchIcon
+					sx={{
+						position: 'absolute',
+						right: { xs: -24, md: 12 },
+						bottom: { xs: -30, md: -16 },
+						fontSize: { xs: 120, md: 180 },
+						color: isDark ? 'rgba(212,175,55,0.18)' : 'rgba(17,17,17,0.12)',
+						pointerEvents: 'none',
+					}}
+				/>
+				<Box
+					sx={{
+						position: 'absolute',
+						inset: 0,
+						background: isDark ? 'rgba(16,23,34,0.7)' : 'rgba(255,255,255,0.75)',
+						pointerEvents: 'none',
+					}}
+				/>
+				<Box sx={{ position: 'relative', zIndex: 1 }}>
 				<UploadFileOutlinedIcon sx={{ fontSize: 42, color: '#C6A969', mb: 1.2 }} />
 				<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, mb: 0.6 }}>{t('ai.dragDrop')}</Typography>
 				<Typography sx={{ color: isDark ? '#AEB6C2' : '#777777', fontSize: '0.88rem', mb: 2 }}>
@@ -178,6 +186,7 @@ const AiVisualSearch = () => {
 						</Button>
 					</Stack>
 				) : null}
+				</Box>
 			</Box>
 
 			{searchError ? (

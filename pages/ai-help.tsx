@@ -6,10 +6,8 @@ import Top from '../libs/components/Top';
 import Footer from '../libs/components/Footer';
 import AiHero from '../components/ai/AiHero';
 import AiWatchFinder from '../components/ai/AiWatchFinder';
-import AiChatAssistant from '../components/ai/AiChatAssistant';
 import AiComparison from '../components/ai/AiComparison';
 import AiVisualSearch from '../components/ai/AiVisualSearch';
-import AiWristAdvisor from '../components/ai/AiWristAdvisor';
 import { GET_WATCH_BRAND_AI_INSIGHTS } from '../apollo/user/query';
 import { useThemeMode } from '../libs/theme/ThemeModeContext';
 import { useLanguage } from '../libs/i18n/LanguageContext';
@@ -107,10 +105,8 @@ const AiHelpPage = () => {
 						</Container>
 					) : null}
 					<AiWatchFinder />
-					<AiChatAssistant />
 					<AiComparison />
 					<AiVisualSearch />
-					<AiWristAdvisor />
 				</Box>
 				<Box sx={{ mt: 'auto' }}>
 					<Footer />

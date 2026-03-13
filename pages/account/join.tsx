@@ -21,7 +21,8 @@ const JoinPage = () => {
 	const [signNick, setSignNick] = useState('');
 	const [signPass, setSignPass] = useState('');
 	const [signPhone, setSignPhone] = useState('');
-	const [signRole, setSignRole] = useState<'USER' | 'AGENT'>('USER');
+	const [signEmail, setSignEmail] = useState('');
+	const [signRole, setSignRole] = useState<'USER' | 'SELLER'>('USER');
 	const [showLoginPassword, setShowLoginPassword] = useState(false);
 	const [showSignupPassword, setShowSignupPassword] = useState(false);
 
@@ -42,9 +43,13 @@ const JoinPage = () => {
 
 	const handleSignup = async () => {
 		try {
-			if (!signNick || !signPass || !signPhone) return sweetMixinErrorAlert(t('join.fillAll'));
-			await signUp(signNick, signPass, signPhone, signRole);
-			await sweetMixinSuccessAlert(t('join.signupWelcome'));
+			if (!signNick || !signPass || !signPhone || !signEmail) return sweetMixinErrorAlert(t('join.fillAll'));
+			await signUp(signNick, signPass, signPhone, signEmail, signRole);
+			const message =
+				signRole === 'SELLER'
+					? 'Your seller account is under review by the administrator.'
+					: t('join.signupWelcome');
+			await sweetMixinSuccessAlert(message);
 			router.push('/');
 		} catch (err) {
 			sweetMixinErrorAlert(t('join.signupFailed'));
@@ -268,13 +273,13 @@ const JoinPage = () => {
 										label={t('join.accountType')}
 										select
 										value={signRole}
-										onChange={(e) => setSignRole(e.target.value as 'USER' | 'AGENT')}
+										onChange={(e) => setSignRole(e.target.value as 'USER' | 'SELLER')}
 										fullWidth
 										size="medium"
 										sx={inputSx}
 									>
 										<MenuItem value="USER">{t('join.user')}</MenuItem>
-										<MenuItem value="AGENT">{t('join.seller')}</MenuItem>
+										<MenuItem value="SELLER">{t('join.seller')}</MenuItem>
 									</TextField>
 									<TextField
 										label={t('join.nickname')}
@@ -311,6 +316,15 @@ const JoinPage = () => {
 										label={t('join.phone')}
 										value={signPhone}
 										onChange={(e) => setSignPhone(e.target.value)}
+										fullWidth
+										size="medium"
+										sx={inputSx}
+									/>
+									<TextField
+										label={t('mypage.email')}
+										type="email"
+										value={signEmail}
+										onChange={(e) => setSignEmail(e.target.value)}
 										fullWidth
 										size="medium"
 										sx={inputSx}

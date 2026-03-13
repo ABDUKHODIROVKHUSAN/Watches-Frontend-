@@ -8,6 +8,7 @@ export const SIGN_UP = gql`
 			memberStatus
 			memberAuthType
 			memberPhone
+			memberEmail
 			memberNick
 			memberFullName
 			memberImage
@@ -29,6 +30,7 @@ export const LOGIN = gql`
 			memberStatus
 			memberAuthType
 			memberPhone
+			memberEmail
 			memberNick
 			memberFullName
 			memberImage
@@ -49,6 +51,7 @@ export const UPDATE_MEMBER = gql`
 			memberType
 			memberStatus
 			memberNick
+			memberEmail
 			memberFullName
 			memberImage
 			memberAddress
@@ -149,6 +152,34 @@ export const CREATE_ORDER = gql`
 			orderStatus
 			paymentStatus
 			createdAt
+		}
+	}
+`;
+
+export const AI_CHAT = gql`
+	mutation AiChat($message: String!, $locale: String) {
+		aiChat(message: $message, locale: $locale) {
+			reply
+			actionType
+			actionTarget
+			recommendedWatchIds
+		}
+	}
+`;
+
+export const VISUAL_SEARCH_WATCHES = gql`
+	mutation VisualSearchWatches($file: Upload!, $locale: String) {
+		visualSearchWatches(file: $file, locale: $locale) {
+			_id
+			watchType
+			watchBrand
+			watchTitle
+			watchPrice
+			watchImages
+			strapMaterial
+			caseMaterial
+			dialColor
+			strapColor
 		}
 	}
 `;

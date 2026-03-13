@@ -9,11 +9,11 @@ import { useQuery } from '@apollo/client';
 import { GET_BEST_SELLER_WATCHES_ROW, GET_WATCHES } from '../apollo/user/query';
 import { REACT_APP_API_URL } from '../libs/config';
 import WatchIcon from '@mui/icons-material/Watch';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
 import { useLanguage } from '../libs/i18n/LanguageContext';
 import { useThemeMode } from '../libs/theme/ThemeModeContext';
+import AiFloatingAssistant from '../components/ai/AiFloatingAssistant';
 
 const Home = () => {
 	const { t, locale } = useLanguage();
@@ -35,37 +35,37 @@ const Home = () => {
 			name: 'Ryan Gosling',
 			brand: 'TAG HEUER',
 			image: '/img/celebrities/ryan-gosling-tag-heuer.png',
-			position: 'center center',
+			position: 'center 18%',
 		},
 		{
 			name: 'Jung Kook',
 			brand: 'HUBLOT',
 			image: '/img/celebrities/jungkook-rolex.png',
-			position: 'center center',
+			position: 'center 18%',
 		},
 		{
 			name: 'Carlos Alcaraz',
 			brand: 'ROLEX',
 			image: '/img/celebrities/carlos-alcaraz-rolex.png',
-			position: 'center center',
+			position: 'center 18%',
 		},
 		{
 			name: 'Erling Haaland',
 			brand: 'BREITLING',
 			image: '/img/celebrities/erling-haaland-breitling.png',
-			position: 'center center',
+			position: 'center 18%',
 		},
 		{
 			name: 'Eileen Gu',
 			brand: 'IWC',
 			image: '/img/celebrities/eileen-gu-iwc.png',
-			position: 'center center',
+			position: 'center 18%',
 		},
 		{
 			name: 'Jacob Elordi',
 			brand: 'CARTIER',
 			image: '/img/celebrities/jacob-elordi-cartier-v2.png',
-			position: 'center center',
+			position: 'center 18%',
 		},
 	];
 
@@ -134,6 +134,29 @@ const Home = () => {
 				: 'Authorized dealer of world-renowned watchmakers';
 	const latestCollectionLabel = locale === 'ko' ? '최신 컬렉션' : locale === 'uz' ? 'So‘nggi kolleksiya' : 'Latest Collection';
 	const newArrivalsLabel = locale === 'ko' ? '신상품' : locale === 'uz' ? 'YANGI KELGANLAR' : 'NEW ARRIVALS';
+	const aiCardFallbackImage = 'https://images.pexels.com/photos/9978722/pexels-photo-9978722.jpeg?auto=compress&cs=tinysrgb&w=900';
+	const aiShowcaseCards = [
+		{
+			brand: 'ROLEX',
+			image: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=900&q=80',
+		},
+		{
+			brand: 'TISSOT',
+			image: 'https://images.unsplash.com/photo-1612817159949-195b6eb9e31a?auto=format&fit=crop&w=900&q=80',
+		},
+		{
+			brand: 'SEIKO',
+			image: 'https://images.unsplash.com/photo-1508057198894-247b23fe5ade?auto=format&fit=crop&w=900&q=80',
+		},
+		{
+			brand: 'OMEGA',
+			image: 'https://images.pexels.com/photos/1697214/pexels-photo-1697214.jpeg?auto=compress&cs=tinysrgb&w=900',
+		},
+		{
+			brand: 'ROLEX',
+			image: 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=900&q=80',
+		},
+	];
 
 	return (
 		<>
@@ -166,7 +189,7 @@ const Home = () => {
 								letterSpacing: '2px',
 								m: 0,
 								position: 'relative',
-								display: 'inline-flex',
+								display: { xs: 'none', sm: 'inline-flex' },
 								flexWrap: 'wrap',
 								justifyContent: 'center',
 								gap: 0,
@@ -207,26 +230,41 @@ const Home = () => {
 								</Box>
 							))}
 						</Box>
+						<Typography
+							component="h1"
+							sx={{
+								display: { xs: 'block', sm: 'none' },
+								fontSize: '2.05rem',
+								fontWeight: 700,
+								color: 'rgba(250,250,250,0.78)',
+								mb: 2,
+								letterSpacing: '1.2px',
+								lineHeight: 1.15,
+							}}
+						>
+							{heroTitle}
+						</Typography>
 						<Typography variant="h5" sx={{
 							color: '#D4AF37',
-							mb: 4,
+							mb: { xs: 3.2, md: 4 },
 							fontWeight: 300,
-							letterSpacing: '4px',
+							letterSpacing: { xs: '2.6px', md: '4px' },
 							textTransform: 'uppercase',
+							fontSize: { xs: '1.45rem', md: '1.5rem' },
 						}}>
 							{t('home.heroSubtitle')}
 						</Typography>
-						<Typography sx={{ color: 'rgba(248,250,249,0.86)', mb: 5, maxWidth: 600, mx: 'auto', lineHeight: 1.8 }}>
+						<Typography sx={{ color: 'rgba(248,250,249,0.86)', mb: { xs: 3.8, md: 5 }, maxWidth: 600, mx: 'auto', lineHeight: 1.8, fontSize: { xs: '1.08rem', md: '1rem' }, px: { xs: 0.6, md: 0 } }}>
 							{t('home.heroDescription')}
 						</Typography>
 						<Link href="/watches" passHref>
 							<Button variant="outlined" size="large" sx={{
 								color: '#D4AF37',
 								borderColor: '#D4AF37',
-								px: 6,
+								px: { xs: 3.4, md: 6 },
 								py: 1.5,
-								fontSize: '1rem',
-								letterSpacing: '2px',
+								fontSize: { xs: '0.94rem', md: '1rem' },
+								letterSpacing: { xs: '1.2px', md: '2px' },
 								'&:hover': { borderColor: '#FAFAFA', color: '#FAFAFA', background: 'rgba(17,17,17,0.18)' },
 							}}>
 								{t('home.exploreCollection')}
@@ -458,7 +496,24 @@ const Home = () => {
 				</Stack>
 
 				{/* BEST SELLERS */}
-				<Stack sx={{ background: '#0A0D12', py: { xs: 8, md: 11 } }}>
+				<Stack
+					sx={{
+						position: 'relative',
+						overflow: 'hidden',
+						background:
+							'radial-gradient(circle at 18% 24%, rgba(212,175,55,0.09), transparent 42%), radial-gradient(circle at 82% 30%, rgba(212,175,55,0.06), transparent 36%), linear-gradient(180deg, #05080D 0%, #0A111B 45%, #0D1624 100%)',
+						py: { xs: 8, md: 11 },
+					}}
+				>
+					<Box
+						sx={{
+							position: 'absolute',
+							inset: 0,
+							background:
+								'linear-gradient(90deg, rgba(4,8,14,0.34) 0%, rgba(4,8,14,0.16) 50%, rgba(4,8,14,0.34) 100%)',
+							pointerEvents: 'none',
+						}}
+					/>
 					<Container maxWidth="xl">
 						<Stack sx={{ mb: { xs: 6, md: 8 }, pl: { md: 2 } }}>
 							<Typography sx={{ color: '#FAFAFA', fontSize: { xs: '1.8rem', md: '2.2rem' }, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
@@ -533,7 +588,7 @@ const Home = () => {
 					sx={{
 						background: '#111111',
 						py: 0,
-						minHeight: { xs: 'auto', md: 'calc(100vh - 64px)' },
+						minHeight: { xs: 420, md: 'calc(112vh - 64px)' },
 						position: 'relative',
 						overflow: 'hidden',
 					}}
@@ -542,8 +597,8 @@ const Home = () => {
 						key={celebrityStartIndex}
 						direction={{ xs: 'column', md: 'row' }}
 						sx={{
-							minHeight: { xs: 'auto', md: 'calc(100vh - 64px)' },
-							height: { xs: 'auto', md: 'calc(100vh - 64px)' },
+							minHeight: { xs: 420, md: 'calc(112vh - 64px)' },
+							height: { xs: 420, md: 'calc(112vh - 64px)' },
 							animation: 'celebritySlide 0.55s ease',
 							'@keyframes celebritySlide': {
 								'0%': { transform: 'translateX(24px)', opacity: 0.65 },
@@ -557,8 +612,8 @@ const Home = () => {
 								sx={{
 									position: 'relative',
 									flex: 1,
-									minHeight: { xs: 320, md: 'calc(100vh - 64px)' },
-									height: { xs: 320, md: 'calc(100vh - 64px)' },
+									minHeight: { xs: 420, md: 'calc(112vh - 64px)' },
+									height: { xs: 420, md: 'calc(112vh - 64px)' },
 									overflow: 'hidden',
 									background: '#7b7d80',
 									borderRight: { xs: 'none', md: '2px solid rgba(220,220,220,0.35)' },
@@ -661,45 +716,165 @@ const Home = () => {
 					</IconButton>
 				</Stack>
 
-				<Stack sx={{ background: isDark ? '#0f1724' : 'rgba(17,17,17,0.06)', py: { xs: 8, md: 10 } }}>
+				<Stack
+					sx={{
+						background: isDark ? '#050506' : '#f6f6f6',
+						py: { xs: 8, md: 11 },
+						overflow: 'hidden',
+					}}
+				>
 					<Container maxWidth="lg">
-						<Stack direction={{ xs: 'column', md: 'row' }} spacing={6} alignItems="center">
-							<Box flex={1}>
-								<Typography variant="h4" sx={{ color: textPrimary, mb: 2, fontWeight: 600 }}>
-									{t('home.aiInsightsTitle')}
-								</Typography>
-								<Typography sx={{ color: textSecondary, mb: 3, lineHeight: 1.8 }}>
-									{t('home.aiInsightsDesc')}
-								</Typography>
-								<Link href="/watches" passHref>
-									<Button variant="contained" sx={{
+						<Stack alignItems="center" sx={{ textAlign: 'center' }}>
+							<Box
+								sx={{
+									position: 'relative',
+									width: '100%',
+									maxWidth: 920,
+									height: { xs: 270, md: 360 },
+									mb: { xs: 4, md: 5 },
+								}}
+							>
+								<WatchIcon
+									sx={{
+										position: 'absolute',
+										top: { xs: 2, md: 8 },
+										left: '50%',
+										transform: 'translateX(-50%)',
+										color: 'rgba(250,250,250,0.86)',
+										fontSize: { xs: 28, md: 32 },
+										zIndex: 8,
+									}}
+								/>
+								<Box
+									sx={{
+										position: 'absolute',
+										top: { xs: 30, md: 42 },
+										left: '50%',
+										transform: 'translateX(-50%)',
+										width: { xs: 230, md: 300 },
+										height: { xs: 36, md: 44 },
+										borderRadius: '50%',
+										background: 'radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 72%)',
+										filter: 'blur(1px)',
+										zIndex: 1,
+									}}
+								/>
+
+								{aiShowcaseCards.map((card, index) => {
+									const cardLayouts = [
+										{ left: '8%', bottom: 22, rotate: '-15deg', z: 2, opacity: 0.34 },
+										{ left: '23%', bottom: 36, rotate: '-9deg', z: 4, opacity: 0.9 },
+										{ left: '50%', bottom: 44, rotate: '0deg', z: 6, opacity: 1 },
+										{ left: '77%', bottom: 36, rotate: '9deg', z: 4, opacity: 0.9 },
+										{ left: '92%', bottom: 22, rotate: '15deg', z: 2, opacity: 0.34 },
+									];
+									const layout = cardLayouts[index];
+									return (
+										<Box
+											key={`${card.brand}-${index}`}
+											sx={{
+												position: 'absolute',
+												left: layout.left,
+												bottom: layout.bottom,
+												transform: `translateX(-50%) rotate(${layout.rotate})`,
+												zIndex: layout.z,
+												opacity: layout.opacity,
+												width: { xs: 120, sm: 155, md: 195 },
+												height: { xs: 150, sm: 190, md: 228 },
+												borderRadius: '18px',
+												overflow: 'hidden',
+												border: '1px solid rgba(255,255,255,0.34)',
+												boxShadow: '0 20px 34px rgba(0,0,0,0.5)',
+												background: '#0d0d10',
+											}}
+										>
+											<Box
+												component="img"
+												src={card.image}
+												alt={`${card.brand} luxury watch`}
+												onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+													const target = e.currentTarget;
+													if (target.dataset.fallbackApplied === 'true') return;
+													target.dataset.fallbackApplied = 'true';
+													target.src = aiCardFallbackImage;
+												}}
+												sx={{
+													width: '100%',
+													height: '100%',
+													objectFit: 'cover',
+													filter: 'brightness(0.88) contrast(1.06) saturate(0.9)',
+												}}
+											/>
+											<Box
+												sx={{
+													position: 'absolute',
+													inset: 0,
+													background: 'linear-gradient(180deg, rgba(7,7,9,0.08) 30%, rgba(7,7,9,0.62) 100%)',
+												}}
+											/>
+											<Typography
+												sx={{
+													position: 'absolute',
+													left: 10,
+													bottom: 10,
+													fontSize: { xs: '0.58rem', md: '0.65rem' },
+													letterSpacing: '1.5px',
+													fontWeight: 700,
+													color: '#FAFAFA',
+													textTransform: 'uppercase',
+												}}
+											>
+												{card.brand}
+											</Typography>
+										</Box>
+									);
+								})}
+							</Box>
+
+							<Typography
+								sx={{
+									color: isDark ? '#FAFAFA' : '#111111',
+									fontSize: { xs: '1.85rem', md: '2.65rem' },
+									fontWeight: 500,
+									mb: 1.4,
+									letterSpacing: '0.2px',
+								}}
+							>
+								AI Help That Makes Watch Shopping Smarter
+							</Typography>
+							<Typography
+								sx={{
+									color: isDark ? 'rgba(240,244,248,0.78)' : textSecondary,
+									maxWidth: 760,
+									mb: 3.2,
+									lineHeight: 1.8,
+									fontSize: { xs: '0.95rem', md: '1.02rem' },
+								}}
+							>
+								Real AI inside this website analyzes your style, compares watch DNA across brands, and gives personalized recommendations before you buy.
+							</Typography>
+							<Link href="/watches" passHref>
+								<Button
+									variant="contained"
+									sx={{
 										background: '#111111',
 										color: '#FAFAFA',
-										fontWeight: 600,
-										px: 4,
-										borderRadius: '8px',
+										fontWeight: 700,
+										px: 4.2,
+										borderRadius: '999px',
+										border: '1px solid rgba(250,250,250,0.24)',
 										'&:hover': { background: '#2B2B2B' },
-									}}>
-										{t('home.browseWatches')}
-									</Button>
-								</Link>
-							</Box>
-							<Box flex={1} sx={{
-								height: 300,
-								borderRadius: '16px',
-								background: isDark ? 'rgba(16,23,34,0.8)' : 'rgba(255,255,255,0.5)',
-								border: '1px solid #D4AF37',
-								display: 'flex',
-								alignItems: 'center',
-								justifyContent: 'center',
-							}}>
-								<AutoAwesomeIcon sx={{ fontSize: 100, color: 'rgba(17,17,17,0.35)' }} />
-							</Box>
+									}}
+								>
+									Browse Watches
+								</Button>
+							</Link>
 						</Stack>
 					</Container>
 				</Stack>
 
 				<Footer />
+				<AiFloatingAssistant />
 			</Stack>
 		</>
 	);

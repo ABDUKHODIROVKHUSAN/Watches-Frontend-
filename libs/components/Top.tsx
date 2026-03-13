@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Stack, Box, Button, Menu, MenuItem, IconButton, Badge, Typography, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Stack, Box, Button, Menu, MenuItem, IconButton, Badge, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Drawer, Divider } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useReactiveVar } from '@apollo/client';
@@ -16,6 +16,7 @@ import { useThemeMode } from '../theme/ThemeModeContext';
 import BedtimeRoundedIcon from '@mui/icons-material/BedtimeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 
 const Anniversary150Mark = ({ color = '#111111' }: { color?: string }) => (
 	<Stack sx={{ lineHeight: 1, alignItems: 'center', justifyContent: 'center', minWidth: 42 }}>
@@ -60,6 +61,7 @@ const Top = () => {
 	const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 	const [cartAnchor, setCartAnchor] = useState<null | HTMLElement>(null);
 	const [languageAnchor, setLanguageAnchor] = useState<null | HTMLElement>(null);
+	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
 	useEffect(() => {
@@ -142,7 +144,10 @@ const Top = () => {
 					<Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
 						<Anniversary150Mark color={primaryTextColor} />
 					</Link>
-					<Box sx={{ width: '1px', height: 20, background: isHomeOverlay ? 'rgba(250,250,250,0.35)' : 'rgba(17,17,17,0.2)', mx: { xs: 0.3, md: 0.8 } }} />
+					<Box sx={{ width: '1px', height: 20, background: isHomeOverlay ? 'rgba(250,250,250,0.35)' : 'rgba(17,17,17,0.2)', mx: { xs: 0.3, md: 0.8 }, display: { xs: 'none', sm: 'block' } }} />
+					<Box component="span" sx={{ display: { xs: 'inline-flex', sm: 'none' }, color: primaryTextColor, fontWeight: 700, fontSize: '0.9rem', letterSpacing: 1 }}>
+						TIMELESS
+					</Box>
 					<Stack direction="row" alignItems="center" spacing={{ xs: 0, md: 0.2 }} sx={{ display: { xs: 'none', sm: 'flex' } }}>
 						{navLinks.map((link) => (
 							<Link key={link.href} href={link.href} style={{ textDecoration: 'none' }}>
@@ -170,7 +175,8 @@ const Top = () => {
 						justifyContent="center"
 						spacing={0.5}
 						sx={{
-							position: { xs: 'static', md: 'absolute' },
+							display: { xs: 'none', sm: 'flex' },
+							position: { sm: 'static', md: 'absolute' },
 							left: { md: '50%' },
 							transform: { md: 'translateX(-50%)' },
 							opacity: isHomeOverlay ? 0.98 : 1,
@@ -185,7 +191,7 @@ const Top = () => {
 					</Stack>
 				</Link>
 
-				<Stack direction="row" alignItems="center" spacing={0.8}>
+				<Stack direction="row" alignItems="center" spacing={0.8} sx={{ display: { xs: 'none', sm: 'flex' } }}>
 					<Button
 						onClick={toggleMode}
 						sx={{
@@ -383,7 +389,143 @@ const Top = () => {
 						</Stack>
 					)}
 				</Stack>
+				<IconButton
+					onClick={() => setMobileMenuOpen(true)}
+					sx={{
+						display: { xs: 'inline-flex', sm: 'none' },
+						color: primaryTextColor,
+						border: isHomeOverlay ? '1px solid rgba(250,250,250,0.35)' : isDark ? '1px solid rgba(229,231,235,0.24)' : '1px solid rgba(17,17,17,0.2)',
+						borderRadius: '10px',
+						p: 0.75,
+					}}
+				>
+					<MenuRoundedIcon sx={{ fontSize: 20 }} />
+				</IconButton>
 			</Stack>
+			<Drawer
+				anchor="right"
+				open={mobileMenuOpen}
+				onClose={() => setMobileMenuOpen(false)}
+				PaperProps={{
+					sx: {
+						width: 288,
+						background: isDark ? '#101722' : '#FFFFFF',
+						borderLeft: '1px solid rgba(212,175,55,0.5)',
+					},
+				}}
+			>
+				<Stack sx={{ p: 2 }}>
+					<Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1.6 }}>
+						<Typography sx={{ color: isDark ? '#E5E7EB' : '#111111', fontWeight: 700, letterSpacing: '1.2px' }}>
+							TIMELESS
+						</Typography>
+						<Button
+							onClick={toggleMode}
+							sx={{
+								color: isDark ? '#E5E7EB' : '#111111',
+								minWidth: 0,
+								border: isDark ? '1px solid rgba(229,231,235,0.24)' : '1px solid rgba(17,17,17,0.2)',
+								borderRadius: '10px',
+								p: 0.75,
+							}}
+						>
+							{isDark ? <LightModeRoundedIcon sx={{ fontSize: 18 }} /> : <BedtimeRoundedIcon sx={{ fontSize: 18 }} />}
+						</Button>
+					</Stack>
+					<Stack spacing={0.8} sx={{ mb: 1.6 }}>
+						{navLinks.map((link) => (
+							<Link key={`mobile-${link.href}`} href={link.href} style={{ textDecoration: 'none' }}>
+								<Button
+									fullWidth
+									onClick={() => setMobileMenuOpen(false)}
+									sx={{
+										justifyContent: 'flex-start',
+										color: router.pathname === link.href ? (isDark ? '#E5E7EB' : '#111111') : (isDark ? '#AEB6C2' : '#666'),
+										fontWeight: router.pathname === link.href ? 700 : 500,
+										borderRadius: '10px',
+										textTransform: 'none',
+										px: 1.2,
+										py: 0.9,
+									}}
+								>
+									{link.label}
+								</Button>
+							</Link>
+						))}
+					</Stack>
+					<Divider sx={{ borderColor: 'rgba(212,175,55,0.32)', mb: 1.5 }} />
+					<Stack direction="row" spacing={0.8} sx={{ mb: 1.6 }}>
+						{localeMenu.map((item) => (
+							<Button
+								key={`mobile-locale-${item.locale}`}
+								variant={item.locale === locale ? 'contained' : 'outlined'}
+								onClick={() => setLocale(item.locale)}
+								sx={{
+									flex: 1,
+									fontSize: '0.72rem',
+									color: item.locale === locale ? '#111111' : isDark ? '#E5E7EB' : '#111111',
+									background: item.locale === locale ? '#D4AF37' : 'transparent',
+									borderColor: 'rgba(212,175,55,0.45)',
+									minWidth: 0,
+									px: 0.8,
+								}}
+							>
+								{item.flag}
+							</Button>
+						))}
+					</Stack>
+					{user?._id ? (
+						<Stack spacing={0.9}>
+							<Button
+								fullWidth
+								variant="outlined"
+								onClick={() => {
+									setMobileMenuOpen(false);
+									void router.push('/mypage');
+								}}
+								sx={{ color: isDark ? '#E5E7EB' : '#111111', borderColor: 'rgba(212,175,55,0.42)', textTransform: 'none' }}
+							>
+								{t('nav.myPage')}
+							</Button>
+							<Button
+								fullWidth
+								variant="outlined"
+								onClick={() => {
+									setMobileMenuOpen(false);
+									void router.push('/watches');
+								}}
+								sx={{ color: isDark ? '#E5E7EB' : '#111111', borderColor: 'rgba(212,175,55,0.42)', textTransform: 'none' }}
+							>
+								{t('cart.title')} ({getCartCount(user?._id)})
+							</Button>
+							<Button
+								fullWidth
+								variant="contained"
+								onClick={() => {
+									setMobileMenuOpen(false);
+									setLogoutDialogOpen(true);
+								}}
+								sx={{ background: '#111111', color: '#D4AF37', textTransform: 'none', '&:hover': { background: '#232323' } }}
+							>
+								{t('auth.logout')}
+							</Button>
+						</Stack>
+					) : (
+						<Stack spacing={0.9}>
+							<Link href="/account/join" style={{ textDecoration: 'none' }}>
+								<Button fullWidth onClick={() => setMobileMenuOpen(false)} sx={{ color: isDark ? '#E5E7EB' : '#111111', borderColor: 'rgba(212,175,55,0.42)', border: '1px solid', textTransform: 'none' }}>
+									{t('auth.login')}
+								</Button>
+							</Link>
+							<Link href="/account/join" style={{ textDecoration: 'none' }}>
+								<Button fullWidth onClick={() => setMobileMenuOpen(false)} variant="contained" sx={{ background: '#111111', color: '#FAFAFA', textTransform: 'none', '&:hover': { background: '#2B2B2B' } }}>
+									{t('auth.signUp')}
+								</Button>
+							</Link>
+						</Stack>
+					)}
+				</Stack>
+			</Drawer>
 			<Dialog
 				open={logoutDialogOpen}
 				onClose={() => setLogoutDialogOpen(false)}
