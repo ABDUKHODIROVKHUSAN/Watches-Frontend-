@@ -20,6 +20,7 @@ import { userVar } from '../../apollo/store';
 import { sweetInfoAlert } from '../../libs/sweetAlert';
 import { useLanguage } from '../../libs/i18n/LanguageContext';
 import { useThemeMode } from '../../libs/theme/ThemeModeContext';
+import error from 'next/error';
 
 const WatchesPage = () => {
 	const router = useRouter();
@@ -67,11 +68,12 @@ const WatchesPage = () => {
 		},
 	};
 
-	const { data, previousData, loading } = useQuery(GET_WATCHES, {
+	const { data, previousData, loading, refetch } = useQuery(GET_WATCHES, {
 		variables: queryVariables,
-		fetchPolicy: 'network-only',
+		fetchPolicy: 'cache-and-network',
 		notifyOnNetworkStatusChange: true,
 	});
+	
 
 	const [likeTargetWatch] = useMutation(LIKE_TARGET_WATCH);
 
@@ -79,6 +81,7 @@ const WatchesPage = () => {
 	const watches = resolvedData?.getWatches?.list || [];
 	const total = resolvedData?.getWatches?.metaCounter?.[0]?.total || 0;
 	const isInitialLoading = loading && !resolvedData;
+	const isError = !!error && !resolvedData;
 
 	const types = [
 		{ label: t('watches.all'), value: '' },
@@ -111,6 +114,13 @@ const WatchesPage = () => {
 				variables: { input: watchId },
 				refetchQueries: [{ query: GET_WATCHES, variables: queryVariables }],
 				awaitRefetchQueries: true,
+				// ✅ Optimistic UI — update like state instantly before server responds
+				optimisticResponse: {
+					likeTargetWatch: {
+					__typename: 'Watch',
+					_id: watchId,
+					},
+				},
 			});
 		} catch (err) {
 			console.log('Like toggle failed:', err);
@@ -223,10 +233,24 @@ const WatchesPage = () => {
 						</Stack>
 					</Stack>
 
-					<Box sx={{ minHeight: { xs: 420, md: 560 } }}>
-						{isInitialLoading ? (
-							<Typography sx={{ color: '#999', textAlign: 'center', py: 10 }}>{t('watches.loading')}</Typography>
-						) : watches.length === 0 ? (
+					// AFTER:
+							<Box sx={{ minHeight: { xs: 420, md: 560 } }}>
+							{isError ? (
+								<Box sx={{ textAlign: 'center', py: 10 }}>
+								<Typography sx={{ color: '#E53935', mb: 2 }}>
+									{t('watches.loadError') ?? 'Failed to load watches.'}
+								</Typography>
+								<Button
+									variant="outlined"
+									onClick={() => refetch()}
+									sx={{ color: '#111111', borderColor: '#111111' }}
+								>
+									{t('watches.retry') ?? 'Try Again'}
+								</Button>
+								</Box>
+							) : isInitialLoading ? (
+								<Typography sx={{ color: '#999', textAlign: 'center', py: 10 }}>{t('watches.loading')}</Typography>
+							) : watches.length === 0 ? (
 							<Box
 								sx={{
 									border: '1px dashed rgba(212,175,55,0.58)',
