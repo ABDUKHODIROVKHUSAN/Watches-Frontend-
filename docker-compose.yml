@@ -19,9 +19,7 @@ services:
 
     networks:
       - client-network
-
-      
-  # FOR PRODUCTION
+    # FOR PRODUCTION
     command: bash -c "yarn install && yarn build && yarn start"
 
 networks:
