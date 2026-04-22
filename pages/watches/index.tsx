@@ -233,7 +233,6 @@ const WatchesPage = () => {
 						</Stack>
 					</Stack>
 
-					// AFTER:
 							<Box sx={{ minHeight: { xs: 420, md: 560 } }}>
 							{isError ? (
 								<Box sx={{ textAlign: 'center', py: 10 }}>
