@@ -10,11 +10,9 @@ let apolloClient: ApolloClient<NormalizedCacheObject>;
 function getHeaders() {
 	const headers = {} as HeadersInit;
 	const token = getJwtToken();
-	// @ts-ignore
+
 	if (token) headers['Authorization'] = `Bearer ${token}`;
-	// Required by backend CSRF protection for multipart uploads.
-	// @ts-ignore
-	headers['apollo-require-preflight'] = 'true';
+
 	return headers;
 }
 
@@ -30,14 +28,13 @@ function createIsomorphicLink() {
 			return forward(operation);
 		});
 
-		// @ts-ignore
-		const link = new createUploadLink({
+		const link = createUploadLink({
 			uri: REACT_APP_API_GRAPHQL_URL,
 		});
 
 		const errorLink = onError(({ graphQLErrors, networkError }) => {
 			if (graphQLErrors) {
-				graphQLErrors.map(({ message }) => {
+				graphQLErrors.forEach(({ message }) => {
 					console.log(`[GraphQL error]: ${message}`);
 				});
 			}
@@ -53,15 +50,18 @@ function createApolloClient() {
 		ssrMode: typeof window === 'undefined',
 		link: createIsomorphicLink(),
 		cache: new InMemoryCache(),
-		resolvers: {},
 	});
 }
 
 export function initializeApollo(initialState = null) {
 	const _apolloClient = apolloClient ?? createApolloClient();
+
 	if (initialState) _apolloClient.cache.restore(initialState);
+
 	if (typeof window === 'undefined') return _apolloClient;
+
 	if (!apolloClient) apolloClient = _apolloClient;
+
 	return _apolloClient;
 }
 

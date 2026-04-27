@@ -83,10 +83,26 @@ const Home = () => {
 		setCelebrityStartIndex((prev) => (prev - 1 + celebrityWearers.length) % celebrityWearers.length);
 	};
 
+		const heroImages = [
+		'/img/homepage/businessman-checking-time.jpg',
+		'/img/homepage/closeup-watch.jpg',
+		'/img/homepage/luxury-wristwatch-with-accurate-minute-hand-detail-generated-by-ai.jpg'
+	];
+
+	const [heroImageIndex, setHeroImageIndex] = useState(0);
+
 	useEffect(() => {
 		const jwt = getJwtToken();
 		if (jwt) updateUserInfo(jwt);
 	}, []);
+
+	useEffect(() => {
+		const heroInterval = setInterval(() => {
+			setHeroImageIndex((prev) => (prev + 1) % heroImages.length);
+		}, 6000);
+
+		return () => clearInterval(heroInterval);
+	}, [heroImages.length]);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -167,10 +183,9 @@ const Home = () => {
 				<Top />
 				<Stack sx={{
 					minHeight: '100vh',
-					backgroundImage: 'url(https://images.unsplash.com/photo-1642515839492-a740aa8f6339?auto=format&fit=crop&w=1920&q=90)',
+					backgroundImage: `url(${heroImages[heroImageIndex]})`,
 					backgroundSize: 'cover',
-					backgroundPosition: 'center',
-					display: 'flex',
+					backgroundPosition: 'center',				transition: 'background-image 0.8s ease',					display: 'flex',
 					alignItems: 'center',
 					justifyContent: 'center',
 					textAlign: 'center',
